@@ -18,14 +18,18 @@ const fs = require('fs');
 var jsonFile = fs.readFileSync('./config/keys.json', 'utf8');
 const DB_key = JSON.parse(jsonFile).DB_key;
 const sessionKeySecret = JSON.parse(jsonFile).session_key.secret;
-
 //if you want to access my DB, contant to chanwooDev / pove2019@gmail.com 
 let connection = mysql.createConnection(DB_key)
 connection.connect();
 
-app.listen(3000, function(){
-    console.log("start!! express server on port 3000")
-});
+async function startServer() {
+    app.listen(3000, function(){
+        console.log("start!! express server on port 3000")
+    });
+}
+
+startServer();
+
 
 app.use(express.static('public'))
 app.use(bodyParser.json())
