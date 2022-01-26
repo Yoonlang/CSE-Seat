@@ -2,7 +2,7 @@
   "name": "knu-seat",
   "version": "1.0.0",
   "description": "KNU-SEAT back-end",
-  "main": "index.js",
+  "main": "./src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,7 +14,9 @@
     "express": "^4.17.2",
     "express-session": "^1.17.2",
     "fs": "^0.0.1-security",
+    "moment": "^2.29.1",
     "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
     "router": "^1.3.6"
