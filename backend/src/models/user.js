@@ -7,5 +7,17 @@ module.exports = {
         if (result)
             return result;
         return null;
+    },
+    insert : async(userDTO) => {
+        let sql = "INSERT INTO user SET ?"
+        set = {
+            name : userDTO.name,
+            email : userDTO.email,
+            pw : userDTO.pw
+        }
+        let result = await db.query(sql,set);
+        if (result)
+            return result;
+        return null;
     }
 }
