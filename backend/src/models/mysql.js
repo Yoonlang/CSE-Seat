@@ -17,15 +17,15 @@ pool.getConnection(function(err, conn){
 module.exports = {
     getPool : ()=>{return pool},
 
-    query : async (sql) => {
+    query : async (sql, set) => {
         const connection = await pool.getConnection(async conn => conn);
         
         try {
             await connection.beginTransaction();
-            [result, fields] = await connection.query(sql);
+            [result, fields] = await connection.query(sql,set);
             await connection.commit();
             connection.release();
-            return result.length;
+            return result;
         } catch (err){
             await connection.rollback();
             connection.release();
