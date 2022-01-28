@@ -1,5 +1,4 @@
 //if you want to access my DB, contant to chanwooDev / pove2019@gmail.com 
-
 const mysql = require('mysql2');
 const path = require('path')
 const DB_key = require(__dirname+'/../config').DB_key;
