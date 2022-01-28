@@ -1,7 +1,7 @@
 //if you want to access my DB, contant to chanwooDev / pove2019@gmail.com 
-const mysql = require('mysql');
-const path = require('path')
+const mysql = require('mysql2/promise');
 const DB_key = require(__dirname+'/../config').DB_key;
+let pool;
 
 pool = mysql.createPool(DB_key);
 
@@ -13,22 +13,24 @@ pool.getConnection(function(err, conn){
         conn.release();
     }
 });
+
 module.exports = {
     getPool : ()=>{return pool},
 
-    getConnection : async (callback) => {
-        pool.getConnection(function (err, conn) {
-            if(!err) {
-              callback(conn);
-            }
-            else{
-                throw err;
-            }
-        });
+    query : async (sql) => {
+        const connection = await pool.getConnection(async conn => conn);
+        
+        try {
+            await connection.beginTransaction();
+            [result, fields] = await connection.query(sql);
+            await connection.commit();
+            connection.release();
+            return result.length;
+        } catch (err){
+            await connection.rollback();
+            connection.release();
+            throw err;
+            
+        } 
     },
 }
-
-
-
-
-
