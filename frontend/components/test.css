@@ -1,6 +1,10 @@
-img{
-    object-fit:fill;
-    text-decoration: none;
-    white-space: nowrap;
-    text-align: center;
+div{
+    border: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    justify-content: space-around;
+    overflow: hidden;
+    flex-direction: column;
+    flex-wrap: wrap;
+    background: #373737;
 }
