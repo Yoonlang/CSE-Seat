@@ -3,11 +3,12 @@
     18 배찬우
     18 최윤석
 */
-
+const path = require('path')
+const alias = require('better-module-alias')(path.join(__dirname,'/..'));  // $ == backend/src
 const express = require('express');
 const app = express();
 const loaders = require('./loaders');
-require('better-module-alias')(__dirname);  // $ == backend/src
+
 
 
 async function startServer() {
