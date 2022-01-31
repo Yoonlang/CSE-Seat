@@ -16,7 +16,7 @@ passport.deserializeUser(function(name, done){
 
 passport.use('local-join', new LocalStrategy({
     usernameField: 'name',
-    passwordField: 'pw',
+    passwordField: 'password',
     passReqToCallback : true
     }, (req, name, password, done)=>{
         userDTO = req.body;
