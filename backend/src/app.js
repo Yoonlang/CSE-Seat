@@ -1,14 +1,14 @@
 /*
     CSE-Seat project
-    
     18 배찬우
     18 최윤석
 */
 
-
 const express = require('express');
 const app = express();
-const loaders = require('./loaders')
+const loaders = require('./loaders');
+require('better-module-alias')(__dirname);  // $ == backend/src
+
 
 async function startServer() {
     await loaders({expressApp:app});
@@ -18,7 +18,3 @@ async function startServer() {
 }
 
 startServer();
-
-
-
-

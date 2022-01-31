@@ -5,5 +5,5 @@ module.exports = async ({expressApp}) => {
   await expressLoader({app:expressApp});
   console.log('Express Initialized');
   sessionLoader({app:expressApp});
-  console.log('Session Initialized')
+  console.log('Session Initialized');
 }
