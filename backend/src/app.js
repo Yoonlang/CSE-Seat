@@ -12,11 +12,10 @@ const loaders = require('./loaders');
 
 
 async function startServer() {
-    
+    await loaders({expressApp:app});
     app.listen(3000, function(){
         console.log("start!! express server on port 3000");
     });
-    await loaders({expressApp:app});
 }
 
 startServer();
