@@ -11,9 +11,13 @@ module.exports = {
     insert : async(userDTO) => {
         let sql = "INSERT INTO user SET ?"
         set = {
+            sid : userDTO.sid,
             name : userDTO.name,
-            email : userDTO.email,
-            pw : userDTO.pw
+            birth : userDTO.birth,
+            password : userDTO.password,
+            password_salt : userDTO.password_salt,
+            only_friend : userDTO.only_friend,
+            major : userDTO.major,
         }
         let result = await db.query(sql,set);
         if (result)
