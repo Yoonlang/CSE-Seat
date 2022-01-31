@@ -6,7 +6,10 @@ const Index = () => {
     return (
     <>
         <HeadTitle title="home" />
-        <RoomSeats/>
+        {/* <IndexHeader /> */}
+        <RoomSeats roomNumber={0}/>
+        <RoomSeats roomNumber={1}/>
+        <RoomSeats roomNumber={2}/>
     </>
     )
 }
