@@ -68,7 +68,6 @@ const Header = () => {
                 border: solid;
                 border-width: 1px;
                 border-color: #ddd;
-                z-index: 5;
                 cursor:pointer;
             }
             .logout{
@@ -80,11 +79,14 @@ const Header = () => {
             }
             .headerDiv{
                 display: flex;
+                position: relative;
                 padding: 0 10px;
                 align-items: center;
                 border-bottom: solid;
                 border-color: #ddd;
                 border-width: 1px;
+                background: #fff;
+                z-index: 10;
             }
             .loginInfoA, .loginInfoB{
                 display:flex;

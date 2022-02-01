@@ -10,4 +10,14 @@ const userListAtom = atom({
     default : []
 });
 
-export {authAtom, userListAtom};
+const todayAtom = atom({
+    key : 'today',
+    default : true
+})
+
+const showRoomAtom = atom({
+    key : 'room',
+    default : 0
+})
+
+export {authAtom, userListAtom, todayAtom, showRoomAtom };

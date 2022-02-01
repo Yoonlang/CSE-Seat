@@ -7,4 +7,8 @@ div{
     flex-direction: column;
     flex-wrap: wrap;
     background: #373737;
+    border-radius: 50% 50%;
+    visibility: hidden;
+    transition: 1s;
+    float: left;
 }

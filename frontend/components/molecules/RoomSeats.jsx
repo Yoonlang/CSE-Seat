@@ -115,8 +115,8 @@ const RoomSeats = ({roomNumber}) => {
                 .roomSeatsDiv{
                     display: flex;
                     flex-direction: column;
-                    width: 300px;
                     height: 100%;
+                    margin-top: 20px;
                 }
                 .seatTitle{
                     width: 100%;
@@ -141,6 +141,16 @@ const RoomSeats = ({roomNumber}) => {
                     width: 25%;
                     flex-direction: column;
                     align-items:center;
+                }
+                @media(min-width: 750px){
+                    .roomSeatsDiv{
+                        width: 300px;
+                    }
+                }
+                @media(max-width: 749px){
+                    .roomSeatsDiv{
+                        width: 100%;
+                    }
                 }
             `}</style>
         </>
