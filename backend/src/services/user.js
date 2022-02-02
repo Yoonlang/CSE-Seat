@@ -20,8 +20,6 @@ module.exports = {
         }catch(e){
             return {message: e.message};
         }
-
-
     },
     login : function(sid, password){
         console.log('hi');
