@@ -30,7 +30,6 @@ module.exports = {
             await connection.rollback();
             connection.release();
             throw err;
-            
         } 
     },
 }

@@ -18,8 +18,10 @@ module.exports = {
             password_salt : userDTO.password_salt,
             only_friend : userDTO.only_friend,
             major : userDTO.major,
+            email : userDTO.email
         }
         let result = await db.query(sql,set);
+        console.log('usermodel :',result)
         if (result)
             return result;
         return null;
