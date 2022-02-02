@@ -20,4 +20,18 @@ const showRoomAtom = atom({
     default : 0
 })
 
-export {authAtom, userListAtom, todayAtom, showRoomAtom };
+const seatModalAtom = atom({
+    key : 'seatModal',
+    default : {
+        isModalOpen : false,
+        seatInfo : {
+            roomNumber : undefined,
+            isToday : undefined,
+            seatNumber : undefined,
+            one : undefined,
+            two : undefined
+        }
+    }
+})
+
+export {authAtom, userListAtom, todayAtom, showRoomAtom, seatModalAtom };

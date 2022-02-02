@@ -16,7 +16,7 @@ const TodayButton = () => {
             setIsToday(!isToday);
         }
     }
-    
+
     return (
         <>
             <div className="buttonDiv">

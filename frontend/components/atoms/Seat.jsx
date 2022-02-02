@@ -2,7 +2,6 @@ import {useRef, useEffect} from 'react';
 
 const Seat = ({length = "50px", left = 0, right = 0, dist = 0, width = 26}) => {
     const canvasRef = useRef();
-
     const seatColor = ['white', '#969696', '#0F5BCC', '#007435'];
 
     useEffect(() => {
@@ -29,7 +28,6 @@ const Seat = ({length = "50px", left = 0, right = 0, dist = 0, width = 26}) => {
             ctx.beginPath();
             ctx.arc(hX - dist, 140, 67, Math.PI * 0.5, Math.PI * 1.5);
             ctx.fill();
-
         }
 
         const fillRight = (color) => {

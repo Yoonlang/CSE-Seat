@@ -1,21 +1,9 @@
-import { useState, useRef, useEffect } from "react";
-import { useRecoilState } from "recoil";
-import SquareImg from "../atoms/Img";
 import ColorTables from "../molecules/ColorTables";
 import Explain from "../molecules/Explain";
 import IndexNav from "../molecules/IndexNav";
 import TodayButton from "../molecules/TodayButton";
-import { todayAtom } from "../others/state";
 
-const IndexHeader = () => {
-    const [isNav, setIsNav] = useState(true);
-    const [isToday, setIsToday] = useRecoilState(todayAtom);
-    const nav = useRef();
-
-    const changeUpDownState = () => {
-        setIsNav(!isNav);
-    }
-
+const IndexHeader = ({isNav = true}) => {
     return (
         <>
         <div className="indexHeader">
@@ -32,15 +20,7 @@ const IndexHeader = () => {
                 <ColorTables />
             </div>
         </div>
-        <div className="upDownBtn" onClick={changeUpDownState} ref={nav}>
-            {
-                isNav ?
-                <SquareImg src="/images/minus.png" length="22px" />
-                :
-                <SquareImg src="/images/plus.png" length="22px" />
-            }
-            
-        </div>
+        
         <style jsx>{`
             .indexHeader{
                 display:flex;
@@ -59,9 +39,6 @@ const IndexHeader = () => {
                     padding: 0 15px;
                 }
                 .nav{
-                    display:none;
-                }
-                .upDownBtn{
                     display:none;
                 }
             }
@@ -86,22 +63,6 @@ const IndexHeader = () => {
                 }
                 .right div{
                     display: none;
-                }
-                .upDownBtn{
-                    display:flex;
-                    align-items:center;
-                    justify-content: center;
-                    position: fixed;
-                    bottom: 25px;
-                    right: 25px;
-                    width: 40px;
-                    height: 40px;
-                    background: #fff;
-                    border: solid;
-                    border-radius: 50% 50%;
-                    border-width: 1px;
-                    border-color: #ccc;
-                    cursor: pointer;
                 }
             }
 

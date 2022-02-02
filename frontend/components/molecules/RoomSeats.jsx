@@ -1,9 +1,8 @@
-import {useEffect, useState} from 'react';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+import { seatModalAtom } from '../others/state';
 import Seat from "../atoms/Seat";
 import SquareImg from '../atoms/Img';
-
-// 각 방 안에
-// 각 자리마다 오늘 / 내일 상태 나뉘게
+import { todayAtom } from '../others/state';
 
 const RoomData = [
     {
@@ -34,16 +33,6 @@ const RoomData = [
     {
         room : 104,
         seats : [
-            [22, 0, 1, 0, 0],
-            [23, 1, 1, 0, 0],
-            [24, 3, 3, 0, 0],
-            [25, 0, 1, 0, 0],
-            [26, 0, 0, 0, 0],
-            [27, 0, 0, 0, 0],
-            [28, 0, 1, 0, 0],
-            [29, 3, 3, 0, 0],
-            [30, 0, 0, 0, 0],
-            [31, 0, 1, 0, 0],
             [32, 2, 2, 0, 0],
             [33, 3, 3, 0, 0],
             [34, 1, 1, 0, 0],
@@ -54,11 +43,28 @@ const RoomData = [
             [39, 0, 1, 0, 0],
             [40, 1, 1, 0, 0],
             [41, 1, 1, 0, 0],
+            [22, 0, 1, 0, 0],
+            [23, 1, 1, 0, 0],
+            [24, 3, 3, 0, 0],
+            [25, 0, 1, 0, 0],
+            [26, 0, 0, 0, 0],
+            [27, 0, 0, 0, 0],
+            [28, 0, 1, 0, 0],
+            [29, 3, 3, 0, 0],
+            [30, 0, 0, 0, 0],
         ],
     },
     {
         room : 108,
         seats : [
+            [37, 1, 1, 0, 0],
+            [38, 0, 0, 0, 0],
+            [39, 0, 1, 0, 0],
+            [40, 1, 1, 0, 0],
+            [41, 1, 1, 0, 0],
+            [22, 0, 1, 0, 0],
+            [23, 1, 1, 0, 0],
+            [24, 3, 3, 0, 0],
             [22, 0, 1, 0, 0],
             [23, 1, 1, 0, 0],
             [24, 3, 3, 0, 0],
@@ -71,20 +77,35 @@ const RoomData = [
             [31, 0, 1, 0, 0],
             [32, 2, 2, 0, 0],
             [33, 3, 3, 0, 0],
-            [34, 1, 1, 0, 0],
-            [35, 0, 1, 0, 0],
-            [36, 1, 1, 0, 0],
-            [37, 1, 1, 0, 0],
-            [38, 0, 0, 0, 0],
-            [39, 0, 1, 0, 0],
-            [40, 1, 1, 0, 0],
-            [41, 1, 1, 0, 0],
         ],
     }  
 ]
 
 const RoomSeats = ({roomNumber}) => {
-    const [isToday, setIsToday] = useState(true);
+    const setModalState = useSetRecoilState(seatModalAtom);
+    const isToday = useRecoilValue(todayAtom);    
+    const openSeatModal = (room, today, prop) => {
+        let seatInfo = {
+            roomNumber : room,
+            isToday : today,
+            seatNumber : prop[0],
+            one : undefined,
+            two : undefined
+        };
+        if(today){
+            seatInfo.one = prop[1];
+            seatInfo.two = prop[2];
+        }
+        else{
+            seatInfo.one = prop[3];
+            seatInfo.two = prop[4];
+        }
+        let tempObject = {
+            isModalOpen : true,
+            seatInfo : seatInfo
+        };
+        setModalState(tempObject);
+    }
 
     return (
         <>
@@ -99,15 +120,17 @@ const RoomSeats = ({roomNumber}) => {
                 {
                     RoomData[roomNumber].seats.map((prop, index) => {
                         return (
-                            <div className="seatDiv">
-                                <Seat left={prop[1]} right={prop[2]}/>
+                            <div className="seatDiv" key={prop + index} onClick={() => openSeatModal(roomNumber, isToday, prop)}>
+                                {
+                                    isToday ? 
+                                    <Seat left={prop[1]} right={prop[2]}/>
+                                    : 
+                                    <Seat left={prop[3]} right={prop[4]}/>
+                                }
                                 <span>{prop[0]}</span>
                             </div>
                         );
                     })
-                    // 내가 하고싶은거
-                    // index가 올라가면서 이 div를 4개 단위로 끊어서 새로운 div에 넣어주고싶다
-                    // 어떻게 해야할까?
                 }
                 </div>
             </div>
@@ -117,6 +140,9 @@ const RoomSeats = ({roomNumber}) => {
                     flex-direction: column;
                     height: 100%;
                     margin-top: 20px;
+                    margin-bottom: 40px;
+                    width: 100%;
+                    max-width: 400px;
                 }
                 .seatTitle{
                     width: 100%;
@@ -141,16 +167,6 @@ const RoomSeats = ({roomNumber}) => {
                     width: 25%;
                     flex-direction: column;
                     align-items:center;
-                }
-                @media(min-width: 750px){
-                    .roomSeatsDiv{
-                        width: 300px;
-                    }
-                }
-                @media(max-width: 749px){
-                    .roomSeatsDiv{
-                        width: 100%;
-                    }
                 }
             `}</style>
         </>

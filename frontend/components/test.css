@@ -11,4 +11,5 @@ div{
     visibility: hidden;
     transition: 1s;
     float: left;
+    cursor:none;
 }

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { showRoomAtom, todayAtom } from "../others/state";
 
@@ -20,19 +19,19 @@ const IndexNav = () => {
 
     const changeRoomNumberToZero = () => {
         if(roomNumber != 0){
-            setRoomNumber = 0;
+            setRoomNumber(0);
         }
     }
 
     const changeRoomNumberToOne = () => {
         if(roomNumber != 1){
-            setRoomNumber = 1;
+            setRoomNumber(1);
         }
     }
     
     const changeRoomNumberToTwo = () => {
         if(roomNumber != 2){
-            setRoomNumber = 2;
+            setRoomNumber(2);
         }
     }
 
