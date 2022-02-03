@@ -20,8 +20,8 @@ const Seat = ({length = "50px", left = 0, right = 0, dist = 0, width = 26}) => {
             ctx.fillStyle = color;
             ctx.beginPath();
             ctx.moveTo(hX - dist, 300 + hW);
-            ctx.moveTo(hX - dist, 450 - hW);
-            ctx.lineTo(63 - dist, 450 - hW);
+            ctx.moveTo(hX - dist, 451 - hW);
+            ctx.lineTo(63 - dist, 451 - hW);
             ctx.bezierCurveTo(50 + hW - dist, 350 + hW, 50 - dist, 300 + 10, hX - dist, 300 + hW);
             ctx.fill();
             ctx.beginPath();
@@ -33,9 +33,9 @@ const Seat = ({length = "50px", left = 0, right = 0, dist = 0, width = 26}) => {
             ctx.fillStyle = color;
             ctx.beginPath();
             ctx.moveTo(hX + dis, 300 + hW);
-            ctx.bezierCurveTo(450 + dis, 310, 450 - hW + dis, 367, 450 - hW + dis, 450 - hW);
-            ctx.lineTo(hX + dis, 437);
-            ctx.moveTo(hX + dis, 313)
+            ctx.bezierCurveTo(450 + dis, 310, 450 - hW + dis, 367, 451 - hW + dis, 451 - hW);
+            ctx.lineTo(hX + dis, 451 - hW);
+            ctx.moveTo(hX + dis, 300 + hW)
             ctx.fill();
             ctx.beginPath();
             ctx.arc(hX + dis, 140, 67, Math.PI * 1.5, Math.PI * 0.5);
@@ -47,12 +47,12 @@ const Seat = ({length = "50px", left = 0, right = 0, dist = 0, width = 26}) => {
         ctx.lineWidth = width;
         ctx.clearRect(0, 0, canvas.width, canvas.height);        
         ctx.beginPath();
-        ctx.arc(hX - dis, 140, 80, Math.PI * 0.5, Math.PI * 1.5);
-        ctx.lineTo(hX - dis, 140 + 80 + hW);
+        ctx.arc(hX - dis, 140, 79, Math.PI * 0.5, Math.PI * 1.5);
+        ctx.lineTo(hX - dis, 138 + 80 + hW);
         ctx.stroke();
         ctx.beginPath();
-        ctx.arc(hX + dis, 140, 80, Math.PI * 1.5, Math.PI * 2.5);
-        ctx.lineTo(hX + dis, 140 - 80 - hW);
+        ctx.arc(hX + dis, 140, 79, Math.PI * 1.5, Math.PI * 2.5);
+        ctx.lineTo(hX + dis, 142 - 80 - hW);
         ctx.stroke();
 
         ctx.beginPath();

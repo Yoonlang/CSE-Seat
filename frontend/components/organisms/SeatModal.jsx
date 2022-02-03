@@ -30,10 +30,17 @@ const SeatModal = () => {
                     }호 | {modalState.seatInfo.isToday ? "오늘" : "내일"} | {modalState.seatInfo.seatNumber}번 좌석</span>
                     <Seat length="150px" left={modalState.seatInfo.one} right={modalState.seatInfo.two} />
                     <div className="time">
-                        <span></span>
+                        <span>시간</span>
                         <div>
+                            <div></div>
+                            <div></div>
                         </div>
                     </div>
+                    <div>
+                        <button>입실</button>
+                        <button>퇴실</button>
+                    </div>
+                    <button>신청하기</button>
                     <div className="cancel">
                         <SquareImg src="/images/cancel.png" length="30px"/>
                     </div>

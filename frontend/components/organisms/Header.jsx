@@ -24,6 +24,7 @@ const Header = () => {
 
     return (
         <>
+        <div className="block"></div>
         <div className="headerDiv">
             <div className="menu" onClick={clickMenu}>
                 <SquareImg src="/images/menu.png" 
@@ -116,13 +117,18 @@ const Header = () => {
                 }
             }
             @media(max-width: 749px){
+                .block{
+                    width: 100%;
+                    height: 100px;
+                }
                 .headerDiv{
+                    position: fixed;
+                    top:0;
+                    left:0;
+                    width: 100%;
                     height: 100px;
                     justify-content: space-around;
                     flex-wrap: wrap;
-                }
-                .headerDiv:nth-child(2){
-                    background: black;
                 }
                 .menu{
                     display:flex;

@@ -7,6 +7,7 @@ const IndexHeader = ({isNav = true}) => {
     return (
         <>
         <div className="indexHeader">
+            <div className="block"></div>
             <div className="nav">
                 <IndexNav />
             </div>
@@ -53,13 +54,20 @@ const IndexHeader = ({isNav = true}) => {
                     `}
                     transition: 0.7s;
                 }
+                .block{
+                    width: 100%;
+                    height: 70px;
+                }
                 .explain{
                     display: none;
                 }
                 .nav{
+                    position:fixed;
+                    left:0;
                     width: 100%;
                     height: 70px;
-                    
+                    background: #fff;
+                    z-index: 4;
                 }
                 .right div{
                     display: none;

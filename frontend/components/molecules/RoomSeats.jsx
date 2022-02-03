@@ -154,6 +154,7 @@ const RoomSeats = ({roomNumber}) => {
                     flex-direction: column;
                     align-items: center;
                     justify-content: center;
+                    margin-bottom: 15px;
                 }
                 .front span{
                     font-size: 14px;
