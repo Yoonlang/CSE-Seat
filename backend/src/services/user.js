@@ -18,6 +18,17 @@ new Promise(async (resolve, reject) => {
     });
 });
 
+const makePasswordHashed = (sid, password) =>
+    new Promise(async (resolve, reject) => {
+        const salt = await userModel
+            .findById(sid)
+            .then((result) => result.salt);
+        crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
+            if (err) reject(err);
+            resolve(key.toString('base64'));
+        });
+    });
+
 module.exports = {
     
     join: async (userDTO)=>{
@@ -27,23 +38,35 @@ module.exports = {
             if (!userDTO.email) throw Error('이메일을 입력하세요.')
             if (!userDTO.birth) throw Error('생일을 입력하세요.')
             if (!userDTO.major) throw Error('학번을 입력하세요.')
-            let result = userModel.search(userDTO.sid);
+            let result = await userModel.findById(userDTO.sid).catch((err)=>{throw err;});
             if(!result) throw Error('데이터 베이스 오류입니다. 관리자에게 문의하세요.');
             if(result.length>0) throw Error('이미 가입한 학번이 존재합니다.');
             
             hashed = await createHashedPassword(userDTO.password);
-            console.log(hashed)
             userDTO.password = hashed.password;
             userDTO.password_salt = hashed.salt;
             result = await userModel.insert(userDTO);
             if(!result) throw Error('데이터 베이스 오류입니다. 관리자에게 문의하세요.');
             return {result : result};
         }catch(e){
-            console.log('user',e)
+            console.log('userService Join error: ',e)
             return {result : false, message: e.message};
         }
     },
-    login : function(userDTO){
-    
+    login : async (userDTO) => {
+        try{
+            if (!userDTO.sid) throw Error('학번을 입력하세요.')
+            if (!userDTO.password) throw Error('비밀번호를 입력하세요.')
+            rightPassword = await userModel.findById(sid)
+            .then(result => result.password)
+            .catch((err)=>{throw err;});
+            if (rightPassword == makePasswordHashed(userDTO.password)){
+                return {result: true}
+            }
+            else throw Error('비밀번호가 틀렸습니다.');
+        }catch(e){
+            console.log('userService Login error: ',e)
+            return {result : false, message: e.message};
+        }     
     },
 }
