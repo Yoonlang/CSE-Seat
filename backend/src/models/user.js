@@ -1,13 +1,13 @@
 let db = require('./mysql');
 
 module.exports = {
-    search : async (name) => {
-        let sql = "select * from user where name = ?"
-        let result = await db.query(sql,[name]);
+    findById : async (sid) => new Promise((resolve, reject) => {
+        let sql = "select * from user where sid = ?"
+        let result = await db.query(sql,[sid]);
         if (result)
-            return result;
-        return null;
-    },
+            return resolve(result);
+        return reject(new Error('해당하는 학번이 없습니다.'));
+    }),
     insert : async(userDTO) => {
         try {
             let sql = "INSERT INTO user SET ?"
