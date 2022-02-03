@@ -4,7 +4,6 @@ const bodyParser = require('body-parser')
 const userService = require('$/services/user')
 
 passport.serializeUser(function(user, done){
-    console.log('여기 도달해야하는데?')
     console.log('passport session save : ', user.sid)
     done(null, user.sid)
 });

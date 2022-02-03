@@ -6,7 +6,7 @@ const passportService = require('$/services/passport.js');
 const flash = require('connect-flash');
 
 router.get('/', (req, res)=>{
-    //yoonseok Nuxt js
+    res.send({result : 'hi', sid :  req.user});
 });
 
 router.post('/process', (req,res,next)=>{
@@ -14,7 +14,10 @@ router.post('/process', (req,res,next)=>{
         if(err) return next(err);
         if (!user) return res.status(401).json(info.message);
 
-        res.status(200).json({result:'success', sid: user.sid})
+        req.logIn(user, function(err) {
+            if (err) { return next(err); }
+            return res.status(200).json({result:'success', sid: user.sid});
+        });
     })(req, res, next);
 });
 

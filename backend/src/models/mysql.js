@@ -29,6 +29,7 @@ module.exports = {
         } catch (err){
             await connection.rollback();
             connection.release();
+            console.log('mysql : ' , err)
             throw err;
         } 
     },
