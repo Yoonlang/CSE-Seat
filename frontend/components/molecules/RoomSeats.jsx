@@ -1,6 +1,6 @@
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { seatModalAtom } from '../others/state';
-import Seat from "../atoms/Seat";
+import {Seat} from "../atoms/Seat";
 import SquareImg from '../atoms/Img';
 import { todayAtom } from '../others/state';
 
@@ -110,7 +110,7 @@ const RoomSeats = ({roomNumber}) => {
     return (
         <>
             <div className="roomSeatsDiv">
-                <span className="seatTitle">{RoomData[roomNumber].room}호 | {isToday ? "오늘" : "내일"}</span>
+                <span className="seatTitle">{RoomData[roomNumber].room}호<bar>|</bar>{isToday ? "오늘" : "내일"}</span>
                 <div className="front">
                     <SquareImg src="/images/square.png"
                     length="40px"/>
@@ -147,6 +147,9 @@ const RoomSeats = ({roomNumber}) => {
                 .seatTitle{
                     width: 100%;
                     margin: 15px;
+                }
+                bar{
+                    margin: 0 14px;
                 }
                 .front{
                     width: 100%;

@@ -1,4 +1,4 @@
-import Seat from "../atoms/Seat";
+import {Seat} from "../atoms/Seat";
 
 const Explain = () => {
     return (

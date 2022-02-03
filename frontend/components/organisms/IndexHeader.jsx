@@ -42,6 +42,9 @@ const IndexHeader = ({isNav = true}) => {
                 .nav{
                     display:none;
                 }
+                .block{
+                    display: none;
+                }
             }
             @media(max-width: 749px){
                 .indexHeader{

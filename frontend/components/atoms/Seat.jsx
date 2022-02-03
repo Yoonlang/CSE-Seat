@@ -1,8 +1,9 @@
 import {useRef, useEffect} from 'react';
 
+const seatColor = ['white', '#969696', '#0F5BCC', '#007435'];
+
 const Seat = ({length = "50px", left = 0, right = 0, dist = 0, width = 26}) => {
     const canvasRef = useRef();
-    const seatColor = ['white', '#969696', '#0F5BCC', '#007435'];
     const leng = length.slice(0, length.match("px").index);
 
     useEffect(() => {
@@ -96,4 +97,4 @@ const Seat = ({length = "50px", left = 0, right = 0, dist = 0, width = 26}) => {
     );
 }
 
-export default Seat;
+export {Seat, seatColor};

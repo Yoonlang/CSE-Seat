@@ -1,4 +1,4 @@
-import {useState, useRef} from 'react';
+import {useState, useRef, useEffect} from 'react';
 import { useRecoilValue } from 'recoil';
 import RoomSeats from '../components/molecules/RoomSeats';
 import IndexHeader from '../components/organisms/IndexHeader';
@@ -15,6 +15,10 @@ const Index = () => {
     const changeUpDownState = () => {
         setIsNav(!isNav);
     }
+
+    useEffect(() => {
+        
+    },[])
 
     return (
     <>
