@@ -4,13 +4,14 @@ const bodyParser = require('body-parser')
 const userService = require('$/services/user')
 
 passport.serializeUser(function(user, done){
+    console.log('여기 도달해야하는데?')
     console.log('passport session save : ', user.sid)
     done(null, user.sid)
 });
 
 passport.deserializeUser(function(sid, done){
     console.log('passport session getdata : ', sid)
-    done(null, name); //user라는 객체에 담아 request로 전달한다
+    done(null, sid); //user라는 객체에 담아 request로 전달한다
 })
 
 passport.use('local-join', new LocalStrategy({
@@ -22,7 +23,7 @@ passport.use('local-join', new LocalStrategy({
         userDTO.only_friend = 'true' ? true : false;
         try{
             result = await userService.join(userDTO);
-            if(result.result == false)  
+            if(result.result == false) 
                 throw result;
             return done(null, {sid : userDTO.sid});
         }catch(e){

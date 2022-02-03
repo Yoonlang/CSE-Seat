@@ -9,20 +9,27 @@ module.exports = {
         return null;
     },
     insert : async(userDTO) => {
-        let sql = "INSERT INTO user SET ?"
-        set = {
-            sid : userDTO.sid,
-            name : userDTO.name,
-            birth : userDTO.birth,
-            password : userDTO.password,
-            password_salt : userDTO.password_salt,
-            only_friend : userDTO.only_friend,
-            major : userDTO.major,
-            email : userDTO.email
+        try {
+            let sql = "INSERT INTO user SET ?"
+            set = {
+                sid : userDTO.sid,
+                name : userDTO.name,
+                birth : userDTO.birth,
+                password : userDTO.password,
+                password_salt : userDTO.password_salt,
+                only_friend : userDTO.only_friend,
+                major : userDTO.major,
+                email : userDTO.email
+            }
+            let result = await db.query(sql,set);
+            if (result && result.affectedRows > 0)
+                return true;
+            else
+                throw Error('fail to insert')
+        } catch(e){
+            console.log(e);
+            return false;
         }
-        let result = await db.query(sql,set);
-        if (result && result.affectedRows > 0)
-            return true;
-        return false;
+        
     }
 }

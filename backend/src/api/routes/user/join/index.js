@@ -3,7 +3,7 @@ const { join } = require('$/services/user');
 const router = Router();
 const passport = require('passport');
 const passportService = require('$/services/passport.js');
-const e = require('connect-flash');
+const flash = require('connect-flash');
 
 router.get('/', (req, res)=>{
     //yoonseok Nuxt js

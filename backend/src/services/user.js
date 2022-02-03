@@ -14,6 +14,7 @@ module.exports = {
             if(result.length>0) throw Error('이미 가입한 학번이 존재합니다.');
 
             result = await userModel.insert(userDTO);
+            if(!result) throw Error('데이터 베이스 오류입니다. 관리자에게 문의하세요.');
             return {result : result};
         }catch(e){
             console.log('user',e)
