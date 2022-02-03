@@ -1,7 +1,7 @@
 let db = require('./mysql');
 
 module.exports = {
-    findById : async (sid) => new Promise((resolve, reject) => {
+    findById : async (sid) => new Promise( async (resolve, reject) => {
         let sql = "select * from user where sid = ?"
         let result = await db.query(sql,[sid]);
         if (result)
