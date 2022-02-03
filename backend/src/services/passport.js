@@ -1,6 +1,5 @@
 const passport = require('passport');
 const LocalStrategy = require ('passport-local').Strategy
-const bodyParser = require('body-parser')
 const userService = require('$/services/user')
 
 passport.serializeUser(function(user, done){
@@ -25,6 +24,24 @@ passport.use('local-join', new LocalStrategy({
             if(result.result == false) 
                 throw result;
             return done(null, {sid : userDTO.sid});
+        }catch(e){
+            console.log('오류 항목:', e.message);
+            return done(null, false, {message : e.message});
+        }
+    }
+));
+
+passport.use('local-login', new LocalStrategy({
+    usernameField: 'sid',
+    passwordField: 'password',
+    passReqToCallback : true
+    }, async (req, sid, password, done)=>{
+        userDTO = req.body;
+        try{
+            result = userService.login(userDTO);
+            if(result.result == false) 
+                throw result;
+            return done(null, {sid : userDTO.sid});            
         }catch(e){
             console.log('오류 항목:', e.message);
             return done(null, false, {message : e.message});
