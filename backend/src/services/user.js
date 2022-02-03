@@ -1,6 +1,25 @@
 const userModel = require('../models/user')
+const crypto = require('crypto');
+
+const createSalt = () =>
+            new Promise((resolve, reject) => {
+                crypto.randomBytes(64, (err, buf) => {
+                    if (err) reject(err);
+                    resolve(buf.toString('base64'));
+                });
+            });
+
+const createHashedPassword = (plainPassword) =>
+new Promise(async (resolve, reject) => {
+    const salt = await createSalt();
+    crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
+        if (err) reject(err);
+        resolve({ password: key.toString('base64'), salt });
+    });
+});
 
 module.exports = {
+    
     join: async (userDTO)=>{
         try{
             if (!userDTO.sid) throw Error('학번을 입력하세요.')
@@ -8,11 +27,14 @@ module.exports = {
             if (!userDTO.email) throw Error('이메일을 입력하세요.')
             if (!userDTO.birth) throw Error('생일을 입력하세요.')
             if (!userDTO.major) throw Error('학번을 입력하세요.')
-            
             let result = userModel.search(userDTO.sid);
             if(!result) throw Error('데이터 베이스 오류입니다. 관리자에게 문의하세요.');
             if(result.length>0) throw Error('이미 가입한 학번이 존재합니다.');
-
+            
+            hashed = await createHashedPassword(userDTO.password);
+            console.log(hashed)
+            userDTO.password = hashed.password;
+            userDTO.password_salt = hashed.salt;
             result = await userModel.insert(userDTO);
             if(!result) throw Error('데이터 베이스 오류입니다. 관리자에게 문의하세요.');
             return {result : result};
@@ -21,7 +43,7 @@ module.exports = {
             return {result : false, message: e.message};
         }
     },
-    login : function(sid, password){
-        console.log('hi');
+    login : function(userDTO){
+    
     },
 }
