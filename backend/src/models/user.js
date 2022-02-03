@@ -21,9 +21,8 @@ module.exports = {
             email : userDTO.email
         }
         let result = await db.query(sql,set);
-        console.log('usermodel :',result)
-        if (result)
-            return result;
-        return null;
+        if (result && result.affectedRows > 0)
+            return true;
+        return false;
     }
 }

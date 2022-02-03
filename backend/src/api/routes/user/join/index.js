@@ -10,9 +10,11 @@ router.get('/', (req, res)=>{
 });
 
 router.post('/process', (req,res,next)=>{
-    passport.authenticate('local-join', (trash,user,err) => {
+    passport.authenticate('local-join', (err,user,info) => {
         if(err) return next(err);
-        res.status(200).json({result:'success'})
+        if (!user) return res.status(401).json(info.message);
+
+        res.status(200).json({result:'success', sid: user.sid})
     })(req, res, next);
 });
 
