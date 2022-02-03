@@ -3,6 +3,7 @@ import {useRef, useEffect} from 'react';
 const Seat = ({length = "50px", left = 0, right = 0, dist = 0, width = 26}) => {
     const canvasRef = useRef();
     const seatColor = ['white', '#969696', '#0F5BCC', '#007435'];
+    const leng = length.slice(0, length.match("px").index);
 
     useEffect(() => {
         left = seatColor[left];
@@ -11,7 +12,6 @@ const Seat = ({length = "50px", left = 0, right = 0, dist = 0, width = 26}) => {
         const ctx = canvas.getContext('2d');
         canvas.width = 500;
         canvas.height = 500;
-
         const hX = canvas.width / 2;
         const dis = Number(dist);
         const hW = width / 2;
@@ -24,7 +24,6 @@ const Seat = ({length = "50px", left = 0, right = 0, dist = 0, width = 26}) => {
             ctx.lineTo(63 - dist, 450 - hW);
             ctx.bezierCurveTo(50 + hW - dist, 350 + hW, 50 - dist, 300 + 10, hX - dist, 300 + hW);
             ctx.fill();
-            
             ctx.beginPath();
             ctx.arc(hX - dist, 140, 67, Math.PI * 0.5, Math.PI * 1.5);
             ctx.fill();
@@ -38,21 +37,19 @@ const Seat = ({length = "50px", left = 0, right = 0, dist = 0, width = 26}) => {
             ctx.lineTo(hX + dis, 437);
             ctx.moveTo(hX + dis, 313)
             ctx.fill();
-
             ctx.beginPath();
             ctx.arc(hX + dis, 140, 67, Math.PI * 1.5, Math.PI * 0.5);
             ctx.fill();
-
         }
-        
+
+        ctx.scale(0.5, 0.5);
+
         ctx.lineWidth = width;
         ctx.clearRect(0, 0, canvas.width, canvas.height);        
         ctx.beginPath();
         ctx.arc(hX - dis, 140, 80, Math.PI * 0.5, Math.PI * 1.5);
         ctx.lineTo(hX - dis, 140 + 80 + hW);
-        
         ctx.stroke();
-        
         ctx.beginPath();
         ctx.arc(hX + dis, 140, 80, Math.PI * 1.5, Math.PI * 2.5);
         ctx.lineTo(hX + dis, 140 - 80 - hW);
@@ -74,18 +71,28 @@ const Seat = ({length = "50px", left = 0, right = 0, dist = 0, width = 26}) => {
         
         fillLeft(left);
         fillRight(right);
+
     })
 
     return (
-        <div>
-            <canvas ref={canvasRef}></canvas>
-            <style jsx>{`
+        <>
+        <div className="canvasDiv">
+            <canvas ref={canvasRef} width="1920" height="1080"></canvas>
+        </div>
+        <style jsx>{`
+                .canvasDiv{
+                    display: flex;
+                    width: ${(leng)}px;
+                    height: ${(leng)}px;
+                    overflow: hidden;
+                }
                 canvas{
-                    width:${(length)};
-                    height:${(length)};
+                    width:${(leng * 2)}px;
+                    height:${(leng * 2)}px;
                 }
             `}</style>
-        </div>
+        </>
+        
     );
 }
 

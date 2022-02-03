@@ -4,7 +4,7 @@ const Explain = () => {
     return (
         <>
         <div>
-            <Seat length="80px" dist="30" />
+            <Seat length="80px" dist="35" />
             <span className="sp">1부(왼): 06:00 ~ 18:00</span>
             <span>2부(오): 18:00 ~ 06:00</span>
         </div>
