@@ -1,6 +1,6 @@
 import HeadTitle from "../components/others/headTitle"
 
-const apply = () => {
+const Apply = () => {
     return (
         <>
             <HeadTitle title="apply"/>
@@ -9,4 +9,4 @@ const apply = () => {
     )
 }
 
-export default apply;
+export default Apply;

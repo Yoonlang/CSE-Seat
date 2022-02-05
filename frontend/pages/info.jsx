@@ -1,6 +1,6 @@
 import HeadTitle from "../components/others/headTitle"
 
-const info = () => {
+const Info = () => {
     return (
         <div className="fixed">
             <HeadTitle title="info"/>
@@ -9,4 +9,4 @@ const info = () => {
     )
 }
 
-export default info;
+export default Info;
