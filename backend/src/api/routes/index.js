@@ -4,11 +4,8 @@ const path = require('path');
 const router = Router();
 
 router.get('/', function(req,res){
-    res.sendFile(path.join("$/public/main.html"))
+    res.send('/');
 });
-
-router.use('/user', user)
-
-
+router.use('/user', user);
 
 module.exports = router;

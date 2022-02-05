@@ -1,5 +1,4 @@
 const {Router} = require('express');
-const { join } = require('$/services/user');
 const router = Router();
 const passport = require('passport');
 const passportService = require('$/services/passport.js');
@@ -13,7 +12,7 @@ router.post('/process', (req,res,next)=>{
     passport.authenticate('local-login', (err,user,info) => {
         if(err) return next(err);
         if (!user) return res.status(401).json(info.message);
-        
+
         req.logIn(user, function(err) {
             if (err) { return next(err); }
             return res.status(200).json({result:'success', sid: user.sid});
