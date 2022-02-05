@@ -64,7 +64,7 @@ const Footer = () => {
                 height: 80ox;
                 gap: 12px;
             }
-            @media(min-width: 500px){
+            @media(min-width: 480px){
                 .footerDiv{
                     height: 150px;
                     flex-wrap: wrap;
@@ -73,7 +73,7 @@ const Footer = () => {
                     width: 50%;
                 }
             }
-            @media(max-width: 499px){
+            @media(max-width: 479px){
                 .footerDiv{
                     height: 220px;
                     flex-direction: column;

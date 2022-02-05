@@ -68,12 +68,12 @@ const Index = () => {
                 height: 100px;
                 background: #fff;
             }
-            @media(min-width: 750px){
+            @media(min-width: 768px){
                 .upDownBtn{
                     display:none;
                 }
             }
-            @media(max-width: 749px){
+            @media(max-width: 767px){
                 .roomsDiv{
                     ${(isNav ? `` : 
                     `

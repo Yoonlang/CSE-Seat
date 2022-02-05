@@ -30,17 +30,17 @@ const MyApp = ({Component, pageProps}) => {
                 .page{
                     height: 100%;
                 }
-                @media(min-width: 750px){
+                @media(min-width: 768px){
                     .page{
                         min-height: calc(100vh - 60px - 150px);
                     }
                 }
-                @media (min-width: 500px) and (max-width: 749px){
+                @media (min-width: 480px) and (max-width: 767px){
                     .page{
                         min-height: calc(100vh - 100px - 150px);
                     }
                 }
-                @media(max-width: 499px){
+                @media(max-width: 479px){
                     .page{
                         min-height: calc(100vh - 100px - 220px);
                     }

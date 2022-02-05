@@ -33,7 +33,7 @@ const IndexHeader = ({isNav = true}) => {
                 align-items: center;
                 gap: 30px;
             }
-            @media(min-width: 750px){
+            @media(min-width: 768px){
                 .indexHeader{
                     justify-content: space-between;
                     height: 130px;
@@ -46,7 +46,7 @@ const IndexHeader = ({isNav = true}) => {
                     display: none;
                 }
             }
-            @media(max-width: 749px){
+            @media(max-width: 767px){
                 .indexHeader{
                     height: 70px;
                     flex-wrap: wrap;
