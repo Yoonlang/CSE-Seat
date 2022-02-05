@@ -45,7 +45,6 @@ const SeatModal = () => {
     };
 
     const submitReq = () => {
-
     }
 
     const clickBtn = (e) => {

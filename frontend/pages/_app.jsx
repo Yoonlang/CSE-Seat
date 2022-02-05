@@ -8,7 +8,6 @@ const MyApp = ({Component, pageProps}) => {
             <RecoilRoot>
                 <Header />
                 <div className="page">
-                    {/* 아 개빡친다 height:100% 안먹히는거 개열받네 */}
                     <Component {...pageProps} />
                 </div>
                 <Footer />
@@ -25,7 +24,12 @@ const MyApp = ({Component, pageProps}) => {
                     color:#000;
                     text-decoration:none;
                 }
+                html, body{
+                    height: 100%;
+                }
                 .page{
+                    display:flex;
+                    align-items: center;
                     height: 100%;
                 }
                 @media(min-width: 750px){
