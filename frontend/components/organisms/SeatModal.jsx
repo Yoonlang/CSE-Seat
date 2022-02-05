@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useRecoilState } from "recoil";
+import { RecoilLoadable, useRecoilState } from "recoil";
 import {Seat, seatColor} from "../atoms/Seat";
 import { seatModalAtom } from "../others/state";
 
@@ -9,37 +9,57 @@ const SeatModal = () => {
     const [oneColor, setOneColor] = useState('');
     const [twoColor, setTwoColor] = useState('');
     const [isMySeat, setIsMySeat] = useState();
+    const [isReadyToRequest, setIsReadyToRequest] = useState([false, false]);
     const modalOutside = useRef();
     const cancelBtn = useRef();
-// 고려해야할 사항
-// 내 자리가 맞는지 아닌지에 따라서 button의 text가 달라짐.
-// 그러면 seatModal이 계속 바뀔수도 있나? (내 자리가 아닐 때 클릭했다가 내 자리가 되어버렸어)
-// useEffect같은걸로 seat 계속 체크해야겠는데
-// 이게 안되고 그냥 에러처리를 해야하는거라면
-// 내가 이 자리에 대해서 요청을 보낼 때 (빈자리라고 생각해서 신청하기를 눌렀는데
-// 다른사람이 이미 신청해서 빈자리가 아닐 떄)
-// 를 확인해서 처리하자
+
+    const changeColor = (color) => {
+        if(color === seatColor[0]) return seatColor[4];
+        if(color === seatColor[4]) return seatColor[0];
+        if(color === seatColor[2]) return seatColor[5];
+        if(color === seatColor[5]) return seatColor[2];
+    }
 
     const clickModal = (event) => {
         if(event.target === modalOutside.current || event.target === cancelBtn.current) {
             let tempObject = {...modalState};
             tempObject.isModalOpen = false;
             setModalState(tempObject);
-            // 나갔다가 들어올때마다 데이터 fetching을 해준다?
             modalOutside.current.style.display = "none";
         }
     };
 
     const selectTime = (prop) => {
-        console.log(prop);
-        // 이제 여기서 prop이 0이냐 1이냐에 따라서 1부 눌렀는지 2부 눌렀는지 알수있게 되고,
-        // 무슨 상태에서 눌렀는지에 따라서 처리해주면 됨.
+        if(prop === 0){
+            if(one === 0 || one === 2){
+                setOneColor(changeColor(oneColor));
+                setIsReadyToRequest([!isReadyToRequest[0], isReadyToRequest[1]]);
+            }
+        }
+        else{
+            if(two === 0 || two === 2){
+                setTwoColor(changeColor(twoColor));
+                setIsReadyToRequest([isReadyToRequest[0], !isReadyToRequest[1]]);
+            }
+        }
     };
+
+    const submitReq = () => {
+
+    }
+
+    const clickBtn = (e) => {
+        e.preventDefault();
+        if(isReadyToRequest[0] | isReadyToRequest[1]){
+            submitReq();
+        }
+    }
 
     useEffect(() => {
         modalOutside.current.style.display = isModalOpen ? "flex" : "none";
         setOneColor(seatColor[one]);
         setTwoColor(seatColor[two]);
+        setIsReadyToRequest([false, false]);
         if(isModalOpen){
             if(one === 2 || two === 2){
                 setIsMySeat(true);
@@ -58,7 +78,7 @@ const SeatModal = () => {
                     (roomNumber === 1? "104" : "108")}호<bar>|</bar>
                     {isToday ? "오늘" : "내일"}<bar>|</bar>
                     {seatNumber}번 좌석</span>
-                    <Seat length="120px" left={one} right={two} />
+                    <Seat length="120px" left={oneColor} right={twoColor} isColor />
                     <div className="time">
                         <span>시간</span>
                         <div>
@@ -81,10 +101,10 @@ const SeatModal = () => {
                         <button>입실</button>
                         <button>퇴실</button>
                     </div>
-                    <button className="submit">자리 수정</button>
+                    <button className="submit" onClick={clickBtn}>자리 수정</button>
                     </>
                     :
-                    <button className="submit">신청하기</button>
+                    <button className="submit" onClick={clickBtn}>신청하기</button>
                     }
                     
                     <img src="/images/cancel.png"
@@ -169,8 +189,8 @@ const SeatModal = () => {
                 background: ${(oneColor)};
             }
             .one, .one > span{
-                cursor: ${(oneColor === seatColor[0] ? "pointer" : 
-                oneColor === seatColor[2] ? "pointer" : "default")};
+                cursor: ${(one === 0 ? "pointer" : 
+                one === 2 ? "pointer" : "default")};
                 color: ${(oneColor === seatColor[0] ? "#000" : "#fff")};
             }
             .two{
@@ -180,8 +200,8 @@ const SeatModal = () => {
                 background: ${(twoColor)};
             }
             .two, .two > span{
-                cursor: ${(twoColor === seatColor[0] ? "pointer" : 
-                twoColor === seatColor[2] ? "pointer" : "default")};
+                cursor: ${(two === 0 ? "pointer" : 
+                twoColor === 2 ? "pointer" : "default")};
                 color: ${(twoColor === seatColor[0] ? "#000" : "#fff")};
             }
             .submit{
@@ -192,8 +212,22 @@ const SeatModal = () => {
                 outline: none;
                 border: solid;
                 border-width: 1px;
-                border-color: #ddd;
                 background: #fff;
+                ${(isReadyToRequest[0] | isReadyToRequest[1] ?
+                    `
+                    box-shadow: 0 0 1px;
+                    border-color: #999;
+                    cursor: pointer;
+                    color: #000;
+                    `
+                    :
+                    `
+                    border-color: #ddd;
+                    color: #ddd;
+                    cursor: default;
+                    `
+                )}
+                transition: 0.2s;
             }
         `}</style>
         </>

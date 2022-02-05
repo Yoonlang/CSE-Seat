@@ -1,14 +1,17 @@
 import {useRef, useEffect} from 'react';
 
-const seatColor = ['white', '#969696', '#0F5BCC', '#007435'];
+const seatColor = ['#ffffff', '#969696', '#0F5BCC', '#007435', '#5C9DFF', '#D60505'];
 
-const Seat = ({length = "50px", left = 0, right = 0, dist = 0, width = 26}) => {
+const Seat = ({length = "50px", left = 0, right = 0, dist = 0, width = 26, isColor = false}) => {
     const canvasRef = useRef();
     const leng = length.slice(0, length.match("px").index);
 
     useEffect(() => {
-        left = seatColor[left];
-        right = seatColor[right];
+        if(!isColor){
+            left = seatColor[left];
+            right = seatColor[right];
+        }
+        
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         canvas.width = 500;
