@@ -1,6 +1,6 @@
 import HeadTitle from "../components/others/headTitle"
 
-const history = () => {
+const History = () => {
     return (
         <>
             <HeadTitle title="history"/>
@@ -9,4 +9,4 @@ const history = () => {
     )
 }
 
-export default history;
+export default History;

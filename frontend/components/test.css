@@ -1,6 +1,16 @@
-img{
-    object-fit:fill;
-    text-decoration: none;
+div{
+    border: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    justify-content: space-around;
+    overflow: hidden;
+    flex-direction: column;
+    flex-wrap: wrap;
+    background: #373737;
+    border-radius: 50% 50%;
+    visibility: hidden;
+    transition: 1s;
+    float: left;
+    cursor:none;
     white-space: nowrap;
-    text-align: center;
 }
