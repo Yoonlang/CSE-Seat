@@ -50,7 +50,7 @@ const IndexHeader = ({isNav = true}) => {
                 .indexHeader{
                     height: 70px;
                     flex-wrap: wrap;
-                    justify-content: right;
+                    justify-content: flex-end;
                     gap: 12px;
                     ${isNav ? `` : `
                     transform: translateY(-70px);
