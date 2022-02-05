@@ -23,6 +23,6 @@ const getTomorrowDate = () => {
 }
 
 module.exports = {
-    getTodayDate : getTodayDate(),
-    getTomorrowDate : getTomorrowDate()
+    getTodayDate : getTodayDate,
+    getTomorrowDate : getTomorrowDate
 }
