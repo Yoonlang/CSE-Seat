@@ -28,8 +28,6 @@ const MyApp = ({Component, pageProps}) => {
                     height: 100%;
                 }
                 .page{
-                    display:flex;
-                    align-items: center;
                     height: 100%;
                 }
                 @media(min-width: 750px){
