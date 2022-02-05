@@ -94,11 +94,24 @@ const SeatModal = () => {
                         </div>
                     </div>
 
+                            {
+                                /*
+                                    입퇴실 관련은 json 받아오고 나서 결정하자
+                                    useState로 해야할지 recoil로 해야할지
+                                    아직은 감이 잘 안오네
+                                    나중에 둘 중 멀 써야하는지에 대해서 정리해보자
+                                */
+                            }
+
                     {isMySeat?
                     <>
-                    <div>
-                        <button>입실</button>
-                        <button>퇴실</button>
+                    <div className="check">
+                        <div>
+                            <button>입실</button><span>22.01.19<space/>06 : 24</span>
+                        </div>
+                        <div>
+                            <button>퇴실</button><span>22.01.19<space/>06 : 24</span>
+                        </div>
                     </div>
                     <button className="submit" onClick={clickBtn}>자리 수정</button>
                     </>
@@ -202,6 +215,30 @@ const SeatModal = () => {
                 cursor: ${(two === 0 ? "pointer" : 
                 twoColor === 2 ? "pointer" : "default")};
                 color: ${(twoColor === seatColor[0] ? "#000" : "#fff")};
+            }
+            .check{
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                gap: 10px;
+            }
+            space{
+                margin: 0 10px;
+            }
+            .check button{
+                width: 80px;
+                height: 35px;
+                outline: none;
+                border: solid;
+                border-width: 1px;
+                border-color: #ddd;
+                background: #fff;
+                margin-left: 50px;
+                margin-right: 25px;
+            }
+            .check span{
+                width: 200px !important;
+                height: 100%;
             }
             .submit{
                 position: absolute;
