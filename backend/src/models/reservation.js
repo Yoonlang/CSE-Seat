@@ -1,13 +1,12 @@
 let db = require('./mysql');
 
 module.exports = {
-    findSeatsList : async (seatDTO) => new Promise( async (resolve, reject) => {
+    findList : async (seatDTO) => new Promise( async (resolve, reject) => {
         let sql = "select * from reservation Where building_id = ? and seat_room = ? "
-        + "and reservation_part = ? and date = ?";
+        + "and date = ? order by reservation_part, seat_num ASC";
         let set  = [
             seatDTO.building_id,
             seatDTO.seat_room,
-            seatDTO.reservation_part,
             seatDTO.date
         ]
 
