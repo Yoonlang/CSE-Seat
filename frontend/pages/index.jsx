@@ -21,13 +21,15 @@ const Index = () => {
         <StyledResDiv>
             <HeadTitle title="home" />
             <IndexHeader isNav={isNav}/>
-            <div className="roomsDiv">
+            <div className="rooms">
                 <div className="room0">
                     <RoomSeats roomNumber={0}/>
                 </div>
+                <div className="bar"></div>
                 <div className="room1">
                     <RoomSeats roomNumber={1}/>
                 </div>
+                <div className="bar"></div>
                 <div className="room2">
                     <RoomSeats roomNumber={2}/>
                 </div>
@@ -42,11 +44,16 @@ const Index = () => {
                 }
             </div>
             <style jsx>{`
-                .roomsDiv{
-                    width: 100%;
-                    justify-content: space-around;
+                .rooms{
                     display: flex;
-                    gap: 20px;
+                    align-items: center;
+                    height: 100%;
+                }
+                .rooms .bar{
+                    width: 0;
+                    height: 400px;
+                    border: 1px solid #ddd;
+                    border-width: 0 1px 0 0;
                 }
                 .modal{
                     position: fixed;
@@ -68,19 +75,23 @@ const Index = () => {
                     .upDownBtn{
                         display:none;
                     }
+                    .rooms{
+                        justify-content: space-between;
+                    }
                 }
                 @media(max-width: 767px){
-                    .roomsDiv{
+                    .rooms{
+                        justify-content: center;
                         ${(isNav ? `` : 
                         `
                         transform: translateY(-70px);
                         `)}
                         transition: 0.5s;
                     }
-                    .roomsDiv div{
+                    .rooms > div{
                         display: none;
                     }
-                    .roomsDiv .room${(targetRoom)}{
+                    .rooms .room${(targetRoom)}{
                         display: flex !important;
                     }
                     .upDownBtn{

@@ -81,7 +81,7 @@ const RoomData = [
     }  
 ]
 
-const RoomSeats = ({roomNumber, length="50px"}) => {
+const RoomSeats = ({roomNumber, length="50px", basic=false}) => {
     const setModalState = useSetRecoilState(seatModalAtom);
     const isToday = useRecoilValue(todayAtom);    
     const openSeatModal = (room, today, prop) => {
@@ -110,7 +110,8 @@ const RoomSeats = ({roomNumber, length="50px"}) => {
     return (
         <>
             <div className="roomSeatsDiv">
-                <span className="seatTitle">{RoomData[roomNumber].room}호<span className="bar">|</span>{isToday ? "오늘" : "내일"}</span>
+                <span className="seatTitle">{RoomData[roomNumber].room}호
+                {basic ? `` : <><span className="bar">|</span>{isToday ? "오늘" : "내일"}</>}</span>
                 <div className="front">
                     <SquareImg src="/images/square.png"
                     length="40px"/>
@@ -122,6 +123,8 @@ const RoomSeats = ({roomNumber, length="50px"}) => {
                         return (
                             <div className="seatDiv" key={prop + index} onClick={() => openSeatModal(roomNumber, isToday, prop)}>
                                 {
+                                    basic ?
+                                    <Seat length={length}/> :
                                     isToday ? 
                                     <Seat length={length} left={prop[1]} right={prop[2]}/>
                                     : 
