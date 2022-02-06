@@ -25,8 +25,8 @@ const room108 = [
 ]
 const getRoomArray =  (rNum) => {
     if (rNum == 101) return room101;
-    if (rNum == 104) return room101;
-    if (rNum == 108) return room101;
+    if (rNum == 104) return room104;
+    if (rNum == 108) return room108;
     return null;
 }
 
