@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { PageDiv, StyledResDiv } from "../components/atoms/Div";
 import HeadTitle from "../components/others/headTitle"
 import SeatingChartModal from "../components/organisms/SeatingChartModal";
+import { useSetRecoilState } from "recoil";
+import { seatingChartModalAtom } from "../components/others/state";
 
 const Apply = () => {
     const ApplyDiv = styled(StyledResDiv)`
@@ -22,7 +24,7 @@ const Apply = () => {
 // const checkRoomNum = isRoomHope.reduce((cnt, prop) => cnt + prop, 0);
 // const checkRoomNum = isRoomHope.filter(prop => prop).length;
     const [isRoomHope, setIsRoomHope] = useState([false, false, false]);
-    const [isOpenSeatModal, setIsOpenSeatModal] = useState(false);
+    const setIsOpenSeatModal = useSetRecoilState(seatingChartModalAtom);
 
     const clickRoom = (prop) => {
         const tempRoomHope = isRoomHope.slice(0, 3);

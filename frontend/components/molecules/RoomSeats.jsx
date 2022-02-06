@@ -81,7 +81,7 @@ const RoomData = [
     }  
 ]
 
-const RoomSeats = ({roomNumber}) => {
+const RoomSeats = ({roomNumber, length="50px"}) => {
     const setModalState = useSetRecoilState(seatModalAtom);
     const isToday = useRecoilValue(todayAtom);    
     const openSeatModal = (room, today, prop) => {
@@ -123,9 +123,9 @@ const RoomSeats = ({roomNumber}) => {
                             <div className="seatDiv" key={prop + index} onClick={() => openSeatModal(roomNumber, isToday, prop)}>
                                 {
                                     isToday ? 
-                                    <Seat left={prop[1]} right={prop[2]}/>
+                                    <Seat length={length} left={prop[1]} right={prop[2]}/>
                                     : 
-                                    <Seat left={prop[3]} right={prop[4]}/>
+                                    <Seat length={length} left={prop[3]} right={prop[4]}/>
                                 }
                                 <span>{prop[0]}</span>
                             </div>
