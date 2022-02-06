@@ -110,7 +110,7 @@ const RoomSeats = ({roomNumber}) => {
     return (
         <>
             <div className="roomSeatsDiv">
-                <span className="seatTitle">{RoomData[roomNumber].room}호<bar>|</bar>{isToday ? "오늘" : "내일"}</span>
+                <span className="seatTitle">{RoomData[roomNumber].room}호<span className="bar">|</span>{isToday ? "오늘" : "내일"}</span>
                 <div className="front">
                     <SquareImg src="/images/square.png"
                     length="40px"/>
@@ -148,7 +148,7 @@ const RoomSeats = ({roomNumber}) => {
                     width: 100%;
                     margin: 15px;
                 }
-                bar{
+                .bar{
                     margin: 0 14px;
                 }
                 .front{
