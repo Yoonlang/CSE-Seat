@@ -1,11 +1,12 @@
+import { PageDiv } from "../components/atoms/Div";
 import HeadTitle from "../components/others/headTitle"
 
 const Info = () => {
     return (
-        <div className="fixed">
+        <PageDiv>
             <HeadTitle title="info"/>
             <div>info</div>
-        </div>
+        </PageDiv>
     )
 }
 

@@ -1,6 +1,8 @@
+import { PageDiv } from "../components/atoms/Div";
+
 const Error = () => {
     return(
-        <>
+        <PageDiv>
             <div>
                 잘못된 페이지입니다.
             </div>
@@ -11,7 +13,7 @@ const Error = () => {
                     background: #ddd;
                 }
             `}</style>
-        </>
+        </PageDiv>
     );
 }
 

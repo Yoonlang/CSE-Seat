@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { RecoilLoadable, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import {Seat, seatColor} from "../atoms/Seat";
 import { seatModalAtom } from "../others/state";
 
