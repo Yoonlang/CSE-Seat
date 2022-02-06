@@ -46,9 +46,41 @@ const getSeats = async (sid,rNum) => {
     return seats
 }
 
+const getData = async (sid) => {
+    
+    const data = {
+        buildingNum : 414,
+        buildingName : 'IT4호관',
+        numRooms : 3,  //101, 104, 108
+        rooms : []
+    }
+    let roomArr = seatChartModel.getRoomArray(101);
+    data.rooms.push({
+        num : 101,
+        n : roomArr.length,
+        m : roomArr[0].length,
+        seats : await getSeats(sid, 101)
+    });
+    roomArr = seatChartModel.getRoomArray(104);
+    data.rooms.push({
+        num : 104,
+        n : roomArr.length,
+        m : roomArr[0].length,
+        seats : await getSeats(sid, 104)
+    });
+    roomArr = seatChartModel.getRoomArray(108);
+    data.rooms.push({
+        num : 108,
+        n : roomArr.length,
+        m : roomArr[0].length,
+        seats : await getSeats(sid, 108)
+    });
+    return data;
+}
+
 
 
 
 module.exports = {
-    getSeats: getSeats   
+    getData : getData  
 }
