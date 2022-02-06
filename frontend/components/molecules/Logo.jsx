@@ -11,13 +11,13 @@ const Logo = () => {
                     font-size: 22px;
                     white-space: nowrap;
                 }
-                @media(min-width: 750px){
+                @media(min-width: 768px){
                     .logoImg{
                         width: 45px;
                         height: 45px;
                     }    
                 }
-                @media(max-width: 749px){
+                @media(max-width: 767px){
                     span{
                         display:none;
                     }

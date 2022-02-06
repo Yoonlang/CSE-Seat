@@ -33,7 +33,7 @@ const IndexHeader = ({isNav = true}) => {
                 align-items: center;
                 gap: 30px;
             }
-            @media(min-width: 750px){
+            @media(min-width: 768px){
                 .indexHeader{
                     justify-content: space-between;
                     height: 130px;
@@ -46,16 +46,16 @@ const IndexHeader = ({isNav = true}) => {
                     display: none;
                 }
             }
-            @media(max-width: 749px){
+            @media(max-width: 767px){
                 .indexHeader{
                     height: 70px;
                     flex-wrap: wrap;
-                    justify-content: right;
+                    justify-content: flex-end;
                     gap: 12px;
                     ${isNav ? `` : `
                     transform: translateY(-70px);
                     `}
-                    transition: 0.7s;
+                    transition: 0.5s;
                 }
                 .block{
                     width: 100%;

@@ -1,23 +1,13 @@
 import HeadTitle from "../components/others/headTitle"
 import SignForm from "../components/organisms/SignForm";
+import { PageDiv } from "../components/atoms/Div";
 
 const Sign = () => {
     return (
-        <>
+        <PageDiv dis="flex" jus="center" ali="center">
             <HeadTitle title="login"/>
-            <div>
-                <SignForm />
-            </div>
-            <style jsx>{`
-                div{
-                    display:flex;
-                    justify-content: center;
-                    align-items: center;
-                    width: 100%;
-                    height: 100%;
-                }
-            `}</style>
-        </>
+            <SignForm />
+        </PageDiv>
     )
 }
 
