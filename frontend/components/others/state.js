@@ -34,4 +34,4 @@ const seatModalAtom = atom({
     }
 })
 
-export {authAtom, userListAtom, todayAtom, showRoomAtom, seatModalAtom };
+export { authAtom, userListAtom, todayAtom, showRoomAtom, seatModalAtom };
