@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { PageDiv, StyledResDiv } from "../components/atoms/Div";
 import HeadTitle from "../components/others/headTitle"
+import SeatingChartModal from "../components/organisms/SeatingChartModal";
 
 const Apply = () => {
     const ApplyDiv = styled(StyledResDiv)`
@@ -21,11 +22,16 @@ const Apply = () => {
 // const checkRoomNum = isRoomHope.reduce((cnt, prop) => cnt + prop, 0);
 // const checkRoomNum = isRoomHope.filter(prop => prop).length;
     const [isRoomHope, setIsRoomHope] = useState([false, false, false]);
+    const [isOpenSeatModal, setIsOpenSeatModal] = useState(false);
 
     const clickRoom = (prop) => {
         const tempRoomHope = isRoomHope.slice(0, 3);
         tempRoomHope[prop] = !tempRoomHope[prop];
         setIsRoomHope(tempRoomHope);
+    }
+
+    const clickSeatModalBtn = () => {
+        setIsOpenSeatModal(true);
     }
 
     return (
@@ -50,8 +56,8 @@ const Apply = () => {
                         원하는 자리<br/><br/>
                         <span>미입력 시 임의 배정</span>
                     </span>
-                    <div className="roomBtn" onClick={() => clickRoom(0)}>101호</div>
-                    <div className="roomBtn" onClick={() => clickRoom(1)}>104호</div>
+                    <input type="text" placeholder="숫자만 입력"/>
+                    <div><div className="seatModalBtn" onClick={clickSeatModalBtn}>자리 배치표</div></div>
                 </div>
                 <div className="bar" />
                 <div className="room">
@@ -62,6 +68,7 @@ const Apply = () => {
                 </div>
                 <button>신청하기</button>
             </ApplyDiv>
+            <SeatingChartModal/>
             <style jsx>{`
                 .title{
                     padding: 50px 0 0 10%;
@@ -149,7 +156,7 @@ const Apply = () => {
                 }
                 .seat{
                     display: grid;
-                    grid-template-rows: 1.2fr 0.8fr;
+                    grid-template-rows: 1fr 1fr;
                     grid-template-columns: 200px 1fr;
                     justify-items: center;
                     align-items: center;
@@ -161,7 +168,38 @@ const Apply = () => {
                     grid-column: 1/1;
                     grid-row: 1/3;
                 }
-
+                .seat > input{
+                    text-align: center;
+                    width: 140px;
+                    height: 35px;
+                    border: 1px solid #ddd;
+                    outline: none;
+                    font-size: 16px;
+                    align-self: end;
+                }
+                .seat > input::placeholder{
+                    font-size: 12px;
+                    color: #aaa;
+                }
+                .seat > div{
+                    display: flex;
+                    justify-content: flex-end;
+                    width: 140px;
+                    align-self: start;
+                    padding-top: 3px;
+                }
+                .seat .seatModalBtn{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 110px;
+                    height: 30px;
+                    border: solid;
+                    border-width: 1px;
+                    border-color: #ddd;
+                    font-size: 14px;
+                    cursor: pointer;
+                }
 
                 button{
                     width: 140px;
