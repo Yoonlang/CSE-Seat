@@ -55,7 +55,7 @@ const IndexHeader = ({isNav = true}) => {
                     ${isNav ? `` : `
                     transform: translateY(-70px);
                     `}
-                    transition: 0.7s;
+                    transition: 0.5s;
                 }
                 .block{
                     width: 100%;

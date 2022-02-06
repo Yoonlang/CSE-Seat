@@ -2,29 +2,32 @@ import styled from 'styled-components';
 import Link from "next/link";
 import React from 'react';
 
+const StyledResDiv = styled.div`
+    width: 100%;
+    height: 100%;
+    @media(min-width: 768px){
+        min-height: calc(100vh - 60px - 150px);
+    }
+    @media (min-width: 480px) and (max-width: 767px){
+        min-height: calc(100vh - 100px - 150px);
+    }
+    @media(max-width: 479px){
+        min-height: calc(100vh - 100px - 220px);
+    }
+`;
+
 const PageDiv = ({
     children,
-    dis="block",
+    dis,
     jus,
     ali,
     dir,
     }) => {
-    const StyledPageDiv = styled.div`
+    const StyledPageDiv = styled(StyledResDiv)`
         display: ${(props) => props.dis};
         justify-content: ${(props) => props.jus};
         align-items: ${(props) => props.ali};
         flex-direction: ${(props) => props.dir};
-        width: 100%;
-        height: 100%;
-        @media(min-width: 768px){
-            min-height: calc(100vh - 60px - 150px);
-        }
-        @media (min-width: 480px) and (max-width: 767px){
-            min-height: calc(100vh - 100px - 150px);
-        }
-        @media(max-width: 479px){
-            min-height: calc(100vh - 100px - 220px);
-        }
     `;
 
     const props = {
@@ -111,4 +114,4 @@ const MyLink = ({
     );
 }
 
-export {Div, PageDiv, MyLink};
+export {Div, PageDiv, MyLink, StyledResDiv};

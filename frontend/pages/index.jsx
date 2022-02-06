@@ -6,7 +6,7 @@ import SeatModal from '../components/organisms/SeatModal';
 import HeadTitle from '../components/others/headTitle';
 import { showRoomAtom } from '../components/others/state';
 import SquareImg from '../components/atoms/Img';
-import { PageDiv } from '../components/atoms/Div';
+import { StyledResDiv } from '../components/atoms/Div';
 
 const Index = () => {
     const targetRoom = useRecoilValue(showRoomAtom);
@@ -18,7 +18,7 @@ const Index = () => {
     }
 
     return (
-        <PageDiv>
+        <StyledResDiv>
             <HeadTitle title="home" />
             <IndexHeader isNav={isNav}/>
             <div className="roomsDiv">
@@ -75,7 +75,7 @@ const Index = () => {
                         `
                         transform: translateY(-70px);
                         `)}
-                        transition: 0.7s;
+                        transition: 0.5s;
                     }
                     .roomsDiv div{
                         display: none;
@@ -101,7 +101,7 @@ const Index = () => {
                     }
                 }
             `}</style>
-        </PageDiv>
+        </StyledResDiv>
     )
 }
 
