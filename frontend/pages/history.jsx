@@ -24,14 +24,16 @@ const History = () => {
                 <div className="title">입퇴실 / 신청 기록 열람</div>
                 <div className="seatHistorys">
                     <SeatHistory />
+                    <SeatHistory />
+                    <SeatHistory />
                 </div>
             </HistoryDiv>
             <style jsx>{`
                 .title{
-                    padding: 50px 0 0 10%;
+                    padding: 6% 0 30px 4%;
                     width: 100%;
-                    height: 120px;
-                    font-size: 24px;
+                    height: 100%;
+                    font-size: 22px;
                 }
                 .seatHistorys{
                     display: flex;

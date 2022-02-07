@@ -112,7 +112,7 @@ const Apply = () => {
                     padding: 50px 0 0 10%;
                     width: 100%;
                     height: 70px;
-                    font-size: 24px;
+                    font-size: 22px;
                 }
                 .bar{
                     width: 85%;

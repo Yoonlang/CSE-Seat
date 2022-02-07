@@ -119,7 +119,7 @@ const SeatingChartModal = () => {
             .rooms .bar{
                 width: 0;
                 height: 80%;
-                border: 1px solid #ddd;
+                border: 1px solid #eee;
                 border-width: 0 1px 0 0;
             }
             .cancel{
