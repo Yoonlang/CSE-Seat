@@ -74,8 +74,8 @@ const SeatModal = () => {
             <div className="modal" onClick={clickModal} ref={modalOutside}>
                 <div>
                     <span>{roomNumber === 0? "101" : 
-                    (roomNumber === 1? "104" : "108")}호<bar>|</bar>
-                    {isToday ? "오늘" : "내일"}<bar>|</bar>
+                    (roomNumber === 1? "104" : "108")}호<span className="bar">|</span>
+                    {isToday ? "오늘" : "내일"}<span className="bar">|</span>
                     {seatNumber}번 좌석</span>
                     <Seat length="120px" left={oneColor} right={twoColor} isColor />
                     <div className="time">
@@ -157,7 +157,7 @@ const SeatModal = () => {
                 font-size: 18px;
                 margin: 10px 0 0 15px;
             }
-            bar{
+            .bar{
                 margin: 0 14px;
             }
             .cancel{

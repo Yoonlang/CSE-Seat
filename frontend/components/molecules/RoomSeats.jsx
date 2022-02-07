@@ -81,7 +81,7 @@ const RoomData = [
     }  
 ]
 
-const RoomSeats = ({roomNumber}) => {
+const RoomSeats = ({roomNumber, length="50px", basic=false}) => {
     const setModalState = useSetRecoilState(seatModalAtom);
     const isToday = useRecoilValue(todayAtom);    
     const openSeatModal = (room, today, prop) => {
@@ -110,7 +110,8 @@ const RoomSeats = ({roomNumber}) => {
     return (
         <>
             <div className="roomSeatsDiv">
-                <span className="seatTitle">{RoomData[roomNumber].room}호<bar>|</bar>{isToday ? "오늘" : "내일"}</span>
+                <span className="seatTitle">{RoomData[roomNumber].room}호
+                {basic ? `` : <><span className="bar">|</span>{isToday ? "오늘" : "내일"}</>}</span>
                 <div className="front">
                     <SquareImg src="/images/square.png"
                     length="40px"/>
@@ -122,10 +123,12 @@ const RoomSeats = ({roomNumber}) => {
                         return (
                             <div className="seatDiv" key={prop + index} onClick={() => openSeatModal(roomNumber, isToday, prop)}>
                                 {
+                                    basic ?
+                                    <Seat length={length}/> :
                                     isToday ? 
-                                    <Seat left={prop[1]} right={prop[2]}/>
+                                    <Seat length={length} left={prop[1]} right={prop[2]}/>
                                     : 
-                                    <Seat left={prop[3]} right={prop[4]}/>
+                                    <Seat length={length} left={prop[3]} right={prop[4]}/>
                                 }
                                 <span>{prop[0]}</span>
                             </div>
@@ -148,7 +151,7 @@ const RoomSeats = ({roomNumber}) => {
                     width: 100%;
                     margin: 15px;
                 }
-                bar{
+                .bar{
                     margin: 0 14px;
                 }
                 .front{

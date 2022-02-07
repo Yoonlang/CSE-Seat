@@ -16,6 +16,54 @@ const StyledResDiv = styled.div`
     }
 `;
 
+const BorderDiv = styled(StyledResDiv)`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    @media(min-width: 768px){
+        border: solid;
+        border-width: 0 1px;
+        border-color: #ddd;
+        box-shadow: 0 -5px 6px 2px #ddd;
+    }
+`;
+
+const StyledPageDiv = styled(StyledResDiv)`
+    display: ${(props) => props.dis};
+    justify-content: ${(props) => props.jus};
+    align-items: ${(props) => props.ali};
+    flex-direction: ${(props) => props.dir};
+`;
+
+const StyledDiv = styled.div`
+    display: ${(props) => props.display};
+    width: ${(props) => props.width};
+    height: ${(props) => props.height};
+    justify-content: ${(props) => props.jusContent};
+    align-items: ${(props) => props.alignItem};
+    flex-direction: ${(props) => props.flexDir};
+    margin: ${(props) => props.margin};
+    padding: ${(props) => props.padding};
+    background-color: ${(props) => props.color};
+    gap: ${(props) => props.gap};
+    overflow: ${(props) => props.hidden ? "hidden" : ""};
+    ${(props) => props.flexWrap ? "flex-wrap:wrap" : ""};
+`;
+
+const StyledA = styled.a`
+    display: ${(props) => props.display};
+    width: ${(props) => props.width};
+    height: ${(props) => props.height};
+    justify-content: ${(props) => props.jusContent};
+    align-items: ${(props) => props.alignItem};
+    flex-direction: ${(props) => props.flexDir};
+    cursor: pointer;
+    margin: ${(props) => props.margin};
+    padding: ${(props) => props.padding};
+    gap: ${(props) => props.gap};
+`;
+
 const PageDiv = ({
     children,
     dis,
@@ -23,13 +71,7 @@ const PageDiv = ({
     ali,
     dir,
     }) => {
-    const StyledPageDiv = styled(StyledResDiv)`
-        display: ${(props) => props.dis};
-        justify-content: ${(props) => props.jus};
-        align-items: ${(props) => props.ali};
-        flex-direction: ${(props) => props.dir};
-    `;
-
+    
     const props = {
         dis, jus, ali, dir
     };
@@ -52,21 +94,7 @@ const Div = ({
     gap="",
     hidden=false
     }) => {
-    const StyledDiv = styled.div`
-        display: ${(props) => props.display};
-        width: ${(props) => props.width};
-        height: ${(props) => props.height};
-        justify-content: ${(props) => props.jusContent};
-        align-items: ${(props) => props.alignItem};
-        flex-direction: ${(props) => props.flexDir};
-        margin: ${(props) => props.margin};
-        padding: ${(props) => props.padding};
-        background-color: ${(props) => props.color};
-        gap: ${(props) => props.gap};
-        overflow: ${(props) => props.hidden ? "hidden" : ""};
-        ${(props) => props.flexWrap ? "flex-wrap:wrap" : ""};
-    `;
-
+    
     const props = {
         display, jusContent, alignItem, width, height, flexDir, margin, padding, color, gap, hidden, flexWrap
     };
@@ -88,19 +116,7 @@ const MyLink = ({
     padding,
     gap
     }) => {
-        const StyledA = styled.a`
-            display: ${(props) => props.display};
-            width: ${(props) => props.width};
-            height: ${(props) => props.height};
-            justify-content: ${(props) => props.jusContent};
-            align-items: ${(props) => props.alignItem};
-            flex-direction: ${(props) => props.flexDir};
-            cursor: pointer;
-            margin: ${(props) => props.margin};
-            padding: ${(props) => props.padding};
-            gap: ${(props) => props.gap};
-        `;
-
+        
         const props = {
             display, jusContent, alignItem, width, height, flexDir, margin, padding, gap
         };
@@ -114,4 +130,4 @@ const MyLink = ({
     );
 }
 
-export {Div, PageDiv, MyLink, StyledResDiv};
+export {Div, PageDiv, MyLink, StyledResDiv, BorderDiv};

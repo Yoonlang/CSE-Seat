@@ -7,9 +7,7 @@ const Footer = () => {
         <>
         <div className="footerDiv">
             <Div width="100%" height="40px">
-                <Div width="200px" jusContent="left">
-                    <span className="title">CSE Seat Project</span>
-                </Div>
+                <div className="footerTitle"><span className="title">CSE Seat</span></div>
             </Div>
             <div className="footerSubDiv">
                 <Div width="200px" height="25px" jusContent="left" gap="10px">
@@ -56,6 +54,10 @@ const Footer = () => {
                 align-items: center;
                 background: #373737;
             }
+            .footerTitle{
+                display:flex;
+                width: 200px;
+            }
             .footerSubDiv{
                 display:flex;
                 flex-direction: column;
@@ -68,6 +70,9 @@ const Footer = () => {
                 .footerDiv{
                     height: 150px;
                     flex-wrap: wrap;
+                }
+                .footerTitle{
+                    justify-content: center;
                 }
                 .footerSubDiv{
                     width: 50%;
