@@ -11,14 +11,14 @@ const SeatHistory = () => {
     return (
     <>
         <div className="history">
-            <span>예약 날짜 : 22.01.19</span>
+            <span>22년 1월 19일</span>
             <div>
-                <span>오전 : 101호 47번 좌석</span>
+                <span>1부 : 101호 47번 좌석</span>
                 <button>입실</button>
                 <button>퇴실</button>
             </div>
             <div>
-                <span>오후 : 101호 47번 좌석</span>
+                <span>2부 : 101호 47번 좌석</span>
                 <button>입실</button>
                 <button>퇴실</button>
             </div>
@@ -33,10 +33,13 @@ const SeatHistory = () => {
                 width: 100%;
                 height: 120px;
                 border: solid #ddd;
-                border-width: 1px 0 0 0;
-                box-shadow: 0 1px #ddd;
+                border-width: 0 0 1px 0;
+                box-shadow: 0 -1px #ddd;
                 white-space: nowrap;
                 font-size: 16px;
+            }
+            .history > span{
+                align-self: start;
             }
             .history > button{
                 grid-column: 2/2;
@@ -65,7 +68,7 @@ const SeatHistory = () => {
             @media(min-width: 480px){
                 .history{
                     grid-template-columns: 1fr 150px;
-                    padding: 10px 0 10px max(10px, 8%);
+                    padding: 12px 0 10px max(10px, 8%);
                 }
                 .history > button{
                     width: 100px;
@@ -78,7 +81,7 @@ const SeatHistory = () => {
             @media(max-width: 479px){
                 .history{
                     grid-template-columns: 1fr 100px;
-                    padding: 10px 0 10px 7px;
+                    padding: 12px 0 10px 7px;
                 }
                 .history > button{
                     width: 80px;

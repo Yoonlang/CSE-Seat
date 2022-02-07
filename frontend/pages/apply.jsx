@@ -64,7 +64,7 @@ const Apply = () => {
                 <div className="bar" />
                 <div className="room">
                     <span>
-                        원하는 호실<br/>
+                        원하는 강의실<br/>
                         <span>(중복 가능)</span><br/><br/>
                         <span>체크 안할 시 임의 배정</span>
                     </span>
