@@ -36,7 +36,7 @@ const seatModalAtom = atom({
 
 const seatingChartModalAtom = atom({
     key: 'seatingChartModal',
-    default : true
+    default : false
 })
 
 export { authAtom, userListAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom };

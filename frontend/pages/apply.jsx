@@ -1,29 +1,31 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { PageDiv, StyledResDiv } from "../components/atoms/Div";
+import { PageDiv } from "../components/atoms/Div";
 import HeadTitle from "../components/others/headTitle"
 import SeatingChartModal from "../components/organisms/SeatingChartModal";
 import { useSetRecoilState } from "recoil";
 import { seatingChartModalAtom } from "../components/others/state";
 
-const Apply = () => {
-    const ApplyDiv = styled(StyledResDiv)`
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        max-width: 523px;
-        background: #fff;
-        @media(min-width: 768px){
-            border: solid;
-            border-width: 0 1px;
-            border-color: #ddd;
-            box-shadow: 0 -5px 6px 2px #ddd;
-        }
-    `;
+const ApplyForm = styled.form`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 523px;
+    height: 100%;
+    background: #fff;
+    @media(min-width: 768px){
+        border: solid;
+        border-width: 0 1px;
+        border-color: #ddd;
+        box-shadow: 0 -5px 6px 2px #ddd;
+    }
+`;
 
-// const checkRoomNum = isRoomHope.reduce((cnt, prop) => cnt + prop, 0);
-// const checkRoomNum = isRoomHope.filter(prop => prop).length;
+const Apply = () => {
     const [isRoomHope, setIsRoomHope] = useState([false, false, false]);
+    const [seatHope, setSeatHope] = useState('');
+    const [friendHope, setFriendHope] = useState(['','','']);
     const setIsOpenSeatModal = useSetRecoilState(seatingChartModalAtom);
 
     const clickRoom = (prop) => {
@@ -36,10 +38,28 @@ const Apply = () => {
         setIsOpenSeatModal(true);
     }
 
+    const handleSeat = (e) => {
+        setSeatHope(e.target.value);
+    }
+
+    const handleFriend = (index, e) => {
+        const tempFriendHope = friendHope.slice(0, 3);
+        tempFriendHope[index] = e.target.value;
+        setFriendHope(tempFriendHope);
+    }
+
+    const submit = (e) => {
+        e.preventDefault();
+        //const checkRoomNum = isRoomHope.filter(prop => prop).length;
+        console.log(isRoomHope);
+        console.log(seatHope);
+        console.log(friendHope);
+    }
+
     return (
         <PageDiv dis="flex" jus="center">
             <HeadTitle title="apply"/>
-            <ApplyDiv>
+            <ApplyForm>
                 <div className="title">자리 신청</div>
                 <div className="bar" />
                 <div className="room">
@@ -58,18 +78,34 @@ const Apply = () => {
                         원하는 자리<br/><br/>
                         <span>미입력 시 임의 배정</span>
                     </span>
-                    <input type="text" placeholder="숫자만 입력"/>
+                    <input type="text"
+                    placeholder="숫자만 입력"
+                    onChange={handleSeat}
+                    value={seatHope}/>
                     <div><div className="seatModalBtn" onClick={clickSeatModalBtn}>자리 배치표</div></div>
                 </div>
                 <div className="bar" />
                 <div className="room">
-                    <span>원하는 호실</span>
-                    <div className="roomBtn" onClick={() => clickRoom(0)}>101호</div>
-                    <div className="roomBtn" onClick={() => clickRoom(1)}>104호</div>
-                    <div className="roomBtn" onClick={() => clickRoom(2)}>108호</div>
+                    <span>
+                        친구<br/>
+                        <span>(최대 3명)</span><br/><br/>
+                        <span>자리가 없을 시 따로 앉거나<br/>일부 인원만 배정될 수 있음.</span>
+                    </span>
+                    <input type="text"
+                    placeholder="학번 입력"
+                    onChange={(e) => handleFriend(0, e)} 
+                    value={friendHope[0]}/>
+                    <input type="text"
+                    placeholder="학번 입력"
+                    onChange={(e) => handleFriend(1, e)} 
+                    value={friendHope[1]}/>
+                    <input type="text"
+                    placeholder="학번 입력"
+                    onChange={(e) => handleFriend(2, e)} 
+                    value={friendHope[2]}/>
                 </div>
-                <button>신청하기</button>
-            </ApplyDiv>
+                <button onClick={submit}>신청하기</button>
+            </ApplyForm>
             <SeatingChartModal/>
             <style jsx>{`
                 .title{
@@ -170,16 +206,16 @@ const Apply = () => {
                     grid-column: 1/1;
                     grid-row: 1/3;
                 }
-                .seat > input{
+                input{
                     text-align: center;
                     width: 140px;
                     height: 35px;
                     border: 1px solid #ddd;
                     outline: none;
-                    font-size: 16px;
+                    font-size: 14px;
                     align-self: end;
                 }
-                .seat > input::placeholder{
+                input::placeholder{
                     font-size: 12px;
                     color: #aaa;
                 }
