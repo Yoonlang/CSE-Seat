@@ -16,6 +16,19 @@ const StyledResDiv = styled.div`
     }
 `;
 
+const BorderDiv = styled(StyledResDiv)`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    @media(min-width: 768px){
+        border: solid;
+        border-width: 0 1px;
+        border-color: #ddd;
+        box-shadow: 0 -5px 6px 2px #ddd;
+    }
+`;
+
 const StyledPageDiv = styled(StyledResDiv)`
     display: ${(props) => props.dis};
     justify-content: ${(props) => props.jus};
@@ -117,4 +130,4 @@ const MyLink = ({
     );
 }
 
-export {Div, PageDiv, MyLink, StyledResDiv};
+export {Div, PageDiv, MyLink, StyledResDiv, BorderDiv};
