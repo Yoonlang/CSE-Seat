@@ -65,6 +65,7 @@ const StyledA = styled.a`
     ${(props) => props.border ? `
     border: 1px solid #ddd;
     ` : ``}
+    font-size: ${(props) => props.fontSize};
 `;
 
 const PageDiv = ({
@@ -118,11 +119,12 @@ const MyLink = ({
     margin,
     padding,
     gap,
-    border=false
+    border=false,
+    fontSize
     }) => {
         
         const props = {
-            display, jusContent, alignItem, width, height, flexDir, margin, padding, gap, border
+            display, jusContent, alignItem, width, height, flexDir, margin, padding, gap, border, fontSize
         };
 
     return (
