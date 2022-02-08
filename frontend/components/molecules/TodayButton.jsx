@@ -1,7 +1,6 @@
 import { useRecoilState } from "recoil";
 import { todayAtom } from "../others/state";
 
-
 const TodayButton = () => {
     const [isToday, setIsToday] = useRecoilState(todayAtom);
 
@@ -45,7 +44,7 @@ const TodayButton = () => {
                 width: 85px;
             }
             .buttonDiv .left{
-                justify-content: right;
+                justify-content: flex-end;
             }
             .buttonDiv .right{
                 justify-content: left;

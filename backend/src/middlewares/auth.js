@@ -4,8 +4,7 @@ module.exports = {
     if (req.isAuthenticated()) {
       next();
     } else {
-      console.log('login plz ^^');
-      res.redirect("/login");
+      res.status(401).json({result:false});
     }
   },
   isNotLoggedIn : (req, res, next) => {
@@ -13,7 +12,7 @@ module.exports = {
       next();
     } else {
       console.log('logout plz ^ g ^');
-      res.redirect("/login");
+      res.status(401);
     }
   }
 }

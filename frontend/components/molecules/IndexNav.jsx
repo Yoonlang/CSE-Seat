@@ -3,52 +3,30 @@ import { showRoomAtom, todayAtom } from "../others/state";
 
 const IndexNav = () => {
     const [isToday, setIsToday] = useRecoilState(todayAtom);
-    const [roomNumber, setRoomNumber] = useRecoilState(showRoomAtom);
+    const [targetRoom, setTargetRoom] = useRecoilState(showRoomAtom);
 
-    const changeToToday = () => {
-        if(!isToday){
-            setIsToday(!isToday);
-        }
+    const changeToToday = (prop) => {
+        prop ? setIsToday(true) : setIsToday(false);
     }
 
-    const changeToTomarrow = () => {
-        if(isToday){
-            setIsToday(!isToday);
-        }
-    }
-
-    const changeRoomNumberToZero = () => {
-        if(roomNumber != 0){
-            setRoomNumber(0);
-        }
-    }
-
-    const changeRoomNumberToOne = () => {
-        if(roomNumber != 1){
-            setRoomNumber(1);
-        }
-    }
-    
-    const changeRoomNumberToTwo = () => {
-        if(roomNumber != 2){
-            setRoomNumber(2);
-        }
+    const changeTargetRoom = (prop) => {
+        setTargetRoom(prop);
     }
 
     return (
         <>
             <div className="nav">
                 <div>
-                    <span onClick={changeRoomNumberToZero}>101호</span>
+                    <span onClick={() => changeTargetRoom(0)}>101호</span>
                     <div></div>
-                    <span onClick={changeRoomNumberToOne}>104호</span>
+                    <span onClick={() => changeTargetRoom(1)}>104호</span>
                     <div></div>
-                    <span onClick={changeRoomNumberToTwo}>108호</span>
+                    <span onClick={() => changeTargetRoom(2)}>108호</span>
                 </div>
                 <div>
-                    <span onClick={changeToToday}>오늘 자리</span>
+                    <span onClick={() => changeToToday(true)}>오늘 자리</span>
                     <div></div>
-                    <span onClick={changeToTomarrow}>내일 자리</span>
+                    <span onClick={() => changeToToday(false)}>내일 자리</span>
                 </div>
             </div>
             <style jsx>{`

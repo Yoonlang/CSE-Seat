@@ -1,7 +1,7 @@
 import SquareImg from "../atoms/Img";
 import Logo from "../molecules/Logo";
 import Navigation from "../molecules/Navigation";
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import { Div, MyLink } from "../atoms/Div";
 
 const Header = () => {
@@ -11,7 +11,12 @@ const Header = () => {
     const userName = "최윤석님";
 
     const clickMenu = () => {
-        setIsMenuClick(!isMenuClick);
+        if(isLogin){
+            setIsMenuClick(!isMenuClick);
+        }
+        else{
+            window.open('/sign', '_self');
+        }
     }
 
     const logout = () => {
@@ -53,7 +58,7 @@ const Header = () => {
                     <MyLink href="/sign" width="60px">로그인</MyLink>
                 </div>
             }
-            <div className="modal">
+            <div className="modal" >
                 <MyLink href="/info">내 정보</MyLink> 
                 <div className="logout" onClick={logout}>로그아웃</div> 
             </div>
@@ -94,7 +99,7 @@ const Header = () => {
                 white-space: nowrap;
                 
             }
-            @media(min-width: 750px){
+            @media(min-width: 768px){
                 .headerDiv{
                     height: 60px;
                     display: flex;
@@ -116,7 +121,7 @@ const Header = () => {
                     top: 59px;
                 }
             }
-            @media(max-width: 749px){
+            @media(max-width: 767px){
                 .block{
                     width: 100%;
                     height: 100px;

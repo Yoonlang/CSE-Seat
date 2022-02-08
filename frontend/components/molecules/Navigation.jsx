@@ -20,6 +20,7 @@ const Navigation = () => {
             .navDiv{
                 display:flex;
                 width: 100%;
+                margin-left: 15px;
                 align-items: center;
             }
             .navDiv div{
@@ -34,13 +35,13 @@ const Navigation = () => {
                 font-size: 16px;
                 white-space: nowrap;
             }
-            @media(min-width:750px){
+            @media(min-width:768px){
                 .navDiv{
                     width: 400px;
                     margin-left: 20px;
                 }
             }
-            @media(max-width:749px){
+            @media(max-width:767px){
                 .navDiv{
                     width: 100%;
                     height: 50px;
