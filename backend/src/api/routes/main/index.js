@@ -3,9 +3,7 @@ const seatService = require('$/services/seat');
 const router = Router();
 
 router.get('/',async (req, res, next) => {
-    sid = '2018114383';
-    data = await seatService.getData(sid);
-    console.log('엥?');
+    data = await seatService.getData(req.user);
     if(data instanceof Error) return next(data);
     res.status(200).json({result : true , data : data});
 });

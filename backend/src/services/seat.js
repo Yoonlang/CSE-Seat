@@ -6,7 +6,6 @@ const initSeatsState = (rNum) => {
     let roomArray = seatChartModel.getRoomArray(rNum);
     let n = roomArray.length
     let m = roomArray[0].length
-    console.log(roomArray);
     for (let i = 0; i<n; i++){
         seats.push([]);
         for(let j = 0; j<m; j++){
