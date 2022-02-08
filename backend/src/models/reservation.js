@@ -13,6 +13,6 @@ module.exports = {
         let result = await db.query(sql,set);
         if (result)
             return resolve(result);
-        return reject(null);
+        return reject(Error('reservation findList error'));
     }),
 }
