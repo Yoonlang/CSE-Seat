@@ -62,6 +62,10 @@ const StyledA = styled.a`
     margin: ${(props) => props.margin};
     padding: ${(props) => props.padding};
     gap: ${(props) => props.gap};
+    ${(props) => props.border ? `
+    border: 1px solid #ddd;
+    ` : ``}
+    font-size: ${(props) => props.fontSize};
 `;
 
 const PageDiv = ({
@@ -114,11 +118,13 @@ const MyLink = ({
     height="50px",
     margin,
     padding,
-    gap
+    gap,
+    border=false,
+    fontSize
     }) => {
         
         const props = {
-            display, jusContent, alignItem, width, height, flexDir, margin, padding, gap
+            display, jusContent, alignItem, width, height, flexDir, margin, padding, gap, border, fontSize
         };
 
     return (

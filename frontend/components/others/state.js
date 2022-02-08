@@ -27,7 +27,7 @@ const seatModalAtom = atom({
         seatInfo : {
             roomNumber : undefined,
             isToday : undefined,
-            seatNumber : undefined,
+            seatNumber : undefined, 
             one : undefined,
             two : undefined
         }
@@ -39,4 +39,12 @@ const seatingChartModalAtom = atom({
     default : false
 })
 
-export { authAtom, userListAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom };
+const enrollFriendAtom = atom({
+    key: 'enrollFriend',
+    default: {
+        isOn: true,
+        friends: [2018115201, 2018115202, 2018115203]
+    }
+})
+
+export { authAtom, userListAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom };
