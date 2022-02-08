@@ -23,8 +23,28 @@ const room108 = [
     [-1,-1,65,66,67],
     [68,-1,69,70,71]
 ]
+const getRoomArray =  (rNum) => {
+    if (rNum == 101) return room101;
+    if (rNum == 104) return room104;
+    if (rNum == 108) return room108;
+    return null;
+}
+
+const getRoomMap = (rNum) => {
+    roomMap = new Map();
+    roomArray = getRoomArray(rNum);
+    n = roomArray.length
+    m = roomArray[0].length
+    for (let i = 0; i<n; i++){
+        for(let j = 0; j<m; j++){
+            if (roomArray[i][j] != -1){
+                roomMap.set(roomArray[i][j], [i,j])
+            }
+        }
+    }
+    return roomMap;      
+}
 module.exports = {
-    room101 : room101,
-    room104 : room104,
-    room108 : room108    
+    getRoomArray : getRoomArray,
+    getRoomMap : getRoomMap
 }
