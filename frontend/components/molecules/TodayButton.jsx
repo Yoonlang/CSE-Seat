@@ -1,7 +1,6 @@
 import { useRecoilState } from "recoil";
 import { todayAtom } from "../others/state";
 
-
 const TodayButton = () => {
     const [isToday, setIsToday] = useRecoilState(todayAtom);
 

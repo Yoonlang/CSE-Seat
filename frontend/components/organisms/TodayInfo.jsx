@@ -17,7 +17,7 @@ const TodayInfo = () => {
         }
     }
 
-    const click = (index) => {
+    const clickCheckbox = (index) => {
         const tempCheckboxState = checkboxState.slice(0, 4);
         if(tempCheckboxState[index] !== 2){
             tempCheckboxState[index] = tempCheckboxState[index] === 0 ? 1 : 0;
@@ -40,7 +40,7 @@ const TodayInfo = () => {
             {
                 checkboxState.map((prop, index) => {
                     return (
-                        <div onClick={() => click(index)}>
+                        <div key={prop + index} onClick={() => clickCheckbox(index)}>
                             <Checkbox state={checkboxState[index]} />
                         </div>
                     );
