@@ -27,7 +27,6 @@ const SignForm = () => {
         e.preventDefault();
         fetch("http://3.37.225.217:3000/user/login/process", {
             method: "POST",
-            credentials: "same-origin",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -41,7 +40,7 @@ const SignForm = () => {
             setIsLogin(res.result);
             console.log(res);
         }).catch(err => {
-            console.log(err);
+            console.log("Error : ", err);
         })
     }
 
