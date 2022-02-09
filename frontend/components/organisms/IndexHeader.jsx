@@ -3,26 +3,26 @@ import Explain from "../molecules/Explain";
 import IndexNav from "../molecules/IndexNav";
 import TodayButton from "../molecules/TodayButton";
 
-const IndexHeader = ({isNav = true}) => {
+const IndexHeader = ({ isNav = true }) => {
     return (
         <>
-        <div className="indexHeader">
-            <div className="block"></div>
-            <div className="nav">
-                <IndexNav />
-            </div>
-            <div className="explain">
-                <Explain />
-            </div>
-            <div className="right">
-                <div>
-                    <TodayButton />
+            <div className="indexHeader">
+                <div className="block"></div>
+                <div className="nav">
+                    <IndexNav />
                 </div>
-                <ColorTables />
+                <div className="explain">
+                    <Explain />
+                </div>
+                <div className="right">
+                    <div>
+                        <TodayButton />
+                    </div>
+                    <ColorTables />
+                </div>
             </div>
-        </div>
-        
-        <style jsx>{`
+
+            <style jsx>{`
             .indexHeader{
                 display:flex;
                 align-items:center;

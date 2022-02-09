@@ -1,20 +1,40 @@
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import SquareImg from "../atoms/Img";
 import { enrollFriendAtom } from "../others/state";
 
 const EnrollBox = () => {
     const [enrollFriend, setEnrollFriend] = useRecoilState(enrollFriendAtom);
-    const {isOn, friends} = enrollFriend;
+    const { isOn, friends } = enrollFriend;
 
     const deleteFriend = (sid) => {
-        // enrollFriend 배열에서 sid가 같은 녀석을 없애고 새로운 배열로 만들고 싶어
-        // const tempFriends = friends.filter((prop) => {
-        //     return (prop !== sid);
-        // });
-        // setEnrollFriend(tempFriends);
+        const tempEnrollFriend = { ...enrollFriend };
+        const tempFriends = tempEnrollFriend.friends.filter((prop) => {
+            return (prop !== sid);
+        });
+        tempEnrollFriend.friends = tempFriends;
+        setEnrollFriend(tempEnrollFriend);
     }
 
-    const Friend = ({sid}) => {
+    const enroll = (e) => {
+        e.preventDefault();
+    }
+
+    useEffect(() => {
+        fetch("http://3.37.225.217:3000/", {
+            method: "GET",
+            headers: {
+            }
+        }).then((res) => {
+            return res.json();
+        }).then((res) => {
+            console.log(res);
+        }).catch((err) => {
+            console.log('Error: ', err);
+        })
+    }, [])
+
+    const Friend = ({ sid }) => {
         return (<>
             <div>
                 <span>{sid}</span><button onClick={() => deleteFriend(sid)}><SquareImg src="/images/cancel_color.png" length="12px" /></button>
@@ -50,20 +70,20 @@ const EnrollBox = () => {
 
     return (
         <>
-        <div className="box">
-            <form>
-                <input type="text" placeholder="학번 입력" />
-                <button>등록하기</button>
-            </form>
-            <div className="friends">
-                {
-                    friends.map((prop, index) =>{
-                        return <Friend key={prop + index} sid={prop}/>;
-                    })
-                }
+            <div className="box">
+                <form>
+                    <input type="text" placeholder="학번 입력" />
+                    <button onClick={enroll}>등록하기</button>
+                </form>
+                <div className="friends">
+                    {
+                        friends.map((prop, index) => {
+                            return <Friend key={prop + index} sid={prop} />;
+                        })
+                    }
+                </div>
             </div>
-        </div>
-        <style jsx>{`
+            <style jsx>{`
             .box{
                 display: ${(isOn ? `flex` : `none`)};
                 flex-direction: column;

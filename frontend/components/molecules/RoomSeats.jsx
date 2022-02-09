@@ -1,13 +1,13 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { seatModalAtom } from '../others/state';
-import {Seat} from "../atoms/Seat";
+import { Seat } from "../atoms/Seat";
 import SquareImg from '../atoms/Img';
 import { todayAtom } from '../others/state';
 
 const RoomData = [
     {
-        room : 101,
-        seats : [
+        room: 101,
+        seats: [
             [22, 0, 1, 0, 0],
             [23, 1, 1, 0, 0],
             [24, 3, 3, 0, 0],
@@ -31,8 +31,8 @@ const RoomData = [
         ],
     },
     {
-        room : 104,
-        seats : [
+        room: 104,
+        seats: [
             [32, 2, 2, 0, 0],
             [33, 3, 3, 0, 0],
             [34, 1, 1, 0, 0],
@@ -55,8 +55,8 @@ const RoomData = [
         ],
     },
     {
-        room : 108,
-        seats : [
+        room: 108,
+        seats: [
             [37, 1, 1, 0, 0],
             [38, 0, 0, 0, 0],
             [39, 0, 1, 0, 0],
@@ -78,31 +78,31 @@ const RoomData = [
             [32, 2, 2, 0, 0],
             [33, 3, 3, 0, 0],
         ],
-    }  
+    }
 ]
 
-const RoomSeats = ({roomNumber, length="50px", basic=false}) => {
+const RoomSeats = ({ roomNumber, length = "50px", basic = false }) => {
     const setModalState = useSetRecoilState(seatModalAtom);
-    const isToday = useRecoilValue(todayAtom);    
+    const isToday = useRecoilValue(todayAtom);
     const openSeatModal = (room, today, prop) => {
         let seatInfo = {
-            roomNumber : room,
-            isToday : today,
-            seatNumber : prop[0],
-            one : undefined,
-            two : undefined
+            roomNumber: room,
+            isToday: today,
+            seatNumber: prop[0],
+            one: undefined,
+            two: undefined
         };
-        if(today){
+        if (today) {
             seatInfo.one = prop[1];
             seatInfo.two = prop[2];
         }
-        else{
+        else {
             seatInfo.one = prop[3];
             seatInfo.two = prop[4];
         }
         let tempObject = {
-            isModalOpen : true,
-            seatInfo : seatInfo
+            isModalOpen: true,
+            seatInfo: seatInfo
         };
         setModalState(tempObject);
     }
@@ -111,30 +111,30 @@ const RoomSeats = ({roomNumber, length="50px", basic=false}) => {
         <>
             <div className="roomSeatsDiv">
                 <span className="seatTitle">{RoomData[roomNumber].room}호
-                {basic ? `` : <><span className="bar">|</span>{isToday ? "오늘" : "내일"}</>}</span>
+                    {basic ? `` : <><span className="bar">|</span>{isToday ? "오늘" : "내일"}</>}</span>
                 <div className="front">
                     <SquareImg src="/images/square.png"
-                    length="40px"/>
+                        length="40px" />
                     <span>정면</span>
                 </div>
                 <div className="seats">
-                {
-                    RoomData[roomNumber].seats.map((prop, index) => {
-                        return (
-                            <div className="seatDiv" key={prop + index} onClick={() => openSeatModal(roomNumber, isToday, prop)}>
-                                {
-                                    basic ?
-                                    <Seat length={length}/> :
-                                    isToday ? 
-                                    <Seat length={length} left={prop[1]} right={prop[2]}/>
-                                    : 
-                                    <Seat length={length} left={prop[3]} right={prop[4]}/>
-                                }
-                                <span>{prop[0]}</span>
-                            </div>
-                        );
-                    })
-                }
+                    {
+                        RoomData[roomNumber].seats.map((prop, index) => {
+                            return (
+                                <div className="seatDiv" key={prop + index} onClick={() => openSeatModal(roomNumber, isToday, prop)}>
+                                    {
+                                        basic ?
+                                            <Seat length={length} /> :
+                                            isToday ?
+                                                <Seat length={length} left={prop[1]} right={prop[2]} />
+                                                :
+                                                <Seat length={length} left={prop[3]} right={prop[4]} />
+                                    }
+                                    <span>{prop[0]}</span>
+                                </div>
+                            );
+                        })
+                    }
                 </div>
             </div>
             <style jsx>{`

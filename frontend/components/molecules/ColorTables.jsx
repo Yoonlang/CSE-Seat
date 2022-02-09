@@ -1,5 +1,5 @@
 
-const ColorTable = ({children, color}) => {
+const ColorTable = ({ children, color }) => {
     return (
         <>
             <div className="colorTable">
@@ -33,7 +33,7 @@ const ColorTables = () => {
                 <ColorTable color="#969696">예약 불가능</ColorTable>
                 <ColorTable color="#0F5BCC">본인 자리</ColorTable>
                 <ColorTable color="#007435">친구 자리</ColorTable>
-            </div>        
+            </div>
             <style jsx>{`
                 .colorTables{
                     display:flex;
@@ -43,7 +43,7 @@ const ColorTables = () => {
                 }
             `}</style>
         </>
-    );    
+    );
 
 }
 

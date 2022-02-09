@@ -25,7 +25,7 @@ const ApplyForm = styled.form`
 const Apply = () => {
     const [isRoomHope, setIsRoomHope] = useState([false, false, false]);
     const [seatHope, setSeatHope] = useState('');
-    const [friendHope, setFriendHope] = useState(['','','']);
+    const [friendHope, setFriendHope] = useState(['', '', '']);
     const setIsOpenSeatModal = useSetRecoilState(seatingChartModalAtom);
 
     const clickRoom = (prop) => {
@@ -58,14 +58,14 @@ const Apply = () => {
 
     return (
         <PageDiv dis="flex" jus="center">
-            <HeadTitle title="apply"/>
+            <HeadTitle title="apply" />
             <ApplyForm>
                 <div className="title">자리 신청</div>
                 <div className="bar" />
                 <div className="room">
                     <span>
-                        원하는 강의실<br/>
-                        <span>(중복 가능)</span><br/><br/>
+                        원하는 강의실<br />
+                        <span>(중복 가능)</span><br /><br />
                         <span>체크 안할 시 임의 배정</span>
                     </span>
                     <div className="roomBtn0" onClick={() => clickRoom(0)}>101호</div>
@@ -75,38 +75,38 @@ const Apply = () => {
                 <div className="bar" />
                 <div className="seat">
                     <span>
-                        원하는 자리<br/><br/>
+                        원하는 자리<br /><br />
                         <span>미입력 시 임의 배정</span>
                     </span>
                     <input type="text"
-                    placeholder="숫자만 입력"
-                    onChange={handleSeat}
-                    value={seatHope}/>
+                        placeholder="숫자만 입력"
+                        onChange={handleSeat}
+                        value={seatHope} />
                     <div><div className="seatModalBtn" onClick={clickSeatModalBtn}>자리 배치표</div></div>
                 </div>
                 <div className="bar" />
                 <div className="room">
                     <span>
-                        친구<br/>
-                        <span>(최대 3명)</span><br/><br/>
-                        <span>자리가 없을 시 따로 앉거나<br/>일부 인원만 배정될 수 있음.</span>
+                        친구<br />
+                        <span>(최대 3명)</span><br /><br />
+                        <span>자리가 없을 시 따로 앉거나<br />일부 인원만 배정될 수 있음.</span>
                     </span>
                     <input type="text"
-                    placeholder="학번 입력"
-                    onChange={(e) => handleFriend(0, e)} 
-                    value={friendHope[0]}/>
+                        placeholder="학번 입력"
+                        onChange={(e) => handleFriend(0, e)}
+                        value={friendHope[0]} />
                     <input type="text"
-                    placeholder="학번 입력"
-                    onChange={(e) => handleFriend(1, e)} 
-                    value={friendHope[1]}/>
+                        placeholder="학번 입력"
+                        onChange={(e) => handleFriend(1, e)}
+                        value={friendHope[1]} />
                     <input type="text"
-                    placeholder="학번 입력"
-                    onChange={(e) => handleFriend(2, e)} 
-                    value={friendHope[2]}/>
+                        placeholder="학번 입력"
+                        onChange={(e) => handleFriend(2, e)}
+                        value={friendHope[2]} />
                 </div>
                 <button onClick={submit}>신청하기</button>
             </ApplyForm>
-            <SeatingChartModal/>
+            <SeatingChartModal />
             <style jsx>{`
                 .title{
                     padding: 50px 0 0 10%;

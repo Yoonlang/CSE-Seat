@@ -1,20 +1,22 @@
 import SquareImg from "../atoms/Img";
 import Logo from "../molecules/Logo";
 import Navigation from "../molecules/Navigation";
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { Div, MyLink } from "../atoms/Div";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { loginAtom } from "../others/state";
 
 const Header = () => {
     const [isMenuClick, setIsMenuClick] = useState(false);
-    const [isLogin, setIsLogin] = useState(true);
 
-    const userName = "최윤석님";
+    const isLogin = useRecoilValue(loginAtom);
+
 
     const clickMenu = () => {
-        if(isLogin){
+        if (isLogin) {
             setIsMenuClick(!isMenuClick);
         }
-        else{
+        else {
             window.open('/sign', '_self');
         }
     }
@@ -24,46 +26,49 @@ const Header = () => {
         setIsMenuClick(false);
         // 동시에 refresh
         // 다른곳으로 이동해도 메뉴가 꺼져야함
-        
+
     }
+
+    useEffect(() => {
+    }, [isLogin])
 
     return (
         <>
-        <div className="block"></div>
-        <div className="headerDiv">
-            <div className="menu" onClick={clickMenu}>
-                <SquareImg src="/images/menu.png" 
-                length="24px"/>
+            <div className="block"></div>
+            <div className="headerDiv">
+                <div className="menu" onClick={clickMenu}>
+                    <SquareImg src="/images/menu.png"
+                        length="24px" />
+                </div>
+                <Logo />
+                {
+                    isLogin ?
+                        <div className="loginInfoA">
+                            <Div width="60px">홍길동</Div>
+                        </div>
+                        :
+                        <div className="loginInfoA">
+                            <MyLink href="/sign" width="60px">로그인</MyLink>
+                        </div>
+                }
+
+                <Navigation />
+                {
+                    isLogin ?
+                        <div className="loginInfoB" onClick={clickMenu}>
+                            <Div width="60px">홍길동</Div>
+                        </div>
+                        :
+                        <div className="loginInfoB">
+                            <MyLink href="/sign" width="60px">로그인</MyLink>
+                        </div>
+                }
+                <div className="modal" >
+                    <MyLink href="/info">내 정보</MyLink>
+                    <div className="logout" onClick={logout}>로그아웃</div>
+                </div>
             </div>
-            <Logo />
-            {
-                isLogin?
-                <div className="loginInfoA">
-                    <Div width="60px">{userName}</Div>
-                </div>
-                :
-                <div className="loginInfoA">
-                    <MyLink href="/sign" width="60px">로그인</MyLink>
-                </div>
-            }
-            
-            <Navigation/>
-            {
-                isLogin?
-                <div className="loginInfoB" onClick={clickMenu}>
-                    <Div width="60px">{userName}</Div>
-                </div>
-                :
-                <div className="loginInfoB">
-                    <MyLink href="/sign" width="60px">로그인</MyLink>
-                </div>
-            }
-            <div className="modal" >
-                <MyLink href="/info">내 정보</MyLink> 
-                <div className="logout" onClick={logout}>로그아웃</div> 
-            </div>
-        </div>
-        <style>{`
+            <style>{`
             .modal{
                 display: ${(isMenuClick ? "flex" : "none")};
                 flex-direction : column;

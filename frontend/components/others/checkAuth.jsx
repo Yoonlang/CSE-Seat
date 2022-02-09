@@ -2,7 +2,7 @@ import { selector } from "recoil";
 
 const checkAuth = selector({
     key: 'user',
-    get: ({get}) => {
+    get: ({ get }) => {
         return get;
     }
 });
