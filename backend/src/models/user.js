@@ -4,9 +4,11 @@ module.exports = {
     findById : async (sid) => new Promise( async (resolve, reject) => {
         let sql = "select * from user where sid = ?"
         let result = await db.query(sql,[sid]);
-        if (result)
-            return resolve(result);
-        return reject(new Error('해당하는 학번이 없습니다.'));
+        if (result.length > 0)
+            return resolve(result[0]);
+        else if(result.length == 0)
+            return resolve(null);
+        return reject(new Error('database error.'));
     }),
     insert : async(userDTO) => {
         try {
