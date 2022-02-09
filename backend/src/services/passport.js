@@ -38,7 +38,7 @@ passport.use('local-login', new LocalStrategy({
     }, async (req, sid, password, done)=>{
         userDTO = req.body;
         try{
-            result = userService.login(userDTO);
+            result = await userService.login(userDTO);
             if(result.result == false) 
                 throw result;
             return done(null, {sid : userDTO.sid});            
