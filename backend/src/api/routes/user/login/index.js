@@ -12,6 +12,7 @@ router.post('/process', (req,res,next)=>{
     passport.authenticate('local-login', (err,user,info) => {
         if(err) return next(err);
         if (!user) return res.status(401).json(info.message);
+        console.log(req)
         req.logIn(user, function(err) {
             if (err) { return next(err); }
             res.header({
