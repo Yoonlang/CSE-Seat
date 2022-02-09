@@ -1,8 +1,8 @@
 import {atom} from 'recoil';
 
-const authAtom = atom({
-    key : 'auth',
-    default: ''
+const loginAtom = atom({
+    key : 'login',
+    default: false
 });
 
 const userListAtom = atom({
@@ -47,4 +47,4 @@ const enrollFriendAtom = atom({
     }
 })
 
-export { authAtom, userListAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom };
+export { loginAtom, userListAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom };

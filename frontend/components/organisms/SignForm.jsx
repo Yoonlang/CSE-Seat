@@ -1,6 +1,9 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {SignInput} from "../atoms/Input";
 import SquareImg from "../atoms/Img";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { loginAtom } from "../others/state";
+import cookies from 'next-cookies';
 
 const SignForm = () => {
 
@@ -10,6 +13,8 @@ const SignForm = () => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const fileInput = useRef();
+
+    const [isLogin, setIsLogin] = useRecoilState(loginAtom);
 
     const changeFormState = () => {
         setIsLoginForm(!isLoginForm);
@@ -31,10 +36,12 @@ const SignForm = () => {
                 password: password
             })
         }).then(res => {
-            console.log(res);
             return res.json();
         }).then(res => {
+            setIsLogin(res.result);
             console.log(res);
+        }).catch(err => {
+            console.log(err);
         })
     }
 
@@ -45,6 +52,13 @@ const SignForm = () => {
     const ttt = (e) => {
         setPassword(e.target.value);
     }
+
+    useEffect(() => {
+        console.log("hi");
+        if(isLogin){
+            // window.open('/', '_self');
+        }
+    }, [isLogin])
 
     return (
         <>
@@ -144,5 +158,7 @@ const SignForm = () => {
         </>
     );
 }
+
+console.dir(SignForm);
 
 export default SignForm;

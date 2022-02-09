@@ -3,12 +3,14 @@ import Logo from "../molecules/Logo";
 import Navigation from "../molecules/Navigation";
 import {useEffect, useState} from 'react';
 import { Div, MyLink } from "../atoms/Div";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { loginAtom } from "../others/state";
 
 const Header = () => {
     const [isMenuClick, setIsMenuClick] = useState(false);
-    const [isLogin, setIsLogin] = useState(true);
 
-    const userName = "최윤석님";
+    const isLogin = useRecoilValue(loginAtom);
+    
 
     const clickMenu = () => {
         if(isLogin){
@@ -27,6 +29,10 @@ const Header = () => {
         
     }
 
+    useEffect(() => {
+        console.log(isLogin ? "hi" : "login please");
+    }, [isLogin])
+
     return (
         <>
         <div className="block"></div>
@@ -39,7 +45,7 @@ const Header = () => {
             {
                 isLogin?
                 <div className="loginInfoA">
-                    <Div width="60px">{userName}</Div>
+                    <Div width="60px">홍길동</Div>
                 </div>
                 :
                 <div className="loginInfoA">
@@ -51,7 +57,7 @@ const Header = () => {
             {
                 isLogin?
                 <div className="loginInfoB" onClick={clickMenu}>
-                    <Div width="60px">{userName}</Div>
+                    <Div width="60px">홍길동</Div>
                 </div>
                 :
                 <div className="loginInfoB">
