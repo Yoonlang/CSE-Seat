@@ -92,5 +92,5 @@ const getData = async (sid) => {
 
 
 module.exports = {
-    getData : getData,
+    seatData : getData,
 }
