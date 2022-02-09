@@ -18,7 +18,7 @@ const SeatingChartModal = () => {
     const cancelBtn = useRef();
 
     const closeModal = (event) => {
-        if(event.target === modalOutside.current || event.target === cancelBtn.current){
+        if (event.target === modalOutside.current || event.target === cancelBtn.current) {
             setIsOpenModal(false);
         }
     }
@@ -29,36 +29,36 @@ const SeatingChartModal = () => {
 
     return (
         <>
-        <div className="background" onClick={closeModal} ref={modalOutside}>
-            <div className="modal">
-                <div className="header">
-                    <span onClick={() => changeTargetRoom(0)}>101호</span>
-                    <div></div>
-                    <span onClick={() => changeTargetRoom(1)}>104호</span>
-                    <div></div>
-                    <span onClick={() => changeTargetRoom(2)}>108호</span>
+            <div className="background" onClick={closeModal} ref={modalOutside}>
+                <div className="modal">
+                    <div className="header">
+                        <span onClick={() => changeTargetRoom(0)}>101호</span>
+                        <div></div>
+                        <span onClick={() => changeTargetRoom(1)}>104호</span>
+                        <div></div>
+                        <span onClick={() => changeTargetRoom(2)}>108호</span>
+                    </div>
+
+                    <div className="rooms">
+                        <div className="room0">
+                            <RoomSeats length="40px" basic roomNumber={0} />
+                        </div>
+                        <div className="bar"></div>
+                        <div className="room1">
+                            <RoomSeats length="40px" basic roomNumber={1} />
+                        </div>
+                        <div className="bar"></div>
+                        <div className="room2">
+                            <RoomSeats length="40px" basic roomNumber={2} />
+                        </div>
+                    </div>
+                    <img src="/images/cancel.png"
+                        className="cancel"
+                        onClick={closeModal}
+                        ref={cancelBtn} />
                 </div>
-                
-                <div className="rooms">
-                    <div className="room0">
-                        <RoomSeats length="40px" basic roomNumber={0}/>
-                    </div>
-                    <div className="bar"></div>
-                    <div className="room1">
-                        <RoomSeats length="40px" basic roomNumber={1}/>
-                    </div>
-                    <div className="bar"></div>
-                    <div className="room2">
-                        <RoomSeats length="40px" basic roomNumber={2}/>
-                    </div>
-                </div>
-                <img src="/images/cancel.png"
-                    className="cancel"
-                    onClick={closeModal}
-                    ref={cancelBtn}/>
             </div>
-        </div>
-        <style jsx>{`
+            <style jsx>{`
             .background{
                 display: ${(isOpenModal ? "flex" : "none")};
                 justify-content: center;

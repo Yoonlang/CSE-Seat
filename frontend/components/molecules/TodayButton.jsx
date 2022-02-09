@@ -5,13 +5,13 @@ const TodayButton = () => {
     const [isToday, setIsToday] = useRecoilState(todayAtom);
 
     const changeToToday = () => {
-        if(!isToday){
+        if (!isToday) {
             setIsToday(!isToday);
         }
     }
 
     const changeToTomarrow = () => {
-        if(isToday){
+        if (isToday) {
             setIsToday(!isToday);
         }
     }

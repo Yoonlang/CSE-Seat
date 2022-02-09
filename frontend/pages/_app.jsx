@@ -1,8 +1,8 @@
-import {RecoilRoot} from 'recoil';
+import { RecoilRoot } from 'recoil';
 import Header from '../components/organisms/Header';
 import Footer from '../components/organisms/Footer';
 
-const MyApp = ({Component, pageProps}) => {
+const MyApp = ({ Component, pageProps }) => {
     return (
         <RecoilRoot>
             <Header />

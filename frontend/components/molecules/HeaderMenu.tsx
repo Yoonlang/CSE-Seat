@@ -1,4 +1,4 @@
-import {Div} from "../atoms/Div";
+import { Div } from "../atoms/Div";
 import Link from "next/link";
 
 const HeaderMenu = () => {

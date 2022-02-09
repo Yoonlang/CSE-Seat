@@ -5,10 +5,10 @@ import { enrollFriendAtom } from "../others/state";
 
 const EnrollBox = () => {
     const [enrollFriend, setEnrollFriend] = useRecoilState(enrollFriendAtom);
-    const {isOn, friends} = enrollFriend;
+    const { isOn, friends } = enrollFriend;
 
     const deleteFriend = (sid) => {
-        const tempEnrollFriend = {...enrollFriend};
+        const tempEnrollFriend = { ...enrollFriend };
         const tempFriends = tempEnrollFriend.friends.filter((prop) => {
             return (prop !== sid);
         });
@@ -34,7 +34,7 @@ const EnrollBox = () => {
         })
     }, [])
 
-    const Friend = ({sid}) => {
+    const Friend = ({ sid }) => {
         return (<>
             <div>
                 <span>{sid}</span><button onClick={() => deleteFriend(sid)}><SquareImg src="/images/cancel_color.png" length="12px" /></button>
@@ -70,20 +70,20 @@ const EnrollBox = () => {
 
     return (
         <>
-        <div className="box">
-            <form>
-                <input type="text" placeholder="학번 입력" />
-                <button onClick={enroll}>등록하기</button>
-            </form>
-            <div className="friends">
-                {
-                    friends.map((prop, index) =>{
-                        return <Friend key={prop + index} sid={prop}/>;
-                    })
-                }
+            <div className="box">
+                <form>
+                    <input type="text" placeholder="학번 입력" />
+                    <button onClick={enroll}>등록하기</button>
+                </form>
+                <div className="friends">
+                    {
+                        friends.map((prop, index) => {
+                            return <Friend key={prop + index} sid={prop} />;
+                        })
+                    }
+                </div>
             </div>
-        </div>
-        <style jsx>{`
+            <style jsx>{`
             .box{
                 display: ${(isOn ? `flex` : `none`)};
                 flex-direction: column;

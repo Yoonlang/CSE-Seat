@@ -1,4 +1,4 @@
-import {useState, useRef} from 'react';
+import { useState, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import RoomSeats from '../components/molecules/RoomSeats';
 import IndexHeader from '../components/organisms/IndexHeader';
@@ -20,27 +20,27 @@ const Index = () => {
     return (
         <StyledResDiv>
             <HeadTitle title="home" />
-            <IndexHeader isNav={isNav}/>
+            <IndexHeader isNav={isNav} />
             <div className="rooms">
                 <div className="room0">
-                    <RoomSeats roomNumber={0}/>
+                    <RoomSeats roomNumber={0} />
                 </div>
                 <div className="bar"></div>
                 <div className="room1">
-                    <RoomSeats roomNumber={1}/>
+                    <RoomSeats roomNumber={1} />
                 </div>
                 <div className="bar"></div>
                 <div className="room2">
-                    <RoomSeats roomNumber={2}/>
+                    <RoomSeats roomNumber={2} />
                 </div>
             </div>
             <SeatModal />
             <div className="upDownBtn" onClick={changeUpDownState} ref={nav}>
                 {
                     isNav ?
-                    <SquareImg src="/images/minus.png" length="22px" />
-                    :
-                    <SquareImg src="/images/plus.png" length="22px" />
+                        <SquareImg src="/images/minus.png" length="22px" />
+                        :
+                        <SquareImg src="/images/plus.png" length="22px" />
                 }
             </div>
             <style jsx>{`
@@ -82,8 +82,8 @@ const Index = () => {
                 @media(max-width: 767px){
                     .rooms{
                         justify-content: center;
-                        ${(isNav ? `` : 
-                        `
+                        ${(isNav ? `` :
+                    `
                         transform: translateY(-70px);
                         `)}
                         transition: 0.5s;
