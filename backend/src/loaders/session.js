@@ -14,7 +14,7 @@ module.exports = ({app}) => {
         saveUninitialized: true,
         store: sessionStore,
         cookie: { sameSite : 'None' },
-        domain: 'http://localhost:3000/'
+        domain: 'http://127.0.0.1:3000/'
     }))
     app.use(passport.initialize())
     app.use(passport.session())
