@@ -17,7 +17,7 @@ router.post('/process', (req,res,next)=>{
         req.logIn(user, function(err) {
             if (err) { return next(err); }
             res.header({
-                'Access-Control-Allow-Origin' : '*',
+                'Access-Control-Allow-Origin' : 'http://172.20.45.118:3000/',
                 'Access-Control-Allow-Credentials': true
             });
             return res.status(200).json({result: true, sid: user.sid});
