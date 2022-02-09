@@ -12,7 +12,8 @@ module.exports = ({app}) => {
         secret: session_secret,
         resave: false,
         saveUninitialized: true,
-        store: sessionStore
+        store: sessionStore,
+        cookie: { sameSite : 'None' }
     }))
     app.use(passport.initialize())
     app.use(passport.session())
