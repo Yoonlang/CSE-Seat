@@ -7,6 +7,8 @@ const SignForm = () => {
     const [isLoginForm, setIsLoginForm] = useState(true);
     const [isFileUpload, setIsFileUpload] = useState(false);
     const [isSamePassword, setIsSamePassword] = useState(false);
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
     const fileInput = useRef();
 
     const changeFormState = () => {
@@ -17,17 +19,46 @@ const SignForm = () => {
         fileInput.current.click();
     }
 
+    const test = (e) => {
+        e.preventDefault();
+        fetch("http://3.37.225.217:3000/user/login/process", {
+            method: "POST",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify({
+                sid: id,
+                password: password
+            })
+        }).then(res => {
+            console.log(res);
+            return res.json();
+        }).then(res => {
+            console.log(res);
+        })
+    }
+
+    const tt = (e) => {
+        setId(e.target.value);
+    }
+
+    const ttt = (e) => {
+        setPassword(e.target.value);
+    }
+
     return (
         <>
             {
                 isLoginForm ?
                 <form className="signForm">
-                    <SignInput src="/images/user.png"
+                    {/* <SignInput src="/images/user.png"
                         radius="5px"/>
                     <SignInput src="/images/lock.png"
                         type="password"
-                        placeholder="비밀번호" />
-                    <button className="formBtn">로그인</button>
+                        placeholder="비밀번호" /> */}
+                        <input type="text" value={id} onChange={tt} />
+                        <input type="password" value={password} onChange={ttt} />
+                    <button className="formBtn" onClick={test}>로그인</button>
                     <div className="changeBtn" onClick={changeFormState}>회원가입</div>
                 </form>
                 : 

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import SquareImg from "../atoms/Img";
 import { enrollFriendAtom } from "../others/state";
@@ -7,12 +8,29 @@ const EnrollBox = () => {
     const {isOn, friends} = enrollFriend;
 
     const deleteFriend = (sid) => {
-        // enrollFriend 배열에서 sid가 같은 녀석을 없애고 새로운 배열로 만들고 싶어
-        // const tempFriends = friends.filter((prop) => {
-        //     return (prop !== sid);
-        // });
-        // setEnrollFriend(tempFriends);
+        const tempEnrollFriend = {...enrollFriend};
+        const tempFriends = tempEnrollFriend.friends.filter((prop) => {
+            return (prop !== sid);
+        });
+        tempEnrollFriend.friends = tempFriends;
+        setEnrollFriend(tempEnrollFriend);
     }
+
+    const enroll = (e) => {
+        e.preventDefault();
+    }
+
+    useEffect(() => {
+        fetch("http://3.37.225.217:3000/", {
+            method: "GET",
+            headers: {
+            }
+        }).then((res) => {
+            return res.json();
+        }).then((res) => {
+            console.log(res);
+        })
+    }, [])
 
     const Friend = ({sid}) => {
         return (<>
@@ -53,7 +71,7 @@ const EnrollBox = () => {
         <div className="box">
             <form>
                 <input type="text" placeholder="학번 입력" />
-                <button>등록하기</button>
+                <button onClick={enroll}>등록하기</button>
             </form>
             <div className="friends">
                 {
