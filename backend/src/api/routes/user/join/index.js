@@ -18,7 +18,8 @@ router.post('/process', (req,res,next)=>{
             if (err) { return next(err); }
             res.header({
                 'Access-Control-Allow-Origin' : 'http://172.20.45.118:3000/',
-                'Access-Control-Allow-Credentials': true
+                'Access-Control-Allow-Credentials': true,
+                'Vary': 'Origin'
             });
             return res.status(200).json({result: true, sid: user.sid});
         });
