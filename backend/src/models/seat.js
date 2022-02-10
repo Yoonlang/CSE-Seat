@@ -1,18 +1,16 @@
 const db = require('./mysql');
-const dateService = require('../services/date');
 const date = require('../services/date');
 
 module.exports = {
     exist : async (seatDTO) => new Promise( async (resolve, reject) => {
         let sql = "select * from reservation Where building_id = ? and seat_room = ? "
         + "and seat_num = ? and part = ? and date = ?";
-        console.log(seatDTO);
         let set  = [
             seatDTO.want_building_id,
             seatDTO.want_seat_room,
             seatDTO.want_seat_num,
             seatDTO.part,
-            seatDTO.date
+            seatDTO.reservation_date
         ]
         let result = await db.query(sql,set);
         if (!result) return reject(Error('reservation findList error'));
@@ -24,11 +22,11 @@ module.exports = {
         let sql = "INSERT INTO reservation_apply SET ?"
         set = {
             user_sid : seatDTO.user_sid,
-            apply_time : dateService.getNowTime(),
+            apply_time : seatDTO.apply_time,
             want_building_id : seatDTO.want_building_id,
             want_seat_room : seatDTO.want_seat_room,
             want_seat_num : seatDTO.want_seat_num,
-            reservation_date : seatDTO.isToday ? dateService.getTodayDate() : dateService.getTomorrowDate(),
+            reservation_date : seatDTO.reservation_date,
             part1 : seatDTO.part1,
             part2 : seatDTO.part2,
         }
@@ -45,7 +43,7 @@ module.exports = {
             building_id : seatDTO.want_building_id,
             seat_room : seatDTO.want_seat_room,
             seat_num : seatDTO.want_seat_num,
-            date : seatDTO.isToday ? dateService.getTodayDate() : dateService.getTomorrowDate(),
+            date : seatDTO.reservation_date,
             part : seatDTO.part
         }
         let result = await db.query(sql,set);
