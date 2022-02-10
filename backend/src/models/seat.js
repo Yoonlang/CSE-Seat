@@ -34,7 +34,7 @@ module.exports = {
         }
         let result = await db.query(sql,set);
         if (result && result.affectedRows > 0)
-            return resolve(true);
+            return resolve(result.insertId);
         else
             return reject(new Error('database PK error'))
         
