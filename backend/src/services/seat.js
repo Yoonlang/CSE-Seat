@@ -18,13 +18,15 @@ const initProperty = (seatDTO)=>{
 }
 
 module.exports = {
-    apply : async (seatDTO) => {
+    
+    reserve : async (seatDTO) => {  //실시간 방식
         try{
             initProperty(seatDTO);
             let result = await seatModel.exist(seatDTO);
             if (result) throw Error('이미 예약된 좌석입니다.');
-            result = await seatModel.apply(seatDTO);
-            //reservation 데이터 추가
+            let insertId = await seatModel.apply(seatDTO);
+            seatDTO.apply_id = insertId;
+             result = await seatModel.reserve(seatDTO);
             //reservation log 추가
             return true;
         }catch(e){
