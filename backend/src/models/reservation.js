@@ -9,7 +9,7 @@ module.exports = {
             seatDTO.seat_room,
             seatDTO.date
         ]
-
+        
         let result = await db.query(sql,set);
         if (result)
             return resolve(result);
