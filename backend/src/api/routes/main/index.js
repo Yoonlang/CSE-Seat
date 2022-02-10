@@ -3,7 +3,7 @@ const stateService = require('$/services/state');
 const router = Router();
 
 router.get('/',async (req, res, next) => {
-    data = await stateService.getData(req.user);
+    data = await stateService.seatData(req.user);
     if(data instanceof Error) return next(data);
     res.status(200).json({result : true , data : data});
 });
