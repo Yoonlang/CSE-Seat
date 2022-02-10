@@ -14,7 +14,6 @@ module.exports = {
             seatDTO.part,
             seatDTO.date
         ]
-        
         let result = await db.query(sql,set);
         if (!result) return reject(Error('reservation findList error'));
         else if (result.length == 1) return resolve(result[0]);
@@ -38,6 +37,21 @@ module.exports = {
             return resolve(result.insertId);
         else
             return reject(new Error('database PK error'))
-        
+    }),
+    reserve: async (seatDTO) => new Promise( async (resolve, reject) => {
+        let sql = "INSERT INTO reservation SET ?"
+        set = {
+            user_sid : seatDTO.user_sid,
+            building_id : seatDTO.want_building_id,
+            seat_room : seatDTO.want_seat_room,
+            seat_num : seatDTO.want_seat_num,
+            date : seatDTO.isToday ? dateService.getTodayDate() : dateService.getTomorrowDate(),
+            part : seatDTO.part
+        }
+        let result = await db.query(sql,set);
+        if (result && result.affectedRows > 0)
+            return resolve(true);
+        else
+            return reject(new Error('database PK error'))
     }),
 }
