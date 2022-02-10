@@ -1,4 +1,5 @@
 const seatModel = require('$/models/seat');
+const logModel = require('$/models/log');
 const dateService = require('../services/date');
 
 const initProperty = (seatDTO)=>{
@@ -26,8 +27,8 @@ module.exports = {
             if (result) throw Error('이미 예약된 좌석입니다.');
             let insertId = await seatModel.apply(seatDTO);
             seatDTO.apply_id = insertId;
-             result = await seatModel.reserve(seatDTO);
-            //reservation log 추가
+            await seatModel.reserve(seatDTO);
+            await logModel.reservation(seatDTO);
             return true;
         }catch(e){
             return e;
