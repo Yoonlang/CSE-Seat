@@ -7,18 +7,10 @@ router.get('/',async (req, res, next) => {
     res.status(200).json({result : true , data : 'hello'});
 });
 
-router.post('/apply',isLoggedIn,async (req, res, next) => {
+router.post('/reserve',isLoggedIn,async (req, res, next) => {
     let seatDTO = req.body;
     seatDTO.user_sid = req.user;
-    let result = await seatService.apply(seatDTO);
-    if(result instanceof Error) return next(result);
-    res.status(200).json({result: true});
-});
-
-router.post('/apply',isLoggedIn,async (req, res, next) => {
-    let seatDTO = req.body;
-    seatDTO.user_sid = req.user;
-    let result = await seatService.apply(seatDTO);
+    let result = await seatService.reserve(seatDTO);
     if(result instanceof Error) return next(result);
     res.status(200).json({result: true});
 });
