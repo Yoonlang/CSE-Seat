@@ -5,12 +5,13 @@ const date = require('../services/date');
 module.exports = {
     exist : async (seatDTO) => new Promise( async (resolve, reject) => {
         let sql = "select * from reservation Where building_id = ? and seat_room = ? "
-        + "and seat_num = ? and reservation_part = ? and date = ?";
+        + "and seat_num = ? and part = ? and date = ?";
+        console.log(seatDTO);
         let set  = [
-            seatDTO.building_id,
-            seatDTO.seat_room,
-            seatDTO.seat_num,
-            seatDTO.reservation_part,
+            seatDTO.want_building_id,
+            seatDTO.want_seat_room,
+            seatDTO.want_seat_num,
+            seatDTO.part,
             seatDTO.date
         ]
         
