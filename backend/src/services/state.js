@@ -29,22 +29,36 @@ const getSeats = async (sid,rNum) => {
         let seatDTO = {
             building_id : 414,
             seat_room : rNum,
-            date : dateService.getTodayDate()
+            todayDate : dateService.getTodayDate(),
+            tomorrowDate : dateService.getTomorrowDate()
         }
         let seatList = await reservationModel.findList(seatDTO);
+        console.log(seatList);
         for (let i = 0; i<seatList.length; i++){
             let location = seatsMap.get(seatList[i].seat_num);
             let y = location[0];
             let x = location[1];
-            if(!seats[y][x].todayState) seats[y][x].todayState = [0,0];
 
-            if(seatList[i].reservation_part == 1){
-                if(seatList[i].user_sid == sid) seats[y][x].todayState[0] = 2;
-                else seats[y][x].todayState[0] = 1;
+
+            if(seatList[i].date == dateService.getTodayDate()){
+                console.log(seatList[i])
+                if(seatList[i].part == 1){
+                    if(seatList[i].user_sid == sid) seats[y][x].todayState[0] = 2;
+                    else seats[y][x].todayState[0] = 1;
+                }else{
+                    if(seatList[i].user_sid == sid) seats[y][x].todayState[1] = 2;
+                    else seats[y][x].todayState[1] = 1;
+                }// 동료 체크 구현해야함
             }else{
-                if(seatList[i].user_sid == sid) seats[y][x].tomorrowState[1] = 2;
-                else seats[y][x].todayState[1] = 1;
-            }// 동료 체크 구현해야함
+                if(seatList[i].part == 1){
+                    if(seatList[i].user_sid == sid) seats[y][x].tomorrowState[0] = 2;
+                    else seats[y][x].tomorrowState[0] = 1;
+                }else{
+                    if(seatList[i].user_sid == sid) seats[y][x].tomorrowState[1] = 2;
+                    else seats[y][x].tomorrowState[1] = 1;
+                }// 동료 체크 구현해야함
+            }
+            
         }
         return seats
     }catch(e){
