@@ -13,7 +13,7 @@ module.exports = {
             seat_room : seatDTO.want_seat_room,
             seat_num : seatDTO.want_seat_num,
             date : seatDTO.reservation_date,
-            cancle_marker : false
+            cancel_marker : false
         }
         let result = await db.query(sql,set);
         if (result && result.affectedRows > 0)
@@ -21,26 +21,22 @@ module.exports = {
         else
             return reject(new Error('database PK error'))
     }),
+    updateCancel : async (seatDTO) => new Promise( async (resolve, reject) => {
+        let sql = "UPDATE reservation_log SET ? WHERE building_id = ? and seat_room = ? and seat_num = ? and part = ? and date = ?";
 
-    
-
-
-    // apply : async (seatDTO) => new Promise( async (resolve, reject) => {
-    //     let sql = "INSERT INTO reservation_apply SET ?"
-    //     set = {
-    //         user_sid : seatDTO.user_sid,
-    //         apply_time : seatDTO.apply_time,
-    //         want_building_id : seatDTO.want_building_id,
-    //         want_seat_room : seatDTO.want_seat_room,
-    //         want_seat_num : seatDTO.want_seat_num,
-    //         reservation_date : seatDTO.reservation_date,
-    //         part1 : seatDTO.part1,
-    //         part2 : seatDTO.part2,
-    //     }
-    //     let result = await db.query(sql,set);
-    //     if (result && result.affectedRows > 0)
-    //         return resolve(result.insertId);
-    //     else
-    //         return reject(new Error('database PK error'))
-    // }),
+        const set = {
+            cancel_marker : true
+        }
+        let result = await db.query(sql,[set,
+            seatDTO.building_id,
+            seatDTO.seat_room,
+            seatDTO.seat_num,
+            seatDTO.part,
+            seatDTO.date,
+        ]);
+        if (result && result.affectedRows > 0)
+            return resolve(true);
+        else
+            return reject(new Error('database PK error'))
+    }),
 }
