@@ -9,10 +9,10 @@ module.exports = {
             apply_user_sid : seatDTO.user_sid,
             reservation_sid : seatDTO.user_sid,  //현재는 신청자 == 앉을 사람
             part : seatDTO.part,
-            building_id : seatDTO.want_building_id,
-            seat_room : seatDTO.want_seat_room,
-            seat_num : seatDTO.want_seat_num,
-            date : seatDTO.reservation_date,
+            building_id : seatDTO.building_id,
+            seat_room : seatDTO.seat_room,
+            seat_num : seatDTO.seat_num,
+            date : seatDTO.date,
             cancel_marker : false
         }
         let result = await db.query(sql,set);
