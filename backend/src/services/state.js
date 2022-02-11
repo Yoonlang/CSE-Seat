@@ -33,7 +33,6 @@ const getSeats = async (sid,rNum) => {
             tomorrowDate : dateService.getTomorrowDate()
         }
         let seatList = await reservationModel.findList(seatDTO);
-        console.log(seatList);
         for (let i = 0; i<seatList.length; i++){
             let location = seatsMap.get(seatList[i].seat_num);
             let y = location[0];
@@ -41,7 +40,6 @@ const getSeats = async (sid,rNum) => {
 
 
             if(seatList[i].date == dateService.getTodayDate()){
-                console.log(seatList[i])
                 if(seatList[i].part == 1){
                     if(seatList[i].user_sid == sid) seats[y][x].todayState[0] = 2;
                     else seats[y][x].todayState[0] = 1;
