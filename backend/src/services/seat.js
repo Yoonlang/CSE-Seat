@@ -51,5 +51,36 @@ module.exports = {
         }catch(e){
             return e;
         }
+    },
+    cancelReservation : async (seatDTO) => {
+        try{
+            initProperty(seatDTO);
+            // part 1  part 2 둘다 되게 해야함
+            if (seatDTO.part1){
+                seatDTO.part = 1;
+                let result = await seatModel.exist(seatDTO);
+                if(!result) throw new Error('예약 좌석이 아닙니다');
+            }
+            if (seatDTO.part2){
+                seatDTO.part = 2;
+                let result = await seatModel.exist(seatDTO);
+                if(!result) throw new Error('예약 좌석이 아닙니다');
+            }
+
+            if (seatDTO.part1){
+                seatDTO.part = 1;
+                await seatModel.deleteReservation(seatDTO);
+                await logModel.updateCancel(seatDTO); // 여기서 오류시 롤백해야함
+            }
+            if (seatDTO.part2){
+                seatDTO.part = 2;
+                await seatModel.deleteReservation(seatDTO);
+                await logModel.updateCancel(seatDTO);
+            }
+            return true;
+        }catch(e){
+            console.log('seat services error',e);
+            return e;
+        }
     }
 }
