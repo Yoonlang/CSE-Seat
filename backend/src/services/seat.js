@@ -14,8 +14,6 @@ const initProperty = (seatDTO)=>{
     seatDTO.want_seat_num *= 1;
     seatDTO.reservation_date = seatDTO.isToday ? dateService.getTodayDate() : dateService.getTomorrowDate();
     seatDTO.apply_time = dateService.getNowTime();
-    if (seatDTO.part1) seatDTO.part = 1;
-    else if (seatDTO.part2) seatDTO.part = 2;
 }
 
 module.exports = {
@@ -23,12 +21,32 @@ module.exports = {
     reserve : async (seatDTO) => {  //실시간 방식
         try{
             initProperty(seatDTO);
-            let result = await seatModel.exist(seatDTO);
-            if (result) throw Error('이미 예약된 좌석입니다.');
+            
+            if (seatDTO.part1){
+                seatDTO.part = 1;
+                let result = await seatModel.exist(seatDTO);
+                if (result) throw Error('이미 예약된 좌석입니다.');
+            }
+            if (seatDTO.part2){
+                seatDTO.part = 2;
+                let result = await seatModel.exist(seatDTO);
+                if (result) throw Error('이미 예약된 좌석입니다.');
+            }
+
             let insertId = await seatModel.apply(seatDTO);
-            seatDTO.apply_id = insertId;
-            await seatModel.reserve(seatDTO);
-            await logModel.reservation(seatDTO);
+
+            if (seatDTO.part1){
+                seatDTO.part = 1;
+                seatDTO.apply_id = insertId;
+                await seatModel.reserve(seatDTO);
+                await logModel.reservation(seatDTO);
+            }
+            if (seatDTO.part2){
+                seatDTO.part = 2;
+                seatDTO.apply_id = insertId;
+                await seatModel.reserve(seatDTO);
+                await logModel.reservation(seatDTO);
+            }
             return true;
         }catch(e){
             return e;
