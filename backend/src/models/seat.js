@@ -44,9 +44,25 @@ module.exports = {
             seat_room : seatDTO.want_seat_room,
             seat_num : seatDTO.want_seat_num,
             date : seatDTO.reservation_date,
-            part : seatDTO.part
+            part : seatDTO.part,
+            apply_id : seatDTO.apply_id
         }
         let result = await db.query(sql,set);
+        if (result && result.affectedRows > 0)
+            return resolve(true);
+        else
+            return reject(new Error('database PK error'))
+    }),
+    deleteReservation: async (seatDTO) => new Promise( async (resolve, reject) => {
+        let sql = "DELETE FROM reservation WHERE building_id = ? and seat_room = ? and seat_num = ? and part = ? and date = ?";
+
+        let result = await db.query(sql,[
+            seatDTO.building_id,
+            seatDTO.seat_room,
+            seatDTO.seat_num,
+            seatDTO.part,
+            seatDTO.date,
+        ]);
         if (result && result.affectedRows > 0)
             return resolve(true);
         else
