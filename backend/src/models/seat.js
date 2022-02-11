@@ -4,13 +4,14 @@ const date = require('../services/date');
 module.exports = {
     exist : async (seatDTO) => new Promise( async (resolve, reject) => {
         let sql = "select * from reservation Where building_id = ? and seat_room = ? "
-        + "and seat_num = ? and part = ? and date = ?";
+        + "and seat_num = ? and part = ? and date = ? and user_sid = ?";
         let set  = [
-            seatDTO.want_building_id,
-            seatDTO.want_seat_room,
-            seatDTO.want_seat_num,
+            seatDTO.building_id,
+            seatDTO.seat_room,
+            seatDTO.seat_num,
             seatDTO.part,
-            seatDTO.reservation_date
+            seatDTO.date,
+            seatDTO.user_sid
         ]
         let result = await db.query(sql,set);
         if (!result) return reject(Error('reservation findList error'));
@@ -23,10 +24,10 @@ module.exports = {
         set = {
             user_sid : seatDTO.user_sid,
             apply_time : seatDTO.apply_time,
-            want_building_id : seatDTO.want_building_id,
-            want_seat_room : seatDTO.want_seat_room,
-            want_seat_num : seatDTO.want_seat_num,
-            reservation_date : seatDTO.reservation_date,
+            want_building_id : seatDTO.building_id,
+            want_seat_room : seatDTO.seat_room,
+            want_seat_num : seatDTO.seat_num,
+            reservation_date : seatDTO.date,
             part1 : seatDTO.part1,
             part2 : seatDTO.part2,
         }
@@ -40,10 +41,10 @@ module.exports = {
         let sql = "INSERT INTO reservation SET ?"
         set = {
             user_sid : seatDTO.user_sid,
-            building_id : seatDTO.want_building_id,
-            seat_room : seatDTO.want_seat_room,
-            seat_num : seatDTO.want_seat_num,
-            date : seatDTO.reservation_date,
+            building_id : seatDTO.building_id,
+            seat_room : seatDTO.seat_room,
+            seat_num : seatDTO.seat_num,
+            date : seatDTO.date,
             part : seatDTO.part,
             apply_id : seatDTO.apply_id
         }

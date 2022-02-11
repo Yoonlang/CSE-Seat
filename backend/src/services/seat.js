@@ -9,10 +9,10 @@ const initProperty = (seatDTO)=>{
     if(seatDTO.part1 == 'false') seatDTO.part1 = false;
     if(seatDTO.part2 == 'true') seatDTO.part2 = true;
     if(seatDTO.part2 == 'false') seatDTO.part2 = false;
-    seatDTO.want_building_id *= 1;
-    seatDTO.want_seat_room *= 1;
-    seatDTO.want_seat_num *= 1;
-    seatDTO.reservation_date = seatDTO.isToday ? dateService.getTodayDate() : dateService.getTomorrowDate();
+    seatDTO.building_id *= 1;
+    seatDTO.seat_room *= 1;
+    seatDTO.seat_num *= 1;
+    seatDTO.date = seatDTO.isToday ? dateService.getTodayDate() : dateService.getTomorrowDate();
     seatDTO.apply_time = dateService.getNowTime();
 }
 
