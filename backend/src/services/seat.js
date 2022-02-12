@@ -21,7 +21,7 @@ module.exports = {
     reserve : async (seatDTO) => {  //실시간 방식
         try{
             initProperty(seatDTO);
-            
+            console.log(seatDTO);
             if (seatDTO.part1){
                 seatDTO.part = 1;
                 let result = await seatModel.exist(seatDTO);
@@ -60,11 +60,13 @@ module.exports = {
                 seatDTO.part = 1;
                 let result = await seatModel.exist(seatDTO);
                 if(!result) throw new Error('예약 좌석이 아닙니다');
+                if(result.user_sid != seatDTO.user_sid) throw new Error('예약자가 본인이 아닙니다')
             }
             if (seatDTO.part2){
                 seatDTO.part = 2;
                 let result = await seatModel.exist(seatDTO);
                 if(!result) throw new Error('예약 좌석이 아닙니다');
+                if(result.user_sid != seatDTO.user_sid) throw new Error('예약자가 본인이 아닙니다')
             }
 
             if (seatDTO.part1){

@@ -4,15 +4,15 @@ const date = require('../services/date');
 module.exports = {
     exist : async (seatDTO) => new Promise( async (resolve, reject) => {
         let sql = "select * from reservation Where building_id = ? and seat_room = ? "
-        + "and seat_num = ? and part = ? and date = ? and user_sid = ?";
+        + "and seat_num = ? and part = ? and date = ?";
         let set  = [
             seatDTO.building_id,
             seatDTO.seat_room,
             seatDTO.seat_num,
             seatDTO.part,
             seatDTO.date,
-            seatDTO.user_sid
         ]
+        console.log(set);
         let result = await db.query(sql,set);
         if (!result) return reject(Error('reservation findList error'));
         else if (result.length == 1) return resolve(result[0]);
