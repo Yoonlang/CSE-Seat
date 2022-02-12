@@ -7,7 +7,7 @@ router.get('/',async (req, res, next) => {
     res.status(200).json({result : true , data : 'hello'});
 });
 
-router.post('/reservaion',isLoggedIn,async (req, res, next) => {
+router.post('/reservation',isLoggedIn,async (req, res, next) => {
     let seatDTO = req.body;
     seatDTO.user_sid = req.user;
     let result = await seatService.reserve(seatDTO);
