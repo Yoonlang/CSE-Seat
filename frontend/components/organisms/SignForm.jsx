@@ -3,7 +3,6 @@ import { SignInput } from "../atoms/Input";
 import SquareImg from "../atoms/Img";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { loginAtom } from "../others/state";
-import cookies from 'next-cookies';
 
 const SignForm = () => {
     const [isLoginForm, setIsLoginForm] = useState(true);
@@ -38,7 +37,7 @@ const SignForm = () => {
             return res.json();
         }).then(res => {
             setIsLogin(res.result);
-            console.log(res);
+            console.log(document.cookie);
         }).catch(err => {
             console.log("Error : ", err);
         })
@@ -54,7 +53,6 @@ const SignForm = () => {
 
     useEffect(() => {
         if (isLogin) {
-            // window.open('/', '_self');
         }
     }, [isLogin])
 

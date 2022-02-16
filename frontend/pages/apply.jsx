@@ -260,4 +260,6 @@ const Apply = () => {
     )
 }
 
+Apply.get
+
 export default Apply;

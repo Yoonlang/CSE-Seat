@@ -9,7 +9,7 @@ const userListAtom = atom({
     key : 'userList',
     default : []
 });
-
+    
 const todayAtom = atom({
     key : 'today',
     default : true
