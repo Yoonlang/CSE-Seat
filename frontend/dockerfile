@@ -2,7 +2,9 @@ FROM node:12
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
+RUN npm i next
 RUN npm install
+RUN npm list
 
 RUN npm run build
 EXPOSE 3000
