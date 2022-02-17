@@ -24,24 +24,24 @@ const SignForm = () => {
 
     const test = (e) => {
         e.preventDefault();
-        setIsLogin(true);
-        // fetch("http://3.37.225.217:3000/user/login/process", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify({
-        //         sid: id,
-        //         password: password
-        //     })
-        // }).then(res => {
-        //     return res.json();
-        // }).then(res => {
-        //     setIsLogin(res.result);
-        //     console.log(document.cookie);
-        // }).catch(err => {
-        //     console.log("Error : ", err);
-        // })
+        //fetch("http://3.37.225.217:3000/user/login/process", {
+        fetch("http://localhost:8080/user/login/process", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                sid: id,
+                password: password
+            })
+        }).then(res => {
+            return res.json();
+        }).then(res => {
+            //setIsLogin(res.result);
+            console.log("hi");
+        }).catch(err => {
+            console.log("Error : ", err);
+        })
     }
 
     const tt = (e) => {

@@ -9,7 +9,7 @@ const MyApp = ({ Component, pageProps }) => {
     return (
         <RecoilRoot>
             <Header />
-            <Checker />
+            {/* <Checker isLogin /> */}
             <Component {...pageProps} />
             <Footer />
             <style jsx global>{`
