@@ -13,8 +13,6 @@ module.exports = ({app}) => {
         resave: false,
         saveUninitialized: true,
         store: sessionStore,
-        cookie: { sameSite : 'none' },
-        domain: 'http://127.0.0.1:3000/'
     }))
     app.use(passport.initialize())
     app.use(passport.session())

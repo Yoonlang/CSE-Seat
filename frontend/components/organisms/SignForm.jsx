@@ -27,6 +27,7 @@ const SignForm = () => {
             e.preventDefault();
             fetch("http://localhost:8080/user/login/process", {
                 method: "POST",
+                credentials:"include",
                 headers: {
                     "Content-Type": "application/json"
                 },
