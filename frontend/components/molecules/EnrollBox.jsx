@@ -22,7 +22,7 @@ const EnrollBox = () => {
 
     useEffect(() => {
         //fetch("http://3.37.225.217:3000/", {
-        fetch("http://localhost:8080/", {
+        fetch(process.env.NEXT_PUBLIC_API_URL, {
             method: "GET",
             headers: {
             }

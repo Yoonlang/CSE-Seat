@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { SignInput } from "../atoms/Input";
 import SquareImg from "../atoms/Img";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { inputValueAtom, loginAtom } from "../others/state";
 
 const SignForm = () => {
@@ -12,7 +12,7 @@ const SignForm = () => {
     const [password, setPassword] = useState('');
     const fileInput = useRef();
     const inputValue = useRecoilValue(inputValueAtom);
-    const [isLogin, setIsLogin] = useRecoilState(loginAtom);
+    const setIsLogin = useSetRecoilState(loginAtom);
 
     const changeFormState = () => {
         setIsLoginForm(!isLoginForm);
@@ -25,9 +25,9 @@ const SignForm = () => {
     const handleSignIn = (e) => {
         if (inputValue[0].length >= 4 && inputValue[1].length >= 4) {
             e.preventDefault();
-            fetch("http://localhost:8080/user/login/process", {
+            fetch(process.env.NEXT_PUBLIC_API_URL + "/user/login/process", {
                 method: "POST",
-                credentials:"include",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -38,10 +38,13 @@ const SignForm = () => {
             }).then(res => {
                 return res.json();
             }).then(res => {
-                //setIsLogin(res.result);
-                console.log(document.cookie);
+                if (res.result === false) {
+                    // 로그인이 실패했다는 걸 보여줘야해.
+
+                }
+                setIsLogin(res.result);
             }).catch(err => {
-                console.log("Error : ", err);
+                console.log(err);
             })
         }
     }

@@ -5,11 +5,10 @@ import { useState } from 'react';
 import Checker from '../components/others/Checker';
 
 const MyApp = ({ Component, pageProps }) => {
-    const [isLogin, setIsLogin] = useState(false);
     return (
         <RecoilRoot>
             <Header />
-            {/* <Checker isLogin /> */}
+            {/* <Checker /> */}
             <Component {...pageProps} />
             <Footer />
             <style jsx global>{`
