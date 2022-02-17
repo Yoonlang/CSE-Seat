@@ -21,7 +21,8 @@ const EnrollBox = () => {
     }
 
     useEffect(() => {
-        fetch("http://3.37.225.217:3000/", {
+        //fetch("http://3.37.225.217:3000/", {
+        fetch("http://localhost:8080/", {
             method: "GET",
             headers: {
             }

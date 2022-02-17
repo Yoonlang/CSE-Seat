@@ -4,7 +4,6 @@ import { useEffect } from "react";
 const Checker = ({ isLogin = false }) => {
     useEffect(() => {
         const { url } = history.state;
-        console.log(history);
         if (isLogin) {
             if (url === "/sign") {
                 window.location.replace("/");
