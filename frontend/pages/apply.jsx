@@ -5,6 +5,7 @@ import HeadTitle from "../components/others/headTitle"
 import SeatingChartModal from "../components/organisms/SeatingChartModal";
 import { useSetRecoilState } from "recoil";
 import { seatingChartModalAtom } from "../components/others/state";
+import { ColorTable } from "../components/molecules/ColorTables";
 
 const ApplyForm = styled.form`
     display: flex;
@@ -23,10 +24,17 @@ const ApplyForm = styled.form`
 `;
 
 const Apply = () => {
-    const [isRoomHope, setIsRoomHope] = useState([false, false, false]);
+    const [isTimeHope, setIsTimeHope] = useState([true, true]);
+    const [isRoomHope, setIsRoomHope] = useState([true, true, true]);
     const [seatHope, setSeatHope] = useState('');
     const [friendHope, setFriendHope] = useState(['', '', '']);
     const setIsOpenSeatModal = useSetRecoilState(seatingChartModalAtom);
+
+    const clickTime = (prop) => {
+        const tempTimeHope = isTimeHope.slice(0, 2);
+        tempTimeHope[prop] = !tempTimeHope[prop];
+        setIsTimeHope(tempTimeHope);
+    }
 
     const clickRoom = (prop) => {
         const tempRoomHope = isRoomHope.slice(0, 3);
@@ -60,7 +68,22 @@ const Apply = () => {
         <PageDiv dis="flex" jus="center">
             <HeadTitle title="apply" />
             <ApplyForm>
-                <div className="title">자리 신청</div>
+                <div className="title">
+                    자리 신청
+                    <div>
+                        <ColorTable color="#5C9EFF" length="14px">신청</ColorTable>
+                        <ColorTable length="14px">비신청</ColorTable>
+                    </div>
+                </div>
+                <div className="bar" />
+                <div className="time">
+                    <span>
+                        원하는 시간<br /><br />
+                        <span>체크 안할 시 임의 배정</span>
+                    </span>
+                    <div className="timeBtn0" onClick={() => clickTime(0)}>1부<span>(06:00~18:00)</span></div>
+                    <div className="timeBtn1" onClick={() => clickTime(1)}>2부<span>(18:00~06:00)</span></div>
+                </div>
                 <div className="bar" />
                 <div className="room">
                     <span>
@@ -105,14 +128,22 @@ const Apply = () => {
                         value={friendHope[2]} />
                 </div>
                 <button onClick={submit}>신청하기</button>
-            </ApplyForm>
+            </ApplyForm >
             <SeatingChartModal />
             <style jsx>{`
                 .title{
-                    padding: 50px 0 0 10%;
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 50px 15% 0 10%;
                     width: 100%;
                     height: 70px;
                     font-size: 22px;
+                }
+                .title > div{
+                    display: flex;
+                    flex-direction: column;
+                    height: 70px;
+                    font-size: 12px;
                 }
                 .bar{
                     width: 85%;
@@ -129,6 +160,76 @@ const Apply = () => {
                 }
                 div > span > span{
                     font-size: 14px;
+                }
+                .time{
+                    display: grid;
+                    grid-template-rows: 1fr 1fr;
+                    grid-template-columns: 200px 1fr;
+                    justify-items: center;
+                    align-items: center;
+                    width: 80%;
+                    height: 80px;
+                    row-gap: 6px;  
+                }
+                .time > span{
+                    grid-column: 1/1;
+                    grid-row: 1/3;
+                }
+                .time > div{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 140px;
+                    height: 35px;
+                    cursor: pointer;
+                    letter-spacing: 1px;
+                    font-size: 16px;
+                    white-space: nowrap;
+                    padding: 0 0 0 5px;
+                }
+                .time > div > span{
+                    font-size: 12px;
+                    letter-spacing: 0.5px;
+                }
+                .timeBtn0{
+                    border:solid;
+                    border-width: 1px;
+                    ${(isTimeHope[0] ? `
+                    background: #5C9EFF;
+                    border-color: #5C9EFF;
+                    color: #fff;
+                    ` : `
+                    background: #fff;
+                    border-color: #ddd;
+                    color: #000;
+                    `)}
+                }
+                .timeBtn0 > span{
+                    ${(isTimeHope[0] ? `
+                    color: #fff;
+                    ` : `
+                    color: #000;
+                    `)}
+                }
+                .timeBtn1{
+                    border:solid;
+                    border-width: 1px;
+                    ${(isTimeHope[1] ? `
+                    background: #5C9EFF;
+                    border-color: #5C9EFF;
+                    color: #fff;
+                    ` : `
+                    background: #fff;
+                    border-color: #ddd;
+                    color: #000;
+                    `)}
+                }
+                .timeBtn1 > span{
+                    ${(isTimeHope[1] ? `
+                    color: #fff;
+                    ` : `
+                    color: #000;
+                    `)}
                 }
                 .room{
                     display: grid;
@@ -256,7 +357,7 @@ const Apply = () => {
                     cursor: pointer;
                 }
             `}</style>
-        </PageDiv>
+        </PageDiv >
     )
 }
 
