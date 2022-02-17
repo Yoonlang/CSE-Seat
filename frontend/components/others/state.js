@@ -20,6 +20,11 @@ const showRoomAtom = atom({
     default : 0
 })
 
+const inputValueAtom = atom({
+    key : 'input',
+    default : ['', '', '', '']
+})
+
 const seatModalAtom = atom({
     key : 'seatModal',
     default : {
@@ -47,4 +52,4 @@ const enrollFriendAtom = atom({
     }
 })
 
-export { loginAtom, userListAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom };
+export { loginAtom, userListAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };

@@ -1,5 +1,5 @@
 
-const ColorTable = ({ children, color }) => {
+const ColorTable = ({ children, color, length = "20px" }) => {
     return (
         <>
             <div className="colorTable">
@@ -13,8 +13,8 @@ const ColorTable = ({ children, color }) => {
                     height: 25%;
                 }
                 .colorTable div{
-                    width: 20px;
-                    height: 20px;
+                    width: ${length};
+                    height: ${length};
                     background: ${(color)};
                     border: solid;
                     border-width: 1px;
@@ -47,4 +47,4 @@ const ColorTables = () => {
 
 }
 
-export default ColorTables;
+export { ColorTables, ColorTable };

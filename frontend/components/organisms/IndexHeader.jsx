@@ -1,4 +1,4 @@
-import ColorTables from "../molecules/ColorTables";
+import { ColorTables } from "../molecules/ColorTables";
 import Explain from "../molecules/Explain";
 import IndexNav from "../molecules/IndexNav";
 import TodayButton from "../molecules/TodayButton";
