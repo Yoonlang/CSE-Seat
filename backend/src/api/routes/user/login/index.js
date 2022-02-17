@@ -14,11 +14,6 @@ router.post('/process', (req,res,next)=>{
         if (!user) return res.status(401).json(info.message);
         req.logIn(user, function(err) {
             if (err) { return next(err); }
-            res.header({
-                'Access-Control-Allow-Origin' : 'http://localhost:3000',
-                'Access-Control-Allow-Credentials': true,
-                'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS'
-            });
             return res.status(200).json({result:true, sid: user.sid});
         });
     })(req, res, next);
