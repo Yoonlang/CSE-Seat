@@ -3,6 +3,7 @@ import Header from '../components/organisms/Header';
 import Footer from '../components/organisms/Footer';
 
 const MyApp = ({ Component, pageProps }) => {
+
     return (
         <RecoilRoot>
             <Header />
@@ -28,5 +29,15 @@ const MyApp = ({ Component, pageProps }) => {
         </RecoilRoot>
     );
 }
+
+// MyApp.getInitialProps = async (context) => {
+//     const { ctx, Component } = context;
+//     let pageProps = {};
+//     if (Component.getInitialProps) {
+//         pageProps = await Component.getInitialProps(ctx);
+//     }
+
+//     return { pageProps };
+// }
 
 export default MyApp;
