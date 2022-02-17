@@ -12,7 +12,6 @@ module.exports = {
             seatDTO.part,
             seatDTO.date,
         ]
-        console.log(set);
         let result = await db.query(sql,set);
         if (!result) return reject(Error('reservation findList error'));
         else if (result.length == 1) return resolve(result[0]);

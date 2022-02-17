@@ -21,7 +21,6 @@ module.exports = {
     reserve : async (seatDTO) => {  //실시간 방식
         try{
             initProperty(seatDTO);
-            console.log(seatDTO);
             if (seatDTO.part1){
                 seatDTO.part = 1;
                 let result = await seatModel.exist(seatDTO);
