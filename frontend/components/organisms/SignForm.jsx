@@ -24,23 +24,24 @@ const SignForm = () => {
 
     const test = (e) => {
         e.preventDefault();
-        fetch("http://3.37.225.217:3000/user/login/process", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                sid: id,
-                password: password
-            })
-        }).then(res => {
-            return res.json();
-        }).then(res => {
-            setIsLogin(res.result);
-            console.log(document.cookie);
-        }).catch(err => {
-            console.log("Error : ", err);
-        })
+        setIsLogin(true);
+        // fetch("http://3.37.225.217:3000/user/login/process", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify({
+        //         sid: id,
+        //         password: password
+        //     })
+        // }).then(res => {
+        //     return res.json();
+        // }).then(res => {
+        //     setIsLogin(res.result);
+        //     console.log(document.cookie);
+        // }).catch(err => {
+        //     console.log("Error : ", err);
+        // })
     }
 
     const tt = (e) => {
@@ -53,6 +54,12 @@ const SignForm = () => {
 
     useEffect(() => {
         if (isLogin) {
+            if (document.referrer && document.referrer.indexOf("localhost") !== -1) {
+                history.back();
+            }
+            else {
+                window.location.replace("/");
+            }
         }
     }, [isLogin])
 

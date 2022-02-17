@@ -1,12 +1,15 @@
 import { RecoilRoot } from 'recoil';
 import Header from '../components/organisms/Header';
 import Footer from '../components/organisms/Footer';
+import { useState } from 'react';
+import Checker from '../components/others/Checker';
 
 const MyApp = ({ Component, pageProps }) => {
-
+    const [isLogin, setIsLogin] = useState(false);
     return (
         <RecoilRoot>
             <Header />
+            <Checker />
             <Component {...pageProps} />
             <Footer />
             <style jsx global>{`
@@ -29,15 +32,5 @@ const MyApp = ({ Component, pageProps }) => {
         </RecoilRoot>
     );
 }
-
-// MyApp.getInitialProps = async (context) => {
-//     const { ctx, Component } = context;
-//     let pageProps = {};
-//     if (Component.getInitialProps) {
-//         pageProps = await Component.getInitialProps(ctx);
-//     }
-
-//     return { pageProps };
-// }
 
 export default MyApp;
