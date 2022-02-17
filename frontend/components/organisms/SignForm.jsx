@@ -32,8 +32,8 @@ const SignForm = () => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    sid: id,
-                    password: password
+                    sid: inputValue[0],
+                    password: inputValue[1]
                 })
             }).then(res => {
                 return res.json();
