@@ -1,7 +1,11 @@
 import { useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { loginAtom } from "./state";
 
 
-const Checker = ({ isLogin = false }) => {
+const Checker = () => {
+    const isLogin = useRecoilValue(loginAtom);
+
     useEffect(() => {
         const { url } = history.state;
         if (isLogin) {
