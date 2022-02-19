@@ -40,7 +40,6 @@ const SignForm = () => {
             }).then(res => {
                 if (res.result === false) {
                     // 로그인이 실패했다는 걸 보여줘야해.
-
                 }
                 setIsLogin(res.result);
             }).catch(err => {

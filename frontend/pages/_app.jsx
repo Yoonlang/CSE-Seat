@@ -8,7 +8,7 @@ const MyApp = ({ Component, pageProps }) => {
     return (
         <RecoilRoot>
             <Header />
-            {/* <Checker /> */}
+            <Checker />
             <Component {...pageProps} />
             <Footer />
             <style jsx global>{`
