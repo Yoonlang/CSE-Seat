@@ -3,13 +3,12 @@ import { SignInput } from "../atoms/Input";
 import SquareImg from "../atoms/Img";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { inputValueAtom, loginAtom } from "../others/state";
+import Checkbox from "../atoms/Checkbox";
 
 const SignForm = () => {
     const [isLoginForm, setIsLoginForm] = useState(true);
     const [isFileUpload, setIsFileUpload] = useState(false);
     const [isSamePassword, setIsSamePassword] = useState(false);
-    const [id, setId] = useState('');
-    const [password, setPassword] = useState('');
     const fileInput = useRef();
     const inputValue = useRecoilValue(inputValueAtom);
     const setIsLogin = useSetRecoilState(loginAtom);
@@ -49,9 +48,11 @@ const SignForm = () => {
     }
 
     const handleSignUp = (e) => {
-        if (inputValue[2].length >= 4 && inputValue[3].length >= 4) {
+        if (!isFileUpload) {
+            alert("모바일 학생증 사진을 업로드하세요.");
+        }
+        if (inputValue[2].length >= 4 && inputValue[3].length >= 4 && isFileUpload) {
             e.preventDefault();
-            console.log("hi");
         }
     }
 
@@ -67,7 +68,9 @@ const SignForm = () => {
     // }, [isLogin])
 
     useEffect(() => {
-        console.log("HI");
+        if (inputValue[2] === inputValue[3] && inputValue[2].length >= 4) setIsSamePassword(true);
+        else setIsSamePassword(false);
+
     }, [inputValue[2], inputValue[3]])
 
     return (
@@ -89,7 +92,7 @@ const SignForm = () => {
                             <SquareImg src="/images/user.png"
                                 radius="5px" length="20px" />
                             <label htmlFor="inputFile">모바일 학생증 업로드</label>
-                            <span className="fileUpload">✅</span>
+                            <span className="fileUpload"><Checkbox state={1} length={"20px"} border={false} /></span>
                         </div>
                         <input type="file" id="inputFile"
                             accept="image/*"
@@ -98,14 +101,14 @@ const SignForm = () => {
                                 () => {
                                     setIsFileUpload(true);
                                 }
-                            } />
+                            } required />
                         <SignInput src="/images/lock.png"
                             type="password"
                             placeholder="비밀번호" num={2} />
                         <SignInput src="/images/lock.png"
                             type="password"
                             placeholder="비밀번호 확인" num={3} />
-                        {/* <span className="samePassword">✅</span> */}
+                        <span className="samePassword"><Checkbox state={1} length={"20px"} border={false} /></span>
                         <button className="formBtn" onClick={handleSignUp}>회원가입</button>
                         <div className="changeBtn" onClick={changeFormState}>로그인</div>
                     </form>
@@ -143,6 +146,8 @@ const SignForm = () => {
                 }
                 .fileUpload{
                     ${(isFileUpload ? "display: flex;" : "display: none;")}
+                    position: absolute;
+                    right: 25px;
                 }
                 .formBtn{
                     width: 300px;
@@ -160,6 +165,12 @@ const SignForm = () => {
                     position: absolute;
                     bottom:20px;
                     cursor: pointer;
+                }
+                .samePassword{
+                    display: ${(isSamePassword ? `flex` : `none`)};
+                    position: absolute;
+                    top: 49%;
+                    right: 25px;
                 }
             `}</style>
         </>

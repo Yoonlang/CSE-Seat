@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useRouter } from 'next/router';
 import RoomSeats from '../components/molecules/RoomSeats';
 import IndexHeader from '../components/organisms/IndexHeader';
 import SeatModal from '../components/organisms/SeatModal';
@@ -8,31 +9,54 @@ import { showRoomAtom } from '../components/others/state';
 import SquareImg from '../components/atoms/Img';
 import { StyledResDiv } from '../components/atoms/Div';
 
-const Index = () => {
+const Index = ({ data }) => {
     const targetRoom = useRecoilValue(showRoomAtom);
+    const [isLoading, setIsLoading] = useState(true);
     const [isNav, setIsNav] = useState(true);
     const nav = useRef();
+
+    const router = useRouter();
+
+    // const refreshData = () => {
+    //     router.replace(router.asPath);
+    // }
 
     const changeUpDownState = () => {
         setIsNav(!isNav);
     }
+
+    // setInterval(() => {
+    //     // refreshData();
+    //     // console.log(data.data.rooms[0].seats[0][0]);
+    // }, 2000);
 
     return (
         <StyledResDiv>
             <HeadTitle title="home" />
             <IndexHeader isNav={isNav} />
             <div className="rooms">
-                <div className="room0">
-                    <RoomSeats roomNumber={0} />
-                </div>
-                <div className="bar"></div>
-                <div className="room1">
-                    <RoomSeats roomNumber={1} />
-                </div>
-                <div className="bar"></div>
-                <div className="room2">
-                    <RoomSeats roomNumber={2} />
-                </div>
+                {
+                    // getServerSideProp으로 받는건 loading을 하는건가?
+                    // isLoading이 필요없는 건 아닐까?
+                    isLoading ?
+                        <>
+                            <div className="room0">
+                                <RoomSeats roomNumber={0} />
+                            </div>
+                            <div className="bar"></div>
+                            <div className="room1">
+                                <RoomSeats roomNumber={1} />
+                            </div>
+                            <div className="bar"></div>
+                            <div className="room2">
+                                <RoomSeats roomNumber={2} />
+                            </div>
+                        </>
+                        :
+                        <>
+
+                        </>
+                }
             </div>
             <SeatModal />
             <div className="upDownBtn" onClick={changeUpDownState} ref={nav}>
@@ -115,5 +139,16 @@ const Index = () => {
         </StyledResDiv>
     )
 }
+
+// export async function getServerSideProps() {
+//     const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+//         method: "GET",
+//     });
+//     const data = await res.json();
+
+//     return {
+//         props: { data }
+//     }
+// }
 
 export default Index;

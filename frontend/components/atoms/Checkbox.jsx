@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const Checkbox = ({ state = 0 }) => {
+const Checkbox = ({ state = 0, length = "25px", border = true }) => {
     const canvasRef = useRef();
 
     useEffect(() => {
@@ -32,11 +32,13 @@ const Checkbox = ({ state = 0 }) => {
         ctx.clearRect(0, 0, 50, 50);
         ctx.lineWidth = 6;
         ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(0, 50);
-        ctx.lineTo(50, 50);
-        ctx.lineTo(50, 0);
-        ctx.lineTo(0, 0);
+        if (border) {
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, 50);
+            ctx.lineTo(50, 50);
+            ctx.lineTo(50, 0);
+            ctx.lineTo(0, 0);
+        }
         ctx.strokeStyle = state === 1 ? `#0F5BCC` : `#ccc`;
         ctx.stroke();
 
@@ -48,8 +50,8 @@ const Checkbox = ({ state = 0 }) => {
             <canvas ref={canvasRef} width="1920" height="1080"></canvas>
             <style jsx>{`
             canvas{
-                width: 25px;
-                height: 25px;
+                width: ${(length)};
+                height: ${(length)};
             }
         `}</style>
         </>
