@@ -126,6 +126,7 @@ const SignForm = () => {
                     border-width:1px;
                     gap: 5px;
                     padding: 20px;
+                    background: #fff;
                 }
                 #inputFile{
                     display:none;

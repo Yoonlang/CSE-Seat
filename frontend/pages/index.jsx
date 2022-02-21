@@ -42,7 +42,6 @@ const Index = ({ data }) => {
                             <div className="bar"></div>
                         </Fragment>
                     })
-
                 }
             </div>
             <SeatModal />
