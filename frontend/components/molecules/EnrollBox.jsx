@@ -20,21 +20,6 @@ const EnrollBox = () => {
         e.preventDefault();
     }
 
-    useEffect(() => {
-        //fetch("http://3.37.225.217:3000/", {
-        fetch(process.env.NEXT_PUBLIC_API_URL, {
-            method: "GET",
-            headers: {
-            }
-        }).then((res) => {
-            return res.json();
-        }).then((res) => {
-            console.log(res);
-        }).catch((err) => {
-            console.log('Error: ', err);
-        })
-    }, [])
-
     const Friend = ({ sid }) => {
         return (<>
             <div>
