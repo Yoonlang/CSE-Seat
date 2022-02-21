@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Link from "next/link";
-import React from 'react';
+import React, { useRef } from 'react';
 
 const StyledResDiv = styled.div`
     width: 100%;
@@ -129,7 +129,7 @@ const MyLink = ({
 
     return (
         <Link href={href} passHref={passHref}>
-            <StyledA {...props}>
+            <StyledA {...props} >
                 {children}
             </StyledA>
         </Link>
