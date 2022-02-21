@@ -3,13 +3,12 @@ import Logo from "../molecules/Logo";
 import Navigation from "../molecules/Navigation";
 import { useEffect, useState } from 'react';
 import { Div, MyLink } from "../atoms/Div";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { loginAtom } from "../others/state";
 
 const Header = () => {
     const [isMenuClick, setIsMenuClick] = useState(false);
-
-    const isLogin = useRecoilValue(loginAtom);
+    const [isLogin, setIsLogin] = useRecoilState(loginAtom);
 
 
     const clickMenu = () => {
@@ -17,14 +16,22 @@ const Header = () => {
             setIsMenuClick(!isMenuClick);
         }
         else {
-            window.open('/sign', '_self');
+            window.location.href = '/sign';
         }
     }
 
-    const logout = () => {
+    const signOut = async () => {
+        await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/logout", {
+            method: "GET",
+            credentials: "include",
+        }).then(res => {
+            return res.json();
+        }).then(res => {
+            console.log(res);
+        });
+
         setIsLogin(false);
         setIsMenuClick(false);
-        // 동시에 refresh
         // 다른곳으로 이동해도 메뉴가 꺼져야함
 
     }
@@ -65,7 +72,7 @@ const Header = () => {
                 }
                 <div className="modal" >
                     <MyLink href="/info">내 정보</MyLink>
-                    <div className="logout" onClick={logout}>로그아웃</div>
+                    <div className="signOut" onClick={signOut}>로그아웃</div>
                 </div>
             </div>
             <style>{`
@@ -81,7 +88,7 @@ const Header = () => {
                 border-color: #ddd;
                 cursor:pointer;
             }
-            .logout{
+            .signOut{
                 width: 100px;
                 height: 49px;
                 display:flex;

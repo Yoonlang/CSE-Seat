@@ -1,8 +1,11 @@
-import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { loginAtom } from "./state";
 
 const Checker = () => {
+    const router = useRouter();
+    const [isFetching, setIsFetching] = useState(true);
     const [isLogin, setIsLogin] = useRecoilState(loginAtom);
 
     useEffect(async () => {
@@ -15,22 +18,32 @@ const Checker = () => {
             if (res.result === true) {
                 setIsLogin(true);
             }
+            setIsFetching(false);
         });
-        const { url } = history.state;
+    }, [router.pathname]);
 
-        if (isLogin) {
-            if (url === "/sign") {
-                window.location.replace("/");
-            }
-        }
-        else {
-            if (url === "/" || url === "/sign") {
+    useEffect(() => {
+        const { pathname } = router;
+        if (!isFetching) {
+            if (isLogin) {
+                if (pathname === "/sign") {
+                    if (document.referrer && document.referrer.indexOf("localhost") !== -1) {
+                        history.back();
+                    }
+                    else {
+                        router.replace("/");
+                    }
+                }
             }
             else {
-                window.location.href = "/sign";
+                if (pathname === "/" || pathname === "/sign") {
+                }
+                else {
+                    router.push("/sign");
+                }
             }
         }
-    })
+    }, [isFetching, isLogin]);
 
     return <></>
 }
