@@ -43,7 +43,7 @@ const Checker = () => {
                 }
             }
         }
-    }, [isFetching, isLogin]);
+    }, [router.pathname, isFetching, isLogin]);
 
     return <></>
 }

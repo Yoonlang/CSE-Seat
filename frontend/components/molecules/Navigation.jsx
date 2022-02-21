@@ -20,7 +20,6 @@ const Navigation = () => {
             .navDiv{
                 display:flex;
                 width: 100%;
-                margin-left: 15px;
                 align-items: center;
             }
             .navDiv div{

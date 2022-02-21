@@ -78,7 +78,7 @@ const RoomSeats = ({ roomNumber = 0, length = "50px", basic = false, m, seats })
                     display: flex;
                     flex-direction: column;
                     height: 100%;
-                    margin-top: 20px;
+                    margin-top: 10px;
                     margin-bottom: 40px;
                     width: 100%;
                     max-width: 400px;
@@ -104,6 +104,7 @@ const RoomSeats = ({ roomNumber = 0, length = "50px", basic = false, m, seats })
                 .seats{
                     display:flex;
                     flex-wrap: wrap;
+                    padding-bottom: 40px;
                 }
                 .seatDiv{
                     display: flex;

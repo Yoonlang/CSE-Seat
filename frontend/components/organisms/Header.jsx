@@ -104,7 +104,6 @@ const Header = () => {
             .headerDiv{
                 display: flex;
                 position: relative;
-                padding: 0 10px;
                 align-items: center;
                 border-bottom: solid;
                 border-color: #ddd;
