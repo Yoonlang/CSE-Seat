@@ -10,7 +10,7 @@ const initProperty = (seatDTO)=>{
     if(seatDTO.part2 == 'true') seatDTO.part2 = true;
     if(seatDTO.part2 == 'false') seatDTO.part2 = false;
     seatDTO.building_id *= 1;
-    seatDTO.seat_room *= 1;
+    //seatDTO.seat_room *= 1;
     seatDTO.seat_num *= 1;
     seatDTO.date = seatDTO.isToday ? dateService.getTodayDate() : dateService.getTomorrowDate();
     seatDTO.apply_time = dateService.getNowTime();
