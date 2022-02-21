@@ -1,7 +1,6 @@
 import HeadTitle from "../components/others/headTitle"
 import SignForm from "../components/organisms/SignForm";
 import { PageDiv } from "../components/atoms/Div";
-import { loginAtom } from "../components/others/state";
 
 const Sign = () => {
     return (

@@ -32,8 +32,6 @@ const Header = () => {
 
         setIsLogin(false);
         setIsMenuClick(false);
-        // 다른곳으로 이동해도 메뉴가 꺼져야함
-
     }
 
     const closeModal = (e) => {
@@ -46,11 +44,11 @@ const Header = () => {
         setIsMenuClick(false);
     }
 
-    useEffect(() => {
-        document.addEventListener("click", (e) => {
-            console.log(e.target);
-        })
-    }, [])
+    // useEffect(() => {
+    //     document.addEventListener("click", (e) => {
+    //         console.log(e.target);
+    //     })
+    // }, [])
 
     return (
         <>

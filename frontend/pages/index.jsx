@@ -1,6 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, Fragment } from 'react';
 import { useRecoilValue } from 'recoil';
-import { useRouter } from 'next/router';
 import RoomSeats from '../components/molecules/RoomSeats';
 import IndexHeader from '../components/organisms/IndexHeader';
 import SeatModal from '../components/organisms/SeatModal';
@@ -11,19 +10,16 @@ import { StyledResDiv } from '../components/atoms/Div';
 
 const Index = ({ data }) => {
     const targetRoom = useRecoilValue(showRoomAtom);
-    const [isLoading, setIsLoading] = useState(true);
     const [isNav, setIsNav] = useState(true);
     const nav = useRef();
-
-    const router = useRouter();
-
-    // const refreshData = () => {
-    //     router.replace(router.asPath);
-    // }
 
     const changeUpDownState = () => {
         setIsNav(!isNav);
     }
+
+    // const refreshData = () => {
+    //     router.replace(router.asPath);
+    // }
 
     // setInterval(() => {
     //     // refreshData();
@@ -36,26 +32,17 @@ const Index = ({ data }) => {
             <IndexHeader isNav={isNav} />
             <div className="rooms">
                 {
-                    // getServerSideProp으로 받는건 loading을 하는건가?
-                    // isLoading이 필요없는 건 아닐까?
-                    isLoading ?
-                        <>
-                            <div className="room0">
-                                <RoomSeats roomNumber={0} />
+                    data.data.rooms.map((prop, index) => {
+                        const className = "room" + index;
+                        const { num, m, seats } = prop;
+                        return <Fragment key={prop + index}>
+                            <div className={className}>
+                                <RoomSeats roomNumber={num} m={m} seats={seats} />
                             </div>
                             <div className="bar"></div>
-                            <div className="room1">
-                                <RoomSeats roomNumber={1} />
-                            </div>
-                            <div className="bar"></div>
-                            <div className="room2">
-                                <RoomSeats roomNumber={2} />
-                            </div>
-                        </>
-                        :
-                        <>
+                        </Fragment>
+                    })
 
-                        </>
                 }
             </div>
             <SeatModal />
@@ -70,7 +57,6 @@ const Index = ({ data }) => {
             <style jsx>{`
                 .rooms{
                     display: flex;
-                    align-items: center;
                     height: 100%;
                 }
                 .rooms .bar{
@@ -140,15 +126,15 @@ const Index = ({ data }) => {
     )
 }
 
-// export async function getServerSideProps() {
-//     const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
-//         method: "GET",
-//     });
-//     const data = await res.json();
+export async function getServerSideProps() {
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+        method: "GET",
+    });
+    const data = await res.json();
 
-//     return {
-//         props: { data }
-//     }
-// }
+    return {
+        props: { data }
+    }
+}
 
 export default Index;

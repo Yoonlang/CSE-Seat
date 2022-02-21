@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 
 const seatColor = ['#ffffff', '#969696', '#0F5BCC', '#007435', '#5C9DFF', '#D60505'];
 
-const Seat = ({ length = "50px", left = 0, right = 0, dist = 0, width = 26, isColor = false }) => {
+const Seat = ({ length = "50px", left = 0, right = 0, dist = 0, width = 26, isColor = false, hidden = false }) => {
     const canvasRef = useRef();
     const leng = length.slice(0, length.match("px").index);
 
@@ -91,6 +91,7 @@ const Seat = ({ length = "50px", left = 0, right = 0, dist = 0, width = 26, isCo
                     overflow: hidden;
                 }
                 canvas{
+                    ${(hidden ? `display: none;` : ``)}
                     width:${(leng * 2)}px;
                     height:${(leng * 2)}px;
                 }

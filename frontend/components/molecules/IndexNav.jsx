@@ -1,9 +1,9 @@
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { showRoomAtom, todayAtom } from "../others/state";
 
 const IndexNav = () => {
-    const [isToday, setIsToday] = useRecoilState(todayAtom);
-    const [targetRoom, setTargetRoom] = useRecoilState(showRoomAtom);
+    const setIsToday = useSetRecoilState(todayAtom);
+    const setTargetRoom = useSetRecoilState(showRoomAtom);
 
     const changeToToday = (prop) => {
         prop ? setIsToday(true) : setIsToday(false);
