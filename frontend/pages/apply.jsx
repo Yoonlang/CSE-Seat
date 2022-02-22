@@ -19,11 +19,12 @@ const ApplyForm = styled.form`
         border: solid;
         border-width: 0 1px;
         border-color: #ddd;
-        box-shadow: 0 -5px 6px 2px #ddd;
+        box-shadow: 0 -5px 4px 1px #dedede;
     }
 `;
 
-const Apply = () => {
+const Apply = ({ data }) => {
+    const rooms = ["101", "104", "108"];
     const [isTimeHope, setIsTimeHope] = useState([true, true]);
     const [isRoomHope, setIsRoomHope] = useState([true, true, true]);
     const [seatHope, setSeatHope] = useState('');
@@ -56,12 +57,48 @@ const Apply = () => {
         setFriendHope(tempFriendHope);
     }
 
+    const handleRoom = () => {
+        const checkRoomNum = isRoomHope.filter(prop => prop).length;
+        return checkRoomNum === 0 ? rooms : isRoomHope.map((prop, index) => {
+            if (prop) return rooms[index];
+            return;
+        }).filter(prop => prop !== undefined);
+    }
+
+    const handleTime = () => {
+        const checkTime = isTimeHope.filter(prop => prop).length;
+        return checkTime === 0 ? [true, true] : isTimeHope;
+    }
+
     const submit = (e) => {
         e.preventDefault();
-        //const checkRoomNum = isRoomHope.filter(prop => prop).length;
-        console.log(isRoomHope);
-        console.log(seatHope);
-        console.log(friendHope);
+        const room = handleRoom();
+        const time = handleTime();
+        // console.log(seatHope);
+        // console.log(friendHope);
+
+        fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                building_id: "414",
+                seat_room: room,
+                seat_num: seatHope,
+                isToday: false,
+                part1: time[0],
+                part2: time[1],
+            })
+        }).then(res => {
+            return res.json();
+        }).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.log(err);
+        })
+
     }
 
     return (
@@ -79,7 +116,7 @@ const Apply = () => {
                 <div className="time">
                     <span>
                         원하는 시간<br /><br />
-                        <span>체크 안할 시 임의 배정</span>
+                        <span>체크 안할 시 풀타임</span>
                     </span>
                     <div className="timeBtn0" onClick={() => clickTime(0)}>1부<span>(06:00~18:00)</span></div>
                     <div className="timeBtn1" onClick={() => clickTime(1)}>2부<span>(18:00~06:00)</span></div>
@@ -129,7 +166,7 @@ const Apply = () => {
                 </div>
                 <button onClick={submit}>신청하기</button>
             </ApplyForm >
-            <SeatingChartModal />
+            <SeatingChartModal data={data} />
             <style jsx>{`
                 .title{
                     display: flex;
@@ -183,9 +220,9 @@ const Apply = () => {
                     height: 35px;
                     cursor: pointer;
                     letter-spacing: 1px;
-                    font-size: 16px;
+                    font-size: 15px;
                     white-space: nowrap;
-                    padding: 0 0 0 5px;
+                    padding: 0 0 0 8px;
                 }
                 .time > div > span{
                     font-size: 12px;
@@ -361,6 +398,15 @@ const Apply = () => {
     )
 }
 
-Apply.get
+export async function getServerSideProps() {
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+        method: "GET",
+    });
+    const data = await res.json();
+
+    return {
+        props: { data }
+    }
+}
 
 export default Apply;

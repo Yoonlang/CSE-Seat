@@ -60,12 +60,8 @@ const SeatModal = () => {
         setTwoColor(seatColor[two]);
         setIsReadyToRequest([false, false]);
         if (isModalOpen) {
-            if (one === 2 || two === 2) {
-                setIsMySeat(true);
-            }
-            else {
-                setIsMySeat(false);
-            }
+            if (one === 2 || two === 2) setIsMySeat(true);
+            else setIsMySeat(false);
         }
     }, [isModalOpen]);
 
@@ -73,8 +69,7 @@ const SeatModal = () => {
         <>
             <div className="modal" onClick={clickModal} ref={modalOutside}>
                 <div>
-                    <span>{roomNumber === 0 ? "101" :
-                        (roomNumber === 1 ? "104" : "108")}호<span className="bar">|</span>
+                    <span>{roomNumber}호<span className="bar">|</span>
                         {isToday ? "오늘" : "내일"}<span className="bar">|</span>
                         {seatNumber}번 좌석</span>
                     <Seat length="120px" left={oneColor} right={twoColor} isColor />
@@ -94,23 +89,14 @@ const SeatModal = () => {
                         </div>
                     </div>
 
-                    {
-                        /*
-                            입퇴실 관련은 json 받아오고 나서 결정하자
-                            useState로 해야할지 recoil로 해야할지
-                            아직은 감이 잘 안오네
-                            나중에 둘 중 멀 써야하는지에 대해서 정리해보자
-                        */
-                    }
-
                     {isMySeat ?
                         <>
                             <div className="check">
                                 <div>
-                                    <button>입실</button><span>22.01.19<space />06 : 24</span>
+                                    <button>입실</button><span>22.01.19<span className="space" />06 : 24</span>
                                 </div>
                                 <div>
-                                    <button>퇴실</button><span>22.01.19<space />06 : 24</span>
+                                    <button>퇴실</button><span>22.01.19<span className="space" />06 : 24</span>
                                 </div>
                             </div>
                             <button className="submit" onClick={clickBtn}>자리 수정</button>
@@ -222,7 +208,7 @@ const SeatModal = () => {
                 width: 100%;
                 gap: 10px;
             }
-            space{
+            .space{
                 margin: 0 10px;
             }
             .check button{

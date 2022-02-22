@@ -2,16 +2,9 @@ import { useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import RoomSeats from "../molecules/RoomSeats";
 import { seatingChartModalAtom } from "../others/state";
+import { Fragment } from "react";
 
-const SeatingChartModal = () => {
-    // 한 room의 width를 250~400. width 조절 처리 끝
-    // RoomSeats에 length 달 수 있게 설정해놨으니까
-    // 내일 seat 크기 조절해서 modal창에 넣도록.
-
-
-    // 스크롤바도 안 보이게 해야함
-
-
+const SeatingChartModal = ({ data }) => {
     const [isOpenModal, setIsOpenModal] = useRecoilState(seatingChartModalAtom);
     const [targetRoom, setTargetRoom] = useState(0);
     const modalOutside = useRef();
@@ -40,17 +33,18 @@ const SeatingChartModal = () => {
                     </div>
 
                     <div className="rooms">
-                        <div className="room0">
-                            <RoomSeats length="40px" basic roomNumber={0} />
-                        </div>
-                        <div className="bar"></div>
-                        <div className="room1">
-                            <RoomSeats length="40px" basic roomNumber={1} />
-                        </div>
-                        <div className="bar"></div>
-                        <div className="room2">
-                            <RoomSeats length="40px" basic roomNumber={2} />
-                        </div>
+                        {
+                            data.data.rooms.map((prop, index) => {
+                                const className = "room" + index;
+                                const { num, m, seats } = prop;
+                                return <Fragment key={prop + index}>
+                                    <div className={className}>
+                                        <RoomSeats length="40px" roomNumber={num} m={m} seats={seats} />
+                                    </div>
+                                    <div className="bar"></div>
+                                </Fragment>
+                            })
+                        }
                     </div>
                     <img src="/images/cancel.png"
                         className="cancel"
@@ -74,7 +68,7 @@ const SeatingChartModal = () => {
             .modal{
                 display: flex;
                 position: relative;
-                align-items: center;
+                flex-direction: column;
                 top:0;
                 left:0;
                 height: 70%;
@@ -113,7 +107,6 @@ const SeatingChartModal = () => {
             .rooms{
                 display: flex;
                 justify-content: space-between;
-                align-items: center;
                 height: 100%;
             }
             .rooms .bar{
@@ -134,6 +127,7 @@ const SeatingChartModal = () => {
                     width: 70%;
                     min-width: 900px;
                     max-width: 1300px;
+                    padding-top: 20px;
                 }
                 .header{
                     display: none;
@@ -142,7 +136,7 @@ const SeatingChartModal = () => {
             @media(max-width: 1023px){
                 .modal{
                     width: 400px;
-                    padding-top: 25px;
+                    padding-top: 40px;
                 }
                 .header{
                     display: flex;

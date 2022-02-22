@@ -5,11 +5,6 @@ const loginAtom = atom({
     default: false
 });
 
-const userListAtom = atom({
-    key : 'userList',
-    default : []
-});
-
 const todayAtom = atom({
     key : 'today',
     default : true
@@ -33,8 +28,8 @@ const seatModalAtom = atom({
             roomNumber : undefined,
             isToday : undefined,
             seatNumber : undefined, 
-            one : undefined,
-            two : undefined
+            one: undefined,
+            two: undefined,
         }
     }
 })
@@ -52,4 +47,4 @@ const enrollFriendAtom = atom({
     }
 })
 
-export { loginAtom, userListAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };
+export { loginAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };

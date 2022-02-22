@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import Link from "next/link";
-import React from 'react';
 
 const StyledResDiv = styled.div`
     width: 100%;
     height: 100%;
+    background: rgba(251, 251, 251, 0.98);
     @media(min-width: 768px){
         min-height: calc(100vh - 60px - 150px);
     }
@@ -129,7 +129,7 @@ const MyLink = ({
 
     return (
         <Link href={href} passHref={passHref}>
-            <StyledA {...props}>
+            <StyledA {...props} >
                 {children}
             </StyledA>
         </Link>
