@@ -7,7 +7,7 @@ module.exports = {
         + "and seat_num = ? and part = ? and date = ?";
         let set  = [
             seatDTO.building_id,
-            seatDTO.seat_room,
+            seatDTO.seat_room[0]*1,
             seatDTO.seat_num,
             seatDTO.part,
             seatDTO.date,
@@ -58,7 +58,7 @@ module.exports = {
 
         let result = await db.query(sql,[
             seatDTO.building_id,
-            seatDTO.seat_room,
+            seatDTO.seat_room[0]*1,
             seatDTO.seat_num,
             seatDTO.part,
             seatDTO.date,
