@@ -7,7 +7,7 @@ module.exports = {
         + "and seat_num = ? and part = ? and date = ?";
         let set  = [
             seatDTO.building_id,
-            seatDTO.seat_room[0]*1,
+            seatDTO.seat_room,
             seatDTO.seat_num,
             seatDTO.part,
             seatDTO.date,
@@ -24,7 +24,7 @@ module.exports = {
             user_sid : seatDTO.user_sid,
             apply_time : seatDTO.apply_time,
             want_building_id : seatDTO.building_id,
-            want_seat_room : seatDTO.seat_room[0]*1,
+            want_seat_room : seatDTO.seat_room,
             want_seat_num : seatDTO.seat_num,
             reservation_date : seatDTO.date,
             part1 : seatDTO.part1,
@@ -41,7 +41,7 @@ module.exports = {
         set = {
             user_sid : seatDTO.user_sid,
             building_id : seatDTO.building_id,
-            seat_room : seatDTO.seat_room[0]*1,
+            seat_room : seatDTO.seat_room,
             seat_num : seatDTO.seat_num,
             date : seatDTO.date,
             part : seatDTO.part,

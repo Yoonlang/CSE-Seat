@@ -10,16 +10,34 @@ const initProperty = (seatDTO)=>{
     if(seatDTO.part2 == 'true') seatDTO.part2 = true;
     if(seatDTO.part2 == 'false') seatDTO.part2 = false;
     seatDTO.building_id *= 1;
-    //seatDTO.seat_room *= 1;
+    seatDTO.seat_room = seatDTO.seat_room[0]*1; // 임시
     seatDTO.seat_num *= 1;
     seatDTO.date = seatDTO.isToday ? dateService.getTodayDate() : dateService.getTomorrowDate();
     seatDTO.apply_time = dateService.getNowTime();
 }
 
+getRandomInt = (min, max)=>{
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+
 module.exports = {
     
     reserve : async (seatDTO) => {  //실시간 방식
         try{
+            //랜덤 생성 임시
+            if (!seatDTO.seat_num){
+                if (seatDTO.seat_room[0] == '101'){
+                    seatDTO.seat_num = getRandomInt(2,15);
+                }else if(seatDTO.seat_room[0] == '104'){
+                    seatDTO.seat_num = getRandomInt(16,47);
+                }else if(seatDTO.seat_room[0] == '108'){
+                    seatDTO.seat_num = getRandomInt(48,71);
+                }
+            }
+            
             initProperty(seatDTO);
             if (seatDTO.part1){
                 seatDTO.part = 1;
@@ -33,6 +51,8 @@ module.exports = {
             }
 
             let insertId = await seatModel.apply(seatDTO);
+            
+            
 
             if (seatDTO.part1){
                 seatDTO.part = 1;
