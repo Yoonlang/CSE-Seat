@@ -8,7 +8,9 @@ import { showRoomAtom } from '../components/others/state';
 import SquareImg from '../components/atoms/Img';
 import { StyledResDiv } from '../components/atoms/Div';
 
-const Index = ({ data }) => {
+const Index = () => {
+    const [data, setData] = useState();
+    const [isLoading, setIsLoading] = useState(true);
     const targetRoom = useRecoilValue(showRoomAtom);
     const [isNav, setIsNav] = useState(true);
     const nav = useRef();
@@ -19,12 +21,27 @@ const Index = ({ data }) => {
 
     // const refreshData = () => {
     //     router.replace(router.asPath);
+    //     console.log(data);
     // }
 
     // setInterval(() => {
-    //     // refreshData();
+    //     refreshData();
     //     // console.log(data.data.rooms[0].seats[0][0]);
     // }, 2000);
+
+    useEffect(async () => {
+        await fetch(process.env.NEXT_PUBLIC_API_URL, {
+            method: "GET",
+            credentials: "include",
+        }).then(res => {
+            return res.json();
+        }).then(res => {
+            setData(res);
+            setIsLoading(false);
+        }).catch(err => {
+            console.log(err);
+        });
+    }, [])
 
     return (
         <StyledResDiv>
@@ -32,16 +49,18 @@ const Index = ({ data }) => {
             <IndexHeader isNav={isNav} />
             <div className="rooms">
                 {
-                    data.data.rooms.map((prop, index) => {
-                        const className = "room" + index;
-                        const { num, m, seats } = prop;
-                        return <Fragment key={prop + index}>
-                            <div className={className}>
-                                <RoomSeats roomNumber={num} m={m} seats={seats} />
-                            </div>
-                            <div className="bar"></div>
-                        </Fragment>
-                    })
+                    isLoading ?
+                        `` :
+                        data.data.rooms.map((prop, index) => {
+                            const className = "room" + index;
+                            const { num, m, seats } = prop;
+                            return <Fragment key={prop + index}>
+                                <div className={className}>
+                                    <RoomSeats roomNumber={num} m={m} seats={seats} />
+                                </div>
+                                <div className="bar"></div>
+                            </Fragment>
+                        })
                 }
             </div>
             <SeatModal />
@@ -123,17 +142,6 @@ const Index = ({ data }) => {
             `}</style>
         </StyledResDiv>
     )
-}
-
-export async function getServerSideProps() {
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
-        method: "GET",
-    });
-    const data = await res.json();
-
-    return {
-        props: { data }
-    }
 }
 
 export default Index;
