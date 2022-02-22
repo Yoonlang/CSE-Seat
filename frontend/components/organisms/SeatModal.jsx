@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { Seat, seatColor } from "../atoms/Seat";
 import { seatModalAtom } from "../others/state";
+import { useRouter } from 'next/router';
 
 const SeatModal = () => {
+    const router = useRouter();
     const [modalState, setModalState] = useRecoilState(seatModalAtom);
     const { isModalOpen, seatInfo: { one, two, roomNumber, isToday, seatNumber } } = modalState
     const [oneColor, setOneColor] = useState('');
@@ -29,6 +31,12 @@ const SeatModal = () => {
         }
     };
 
+    const closeModal = () => {
+        const tempModalState = { ...modalState };
+        tempModalState.isModalOpen = false;
+        setModalState(tempModalState);
+    }
+
     const selectTime = (prop) => {
         if (prop === 0) {
             if (one === 0 || one === 2) {
@@ -45,6 +53,32 @@ const SeatModal = () => {
     };
 
     const submitReq = () => {
+
+        fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                building_id: "414",
+                seat_room: [roomNumber.toString()],
+                seat_num: seatNumber.toString(),
+                isToday: isToday,
+                part1: isReadyToRequest[0],
+                part2: isReadyToRequest[1],
+            })
+        }).then(res => {
+            return res.json();
+        }).then(res => {
+            if (res.result === true) {
+                router.replace("/");
+                closeModal();
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+
     }
 
     const clickBtn = (e) => {
