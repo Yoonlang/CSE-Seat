@@ -25,10 +25,6 @@ const TodayInfo = () => {
         }
     }
 
-    useEffect(() => {
-        // console.log(checkboxState);
-    }, [checkboxState])
-
     return (
         <>
             <div className="today">

@@ -5,8 +5,10 @@ import { useEffect, useRef, useState } from 'react';
 import { Div, MyLink } from "../atoms/Div";
 import { useRecoilState } from "recoil";
 import { loginAtom } from "../others/state";
+import { useRouter } from "next/router";
 
 const Header = () => {
+    const router = useRouter();
     const [isMenuClick, setIsMenuClick] = useState(false);
     const [isLogin, setIsLogin] = useRecoilState(loginAtom);
     const modalOutside = useRef();
@@ -16,7 +18,7 @@ const Header = () => {
             setIsMenuClick(!isMenuClick);
         }
         else {
-            window.location.href = '/sign';
+            router.push("/sign");
         }
     }
 

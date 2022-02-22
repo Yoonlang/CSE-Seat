@@ -15,6 +15,7 @@ const Checker = () => {
         }).then(res => {
             return res.json();
         }).then(res => {
+            console.log(res);
             if (res.result === true) {
                 setIsLogin(true);
             }
