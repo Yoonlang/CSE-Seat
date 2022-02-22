@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Checkbox from "../atoms/Checkbox";
 import { MyLink } from "../atoms/Div";
 
@@ -25,6 +25,10 @@ const TodayInfo = () => {
         }
     }
 
+    useEffect(() => {
+        // console.log(checkboxState);
+    }, [checkboxState])
+
     return (
         <>
             <div className="today">
@@ -40,7 +44,7 @@ const TodayInfo = () => {
                             {
                                 checkboxState.map((prop, index) => {
                                     return (
-                                        <div key={prop + index} onClick={() => clickCheckbox(index)}>
+                                        <div key={prop, index} onClick={() => clickCheckbox(index)}>
                                             <Checkbox state={checkboxState[index]} />
                                         </div>
                                     );
