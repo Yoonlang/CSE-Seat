@@ -5,6 +5,11 @@ const loginAtom = atom({
     default: false
 });
 
+const refreshIndexAtom = atom({
+    key: 'refreshIndex',
+    default: false
+})
+
 const todayAtom = atom({
     key : 'today',
     default : true
@@ -47,4 +52,4 @@ const enrollFriendAtom = atom({
     }
 })
 
-export { loginAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };
+export { loginAtom, refreshIndexAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };

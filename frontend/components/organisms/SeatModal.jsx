@@ -1,16 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { Seat, seatColor } from "../atoms/Seat";
-import { seatModalAtom } from "../others/state";
-import { useRouter } from 'next/router';
+import { refreshIndexAtom, seatModalAtom } from "../others/state";
 
 const SeatModal = () => {
-    const router = useRouter();
+    const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     const [modalState, setModalState] = useRecoilState(seatModalAtom);
     const { isModalOpen, seatInfo: { one, two, roomNumber, isToday, seatNumber } } = modalState
     const [oneColor, setOneColor] = useState('');
     const [twoColor, setTwoColor] = useState('');
-    const [isMySeat, setIsMySeat] = useState();
+    const [isMySeat, setIsMySeat] = useState([false, false]);
     const [isReadyToRequest, setIsReadyToRequest] = useState([false, false]);
     const modalOutside = useRef();
     const cancelBtn = useRef();
@@ -52,9 +51,35 @@ const SeatModal = () => {
         }
     };
 
-    const submitReq = () => {
+    const fetchingCancel = async (one = isReadyToRequest[0], two = isReadyToRequest[1], isFinish = true) => {
+        await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation-cancel", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                building_id: "414",
+                seat_room: roomNumber.toString(),
+                seat_num: seatNumber.toString(),
+                isToday: isToday,
+                part1: one,
+                part2: two,
+            })
+        }).then(res => {
+            return res.json();
+        }).then(res => {
+            if ((res.result === true) & isFinish) {
+                setRefreshData(!refreshData);
+                closeModal();
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+    }
 
-        fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation", {
+    const fetchingReservation = async (one = isReadyToRequest[0], two = isReadyToRequest[1]) => {
+        await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation", {
             method: "POST",
             credentials: "include",
             headers: {
@@ -65,27 +90,47 @@ const SeatModal = () => {
                 seat_room: [roomNumber.toString()],
                 seat_num: seatNumber.toString(),
                 isToday: isToday,
-                part1: isReadyToRequest[0],
-                part2: isReadyToRequest[1],
+                part1: one,
+                part2: two,
             })
         }).then(res => {
             return res.json();
         }).then(res => {
             if (res.result === true) {
-                router.replace("/");
+                setRefreshData(!refreshData);
                 closeModal();
             }
         }).catch(err => {
             console.log(err);
         })
+    }
 
+    const submitReq = () => {
+        if (isReadyToRequest[0] ^ isReadyToRequest[1]) {
+            if (isReadyToRequest[0] & isMySeat[0]) fetchingCancel();
+            else if (isReadyToRequest[0]) fetchingReservation();
+            else if (isReadyToRequest[1] & isMySeat[1]) fetchingCancel();
+            else if (isReadyToRequest[1]) fetchingReservation();
+        }
+        else {
+            if (isMySeat[0] & isMySeat[1]) fetchingCancel();
+            else if (isMySeat[0] | isMySeat[1]) {
+                if (isMySeat[0]) {
+                    fetchingCancel(true, false, false);
+                    fetchingReservation(false, true);
+                }
+                else {
+                    fetchingCancel(false, true, false);
+                    fetchingReservation(true, false);
+                }
+            }
+            else fetchingReservation();
+        }
     }
 
     const clickBtn = (e) => {
         e.preventDefault();
-        if (isReadyToRequest[0] | isReadyToRequest[1]) {
-            submitReq();
-        }
+        if (isReadyToRequest[0] | isReadyToRequest[1]) submitReq();
     }
 
     useEffect(() => {
@@ -94,8 +139,10 @@ const SeatModal = () => {
         setTwoColor(seatColor[two]);
         setIsReadyToRequest([false, false]);
         if (isModalOpen) {
-            if (one === 2 || two === 2) setIsMySeat(true);
-            else setIsMySeat(false);
+            let tempSeat = [false, false];
+            one === 2 ? tempSeat[0] = true : false;
+            two === 2 ? tempSeat[1] = true : false;
+            setIsMySeat(tempSeat);
         }
     }, [isModalOpen]);
 
