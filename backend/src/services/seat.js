@@ -73,7 +73,10 @@ module.exports = {
     },
     cancelReservation : async (seatDTO) => {
         try{
-            initProperty(seatDTO);
+            seatDTO.building_id *= 1;
+            seatDTO.seat_room *= seatDTO.seat_room;
+            seatDTO.seat_num *= 1;
+            seatDTO.date = seatDTO.isToday ? dateService.getTodayDate() : dateService.getTomorrowDate();
             // part 1  part 2 둘다 되게 해야함
             if (seatDTO.part1){
                 seatDTO.part = 1;
