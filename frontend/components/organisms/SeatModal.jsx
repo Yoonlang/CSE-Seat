@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { Seat, seatColor } from "../atoms/Seat";
-import { seatModalAtom } from "../others/state";
-import { useRouter } from 'next/router';
+import { refreshIndexAtom, seatModalAtom } from "../others/state";
 
 const SeatModal = () => {
-    const router = useRouter();
+    const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     const [modalState, setModalState] = useRecoilState(seatModalAtom);
     const { isModalOpen, seatInfo: { one, two, roomNumber, isToday, seatNumber } } = modalState
     const [oneColor, setOneColor] = useState('');
@@ -72,7 +71,7 @@ const SeatModal = () => {
             return res.json();
         }).then(res => {
             if (res.result === true) {
-                router.replace("/");
+                setRefreshData(!refreshData);
                 closeModal();
             }
         }).catch(err => {

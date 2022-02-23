@@ -39,7 +39,7 @@ const SeatingChartModal = ({ data }) => {
                                 const { num, m, seats } = prop;
                                 return <Fragment key={prop + index}>
                                     <div className={className}>
-                                        <RoomSeats length="40px" roomNumber={num} m={m} seats={seats} />
+                                        <RoomSeats length="40px" roomNumber={num} m={m} seats={seats} basic />
                                     </div>
                                     <div className="bar"></div>
                                 </Fragment>

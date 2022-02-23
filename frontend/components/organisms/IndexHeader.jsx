@@ -1,3 +1,4 @@
+import Refresh from "../atoms/Refresh";
 import { ColorTables } from "../molecules/ColorTables";
 import Explain from "../molecules/Explain";
 import IndexNav from "../molecules/IndexNav";
@@ -15,13 +16,13 @@ const IndexHeader = ({ isNav = true }) => {
                     <Explain />
                 </div>
                 <div className="right">
-                    <div>
+                    <div className="onlyPC">
+                        <Refresh />
                         <TodayButton />
                     </div>
                     <ColorTables />
                 </div>
             </div>
-
             <style jsx>{`
             .indexHeader{
                 display:flex;
@@ -30,8 +31,13 @@ const IndexHeader = ({ isNav = true }) => {
             }
             .right{
                 display: flex;
-                align-items: center;
                 gap: 30px;
+                height: 130px;
+            }
+            .right .onlyPC{
+                display: flex;
+                gap: 25px;
+                height: 70%;
             }
             @media(min-width: 768px){
                 .indexHeader{
@@ -44,6 +50,9 @@ const IndexHeader = ({ isNav = true }) => {
                 }
                 .block{
                     display: none;
+                }
+                .right{
+                    align-items: center;
                 }
             }
             @media(max-width: 767px){
@@ -72,7 +81,7 @@ const IndexHeader = ({ isNav = true }) => {
                     background: #fff;
                     z-index: 4;
                 }
-                .right div{
+                .right .onlyPC{
                     display: none;
                 }
             }

@@ -3,14 +3,15 @@ import Logo from "../molecules/Logo";
 import Navigation from "../molecules/Navigation";
 import { useEffect, useRef, useState } from 'react';
 import { Div, MyLink } from "../atoms/Div";
-import { useRecoilState } from "recoil";
-import { loginAtom } from "../others/state";
+import { useRecoilState, } from "recoil";
+import { loginAtom, refreshIndexAtom } from "../others/state";
 import { useRouter } from "next/router";
 
 const Header = () => {
     const router = useRouter();
     const [isMenuClick, setIsMenuClick] = useState(false);
     const [isLogin, setIsLogin] = useRecoilState(loginAtom);
+    const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     const modalOutside = useRef();
 
     const clickMenu = () => {
@@ -29,11 +30,10 @@ const Header = () => {
         }).then(res => {
             return res.json();
         }).then(res => {
-            console.log(res);
+            setIsLogin(false);
+            setIsMenuClick(false);
+            setRefreshData(!refreshData);
         });
-
-        setIsLogin(false);
-        setIsMenuClick(false);
     }
 
     const closeModal = (e) => {
@@ -45,12 +45,6 @@ const Header = () => {
     const closeModal2 = () => {
         setIsMenuClick(false);
     }
-
-    // useEffect(() => {
-    //     document.addEventListener("click", (e) => {
-    //         console.log(e.target);
-    //     })
-    // }, [])
 
     return (
         <>
