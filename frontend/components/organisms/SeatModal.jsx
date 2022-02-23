@@ -170,7 +170,7 @@ const SeatModal = () => {
                         </div>
                     </div>
 
-                    {isMySeat ?
+                    {isMySeat[0] | isMySeat[1] ?
                         <>
                             <div className="check">
                                 <div>
