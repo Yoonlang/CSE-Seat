@@ -69,6 +69,8 @@ const SeatModal = () => {
         }).then(res => {
             return res.json();
         }).then(res => {
+            console.log("cancel");
+            console.log(res);
             if ((res.result === true) & isFinish) {
                 setRefreshData(!refreshData);
                 closeModal();
@@ -96,6 +98,8 @@ const SeatModal = () => {
         }).then(res => {
             return res.json();
         }).then(res => {
+            console.log("reserve");
+            console.log(res);
             if (res.result === true) {
                 setRefreshData(!refreshData);
                 closeModal();
@@ -105,7 +109,8 @@ const SeatModal = () => {
         })
     }
 
-    const submitReq = () => {
+    const submitReq = async () => {
+        console.log(isReadyToRequest);
         if (isReadyToRequest[0] ^ isReadyToRequest[1]) {
             if (isReadyToRequest[0] & isMySeat[0]) fetchingCancel();
             else if (isReadyToRequest[0]) fetchingReservation();
@@ -116,11 +121,11 @@ const SeatModal = () => {
             if (isMySeat[0] & isMySeat[1]) fetchingCancel();
             else if (isMySeat[0] | isMySeat[1]) {
                 if (isMySeat[0]) {
-                    fetchingCancel(true, false, false);
+                    await fetchingCancel(true, false, false);
                     fetchingReservation(false, true);
                 }
                 else {
-                    fetchingCancel(false, true, false);
+                    await fetchingCancel(false, true, false);
                     fetchingReservation(true, false);
                 }
             }
@@ -170,7 +175,7 @@ const SeatModal = () => {
                         </div>
                     </div>
 
-                    {isMySeat ?
+                    {isMySeat[0] | isMySeat[1] ?
                         <>
                             <div className="check">
                                 <div>
