@@ -73,8 +73,11 @@ module.exports = {
     },
     cancelReservation : async (seatDTO) => {
         try{
-            initProperty(seatDTO);
-            // part 1  part 2 둘다 되게 해야함
+            seatDTO.building_id *= 1;
+            seatDTO.seat_room *= 1;
+            seatDTO.seat_num *= 1;
+            seatDTO.date = seatDTO.isToday ? dateService.getTodayDate() : dateService.getTomorrowDate();
+
             if (seatDTO.part1){
                 seatDTO.part = 1;
                 let result = await seatModel.exist(seatDTO);
@@ -87,7 +90,6 @@ module.exports = {
                 if(!result) throw new Error('예약 좌석이 아닙니다');
                 if(result.user_sid != seatDTO.user_sid) throw new Error('예약자가 본인이 아닙니다')
             }
-
             if (seatDTO.part1){
                 seatDTO.part = 1;
                 await seatModel.deleteReservation(seatDTO);
