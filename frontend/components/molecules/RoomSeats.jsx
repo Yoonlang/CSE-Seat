@@ -55,7 +55,7 @@ const RoomSeats = ({ roomNumber = 0, length = "50px", basic = false, m, seats })
                                             </div>
                                         }
                                         const { todayState, tomorrowState, num } = prop;
-                                        return <div className="seatDiv" key={prop + index} onClick={() => openSeatModal(prop)}>
+                                        return <div className="seatDiv" key={prop + index} onClick={() => basic ? `` : openSeatModal(prop)}>
                                             {
                                                 basic ?
                                                     <Seat length={length} /> :

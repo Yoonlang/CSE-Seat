@@ -2,8 +2,13 @@ import { atom } from 'recoil';
 
 const loginAtom = atom({
     key : 'login',
-    default: false
+    default: undefined
 });
+
+const refreshIndexAtom = atom({
+    key: 'refreshIndex',
+    default: false
+})
 
 const todayAtom = atom({
     key : 'today',
@@ -47,4 +52,4 @@ const enrollFriendAtom = atom({
     }
 })
 
-export { loginAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };
+export { loginAtom, refreshIndexAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };

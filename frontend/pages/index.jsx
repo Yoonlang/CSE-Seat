@@ -4,44 +4,35 @@ import RoomSeats from '../components/molecules/RoomSeats';
 import IndexHeader from '../components/organisms/IndexHeader';
 import SeatModal from '../components/organisms/SeatModal';
 import HeadTitle from '../components/others/headTitle';
-import { showRoomAtom } from '../components/others/state';
+import { refreshIndexAtom, showRoomAtom } from '../components/others/state';
 import SquareImg from '../components/atoms/Img';
 import { StyledResDiv } from '../components/atoms/Div';
+import Refresh from '../components/atoms/Refresh';
 
-const Index = () => {
-    const [data, setData] = useState();
+const Index = ({ data }) => {
+    const [updateData, setUpdateData] = useState();
     const [isLoading, setIsLoading] = useState(true);
-    const targetRoom = useRecoilValue(showRoomAtom);
     const [isNav, setIsNav] = useState(true);
+    const targetRoom = useRecoilValue(showRoomAtom);
+    const refreshData = useRecoilValue(refreshIndexAtom);
     const nav = useRef();
 
     const changeUpDownState = () => {
         setIsNav(!isNav);
     }
 
-    // const refreshData = () => {
-    //     router.replace(router.asPath);
-    //     console.log(data);
-    // }
-
-    // setInterval(() => {
-    //     refreshData();
-    //     // console.log(data.data.rooms[0].seats[0][0]);
-    // }, 2000);
-
     useEffect(async () => {
-        await fetch(process.env.NEXT_PUBLIC_API_URL, {
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
             method: "GET",
             credentials: "include",
-        }).then(res => {
-            return res.json();
-        }).then(res => {
-            setData(res);
-            setIsLoading(false);
-        }).catch(err => {
-            console.log(err);
-        });
-    }, [])
+        })
+        const fetchingData = await res.json();
+        setUpdateData(fetchingData);
+    }, [refreshData]);
+
+    useEffect(() => {
+        if (updateData !== undefined) setIsLoading(false);
+    }, [updateData]);
 
     return (
         <StyledResDiv>
@@ -50,8 +41,18 @@ const Index = () => {
             <div className="rooms">
                 {
                     isLoading ?
-                        `` :
                         data.data.rooms.map((prop, index) => {
+                            const className = "room" + index;
+                            const { num, m, seats } = prop;
+                            return <Fragment key={prop + index}>
+                                <div className={className}>
+                                    <RoomSeats roomNumber={num} m={m} seats={seats} basic />
+                                </div>
+                                <div className="bar"></div>
+                            </Fragment>
+                        })
+                        :
+                        updateData.data.rooms.map((prop, index) => {
                             const className = "room" + index;
                             const { num, m, seats } = prop;
                             return <Fragment key={prop + index}>
@@ -64,6 +65,9 @@ const Index = () => {
                 }
             </div>
             <SeatModal />
+            <div className="refreshBtn">
+                <Refresh />
+            </div>
             <div className="upDownBtn" onClick={changeUpDownState} ref={nav}>
                 {
                     isNav ?
@@ -100,8 +104,11 @@ const Index = () => {
                     background: #fff;
                 }
                 @media(min-width: 768px){
+                    .refreshBtn{
+                        display: none;
+                    }
                     .upDownBtn{
-                        display:none;
+                        display: none;
                     }
                     .rooms{
                         justify-content: space-between;
@@ -121,6 +128,12 @@ const Index = () => {
                     }
                     .rooms .room${(targetRoom)}{
                         display: flex !important;
+                    }
+                    .refreshBtn{
+                        display: flex;
+                        position: fixed;
+                        bottom: 75px;
+                        right: 25px;
                     }
                     .upDownBtn{
                         display:flex;
@@ -142,6 +155,17 @@ const Index = () => {
             `}</style>
         </StyledResDiv>
     )
+}
+
+export async function getServerSideProps() {
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+        method: "GET",
+        credentials: "include",
+    });
+    const data = await res.json();
+    return {
+        props: { data }
+    }
 }
 
 export default Index;
