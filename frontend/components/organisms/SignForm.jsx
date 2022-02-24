@@ -35,7 +35,7 @@ const SignForm = () => {
                     password: inputValue[1]
                 })
             })
-            const data = res.json();
+            const data = await res.json();
             if (data.result === false) {
                 // 로그인이 실패했다는 걸 보여줘야해.
             }
