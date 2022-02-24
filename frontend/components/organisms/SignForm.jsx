@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { SignInput } from "../atoms/Input";
 import SquareImg from "../atoms/Img";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { inputValueAtom, loginAtom } from "../others/state";
 import Checkbox from "../atoms/Checkbox";
 
@@ -21,10 +21,10 @@ const SignForm = () => {
         fileInput.current.click();
     }
 
-    const handleSignIn = (e) => {
+    const handleSignIn = async (e) => {
         if (inputValue[0].length >= 4 && inputValue[1].length >= 4) {
             e.preventDefault();
-            fetch(process.env.NEXT_PUBLIC_API_URL + "/user/login/process", {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/login/process", {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -34,16 +34,12 @@ const SignForm = () => {
                     sid: inputValue[0],
                     password: inputValue[1]
                 })
-            }).then(res => {
-                return res.json();
-            }).then(res => {
-                if (res.result === false) {
-                    // 로그인이 실패했다는 걸 보여줘야해.
-                }
-                setIsLogin(res.result);
-            }).catch(err => {
-                console.log(err);
             })
+            const data = res.json();
+            if (data.result === false) {
+                // 로그인이 실패했다는 걸 보여줘야해.
+            }
+            setIsLogin(data.result);
         }
     }
 
@@ -55,17 +51,6 @@ const SignForm = () => {
             e.preventDefault();
         }
     }
-
-    // useEffect(() => {
-    //     if (isLogin) {
-    //         if (document.referrer && document.referrer.indexOf("localhost") !== -1) {
-    //             history.back();
-    //         }
-    //         else {
-    //             window.location.replace("/");
-    //         }
-    //     }
-    // }, [isLogin])
 
     useEffect(() => {
         if (inputValue[2] === inputValue[3] && inputValue[2].length >= 4) setIsSamePassword(true);

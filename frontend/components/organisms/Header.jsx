@@ -1,7 +1,7 @@
 import SquareImg from "../atoms/Img";
 import Logo from "../molecules/Logo";
 import Navigation from "../molecules/Navigation";
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Div, MyLink } from "../atoms/Div";
 import { useRecoilState, } from "recoil";
 import { loginAtom, refreshIndexAtom } from "../others/state";
@@ -15,36 +15,25 @@ const Header = () => {
     const modalOutside = useRef();
 
     const clickMenu = () => {
-        if (isLogin) {
-            setIsMenuClick(!isMenuClick);
-        }
-        else {
-            router.push("/sign");
-        }
+        if (isLogin) setIsMenuClick(!isMenuClick);
+        else router.push("/sign");
     }
 
     const signOut = async () => {
         await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/logout", {
             method: "GET",
             credentials: "include",
-        }).then(res => {
-            return res.json();
-        }).then(res => {
-            setIsLogin(false);
-            setIsMenuClick(false);
-            setRefreshData(!refreshData);
         });
+        setIsLogin(false);
+        setIsMenuClick(false);
+        setRefreshData(!refreshData);
     }
 
     const closeModal = (e) => {
-        if (e.target === modalOutside.current) {
-            setIsMenuClick(!isMenuClick);
-        }
+        if (e.target === modalOutside.current) setIsMenuClick(!isMenuClick);
     }
 
-    const closeModal2 = () => {
-        setIsMenuClick(false);
-    }
+    const closeModal2 = () => setIsMenuClick(false);
 
     return (
         <>

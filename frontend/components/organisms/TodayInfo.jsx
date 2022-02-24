@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Checkbox from "../atoms/Checkbox";
 import { MyLink } from "../atoms/Div";
 

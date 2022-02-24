@@ -12,9 +12,9 @@ import Refresh from '../components/atoms/Refresh';
 const Index = ({ data }) => {
     const [updateData, setUpdateData] = useState();
     const [isLoading, setIsLoading] = useState(true);
+    const [isNav, setIsNav] = useState(true);
     const targetRoom = useRecoilValue(showRoomAtom);
     const refreshData = useRecoilValue(refreshIndexAtom);
-    const [isNav, setIsNav] = useState(true);
     const nav = useRef();
 
     const changeUpDownState = () => {
@@ -22,18 +22,17 @@ const Index = ({ data }) => {
     }
 
     useEffect(async () => {
-        await fetch(process.env.NEXT_PUBLIC_API_URL, {
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
             method: "GET",
             credentials: "include",
-        }).then(res => {
-            return res.json();
-        }).then(res => {
-            setUpdateData(res);
-            setIsLoading(false);
-        }).catch(err => {
-            console.log(err);
-        });
+        })
+        const fetchingData = await res.json();
+        setUpdateData(fetchingData);
     }, [refreshData]);
+
+    useEffect(() => {
+        if (updateData !== undefined) setIsLoading(false);
+    }, [updateData]);
 
     return (
         <StyledResDiv>
