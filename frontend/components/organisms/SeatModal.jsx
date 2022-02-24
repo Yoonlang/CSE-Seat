@@ -21,6 +21,15 @@ const SeatModal = () => {
         if (color === seatColor[5]) return seatColor[2];
     }
 
+    const a = setTimeout(() => {
+        setTimeout(() => {
+            console.log("BB");
+        }, 3000);
+        console.log("HI");
+    }, 2000)
+
+    a;
+
     const clickModal = (event) => {
         if (event.target === modalOutside.current || event.target === cancelBtn.current) {
             let tempObject = { ...modalState };
@@ -110,7 +119,6 @@ const SeatModal = () => {
     }
 
     const submitReq = async () => {
-        console.log(isReadyToRequest);
         if (isReadyToRequest[0] ^ isReadyToRequest[1]) {
             if (isReadyToRequest[0] & isMySeat[0]) fetchingCancel();
             else if (isReadyToRequest[0]) fetchingReservation();

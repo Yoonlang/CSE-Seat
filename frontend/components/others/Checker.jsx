@@ -5,47 +5,37 @@ import { loginAtom } from "./state";
 
 const Checker = () => {
     const router = useRouter();
+    const { pathname } = router;
     const [isFetching, setIsFetching] = useState(true);
     const [isLogin, setIsLogin] = useRecoilState(loginAtom);
 
     useEffect(async () => {
-        await fetch(process.env.NEXT_PUBLIC_API_URL + `/user/login/check`, {
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `/user/login/check`, {
             method: "GET",
             credentials: "include",
-        }).then(res => {
-            return res.json();
-        }).then(res => {
-            if (res.result === true) {
-                setIsLogin(true);
-            }
-            setIsFetching(false);
-        });
-    }, [router.pathname]);
+        })
+        const data = await res.json();
+        data.result === true ? setIsLogin(true) : setIsLogin(false);
+    }, [pathname]);
 
     useEffect(() => {
-        const { pathname } = router;
+        if (isLogin !== undefined) setIsFetching(false);
+    }, [isLogin])
+
+    useEffect(() => {
         if (!isFetching) {
             if (isLogin) {
-                if (pathname === "/sign") {
-                    if (document.referrer && document.referrer.indexOf("localhost") !== -1) {
-                        history.back();
-                    }
-                    else {
-                        router.replace("/");
-                    }
-                }
+                if (pathname === "/sign") router.replace("/");
             }
             else {
-                if (pathname === "/" || pathname === "/sign") {
-                }
-                else {
-                    router.push("/sign");
-                }
+                if (pathname !== "/" && pathname !== "/sign") router.push("/sign");
             }
         }
-    }, [router.pathname, isFetching, isLogin]);
+    }, [pathname, isFetching, isLogin]);
 
     return <></>
 }
+
+
 
 export default Checker;
