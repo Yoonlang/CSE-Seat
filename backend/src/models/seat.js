@@ -14,7 +14,7 @@ module.exports = {
             seatDTO.user_sid
         ]
         let result = await db.query(sql,set);
-        if (!result) return reject(Error('본인 좌석이 아니거나 예약된 좌석이 아닙니다.'));
+        if (!result) return reject(Error('데이터베이스 오류'));
         else if (result.length == 1) return resolve(result[0]);
         else if (result.length == 0) return resolve(false);
         else return reject(new Error('database PK error'));
