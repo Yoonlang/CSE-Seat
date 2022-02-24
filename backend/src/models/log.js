@@ -35,11 +35,28 @@ module.exports = {
             return reject(new Error('database PK error'))
     }),
     updateCancel : async (seatDTO) => new Promise( async (resolve, reject) => {
-        let sql = "UPDATE reservation_log SET ? WHERE apply_id = ?";
+        let sql = "UPDATE reservation_log SET ? WHERE apply_id = ? and reservation_sid = ?";
 
         const set = {
             cancel_marker : true
         }
+        let result = await db.query(sql,[set,
+            seatDTO.apply_id,
+            seatDTO.user_sid
+        ]);
+        if (result && result.affectedRows > 0)
+            return resolve(true);
+        else
+            return reject(new Error('database PK error'))
+    }),
+    updatePart : async (seatDTO) => new Promise( async (resolve, reject) => {
+        let sql = "UPDATE reservation_log SET ? WHERE apply_id = ? and reservation_sid = ?";
+
+        const set = {
+            part1 : !seatDTO.part1,
+            part2 : !seatDTO.part2
+        }
+        console.log(set);
         let result = await db.query(sql,[set,
             seatDTO.apply_id,
             seatDTO.user_sid
