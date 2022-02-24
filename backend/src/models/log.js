@@ -1,6 +1,18 @@
 const db = require('./mysql');
 
 module.exports = {
+    findOne : async (seatDTO) => new Promise( async (resolve, reject) => {
+        let sql = "select * from reservation_log where apply_id = ? and reservation_sid = ?";
+        let set  = [
+            seatDTO.apply_id,
+            seatDTO.user_sid
+        ]
+        let result = await db.query(sql,set);
+        if (!result) return reject(Error('log findOne error'));
+        else if (result.length == 1) return resolve(result[0]);
+        else if (result.length == 0) return resolve(false);
+        else return reject(new Error('database PK error'));
+    }),
     reservation : async (seatDTO) => new Promise( async (resolve, reject) => {
         let sql = "INSERT INTO reservation_log SET ?"
 
