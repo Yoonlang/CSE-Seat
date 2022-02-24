@@ -67,7 +67,7 @@ const SeatModal = () => {
                 part2: two,
             })
         })
-        const data = res.json();
+        const data = await res.json();
         if ((data.result === true) & isFinish) {
             setRefreshData(!refreshData);
             closeModal();
