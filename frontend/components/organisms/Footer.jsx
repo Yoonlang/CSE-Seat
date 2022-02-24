@@ -2,7 +2,6 @@ import { Div } from "../atoms/Div";
 import SquareImg from "../atoms/Img";
 
 const Footer = () => {
-
     return (
         <>
             <div className="footerDiv">

@@ -71,6 +71,7 @@ const Apply = ({ data }) => {
     }
 
     const submit = (e) => {
+        // 신청 처리가 되면 문구 뜨면서 처리해야함.
         e.preventDefault();
         const room = handleRoom();
         const time = handleTime();
@@ -91,14 +92,7 @@ const Apply = ({ data }) => {
                 part1: time[0],
                 part2: time[1],
             })
-        }).then(res => {
-            return res.json();
-        }).then(res => {
-            console.log(res);
-        }).catch(err => {
-            console.log(err);
         })
-
     }
 
     return (

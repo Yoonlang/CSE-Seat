@@ -21,15 +21,6 @@ const SeatModal = () => {
         if (color === seatColor[5]) return seatColor[2];
     }
 
-    const a = setTimeout(() => {
-        setTimeout(() => {
-            console.log("BB");
-        }, 3000);
-        console.log("HI");
-    }, 2000)
-
-    a;
-
     const clickModal = (event) => {
         if (event.target === modalOutside.current || event.target === cancelBtn.current) {
             let tempObject = { ...modalState };
@@ -61,7 +52,7 @@ const SeatModal = () => {
     };
 
     const fetchingCancel = async (one = isReadyToRequest[0], two = isReadyToRequest[1], isFinish = true) => {
-        await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation-cancel", {
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation-cancel", {
             method: "POST",
             credentials: "include",
             headers: {
@@ -75,22 +66,16 @@ const SeatModal = () => {
                 part1: one,
                 part2: two,
             })
-        }).then(res => {
-            return res.json();
-        }).then(res => {
-            console.log("cancel");
-            console.log(res);
-            if ((res.result === true) & isFinish) {
-                setRefreshData(!refreshData);
-                closeModal();
-            }
-        }).catch(err => {
-            console.log(err);
         })
+        const data = res.json();
+        if ((data.result === true) & isFinish) {
+            setRefreshData(!refreshData);
+            closeModal();
+        }
     }
 
     const fetchingReservation = async (one = isReadyToRequest[0], two = isReadyToRequest[1]) => {
-        await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation", {
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation", {
             method: "POST",
             credentials: "include",
             headers: {
@@ -104,18 +89,12 @@ const SeatModal = () => {
                 part1: one,
                 part2: two,
             })
-        }).then(res => {
-            return res.json();
-        }).then(res => {
-            console.log("reserve");
-            console.log(res);
-            if (res.result === true) {
-                setRefreshData(!refreshData);
-                closeModal();
-            }
-        }).catch(err => {
-            console.log(err);
         })
+        const data = res.json();
+        if (data.result === true) {
+            setRefreshData(!refreshData);
+            closeModal();
+        }
     }
 
     const submitReq = async () => {

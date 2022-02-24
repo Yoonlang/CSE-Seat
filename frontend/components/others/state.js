@@ -2,7 +2,7 @@ import { atom } from 'recoil';
 
 const loginAtom = atom({
     key : 'login',
-    default: false
+    default: undefined
 });
 
 const refreshIndexAtom = atom({
