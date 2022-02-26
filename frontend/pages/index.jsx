@@ -1,52 +1,84 @@
-import {useState, useRef} from 'react';
+import React, { useState, useRef, useEffect, Fragment } from 'react';
 import { useRecoilValue } from 'recoil';
 import RoomSeats from '../components/molecules/RoomSeats';
 import IndexHeader from '../components/organisms/IndexHeader';
 import SeatModal from '../components/organisms/SeatModal';
 import HeadTitle from '../components/others/headTitle';
-import { showRoomAtom } from '../components/others/state';
+import { refreshIndexAtom, showRoomAtom } from '../components/others/state';
 import SquareImg from '../components/atoms/Img';
 import { StyledResDiv } from '../components/atoms/Div';
+import Refresh from '../components/atoms/Refresh';
 
-const Index = () => {
-    const targetRoom = useRecoilValue(showRoomAtom);
+const Index = ({ data }) => {
+    const [updateData, setUpdateData] = useState();
+    const [isLoading, setIsLoading] = useState(true);
     const [isNav, setIsNav] = useState(true);
+    const targetRoom = useRecoilValue(showRoomAtom);
+    const refreshData = useRecoilValue(refreshIndexAtom);
     const nav = useRef();
 
     const changeUpDownState = () => {
         setIsNav(!isNav);
     }
 
+    useEffect(async () => {
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+            method: "GET",
+            credentials: "include",
+        })
+        const fetchingData = await res.json();
+        setUpdateData(fetchingData);
+    }, [refreshData]);
+
+    useEffect(() => {
+        if (updateData !== undefined) setIsLoading(false);
+    }, [updateData]);
+
     return (
         <StyledResDiv>
             <HeadTitle title="home" />
-            <IndexHeader isNav={isNav}/>
+            <IndexHeader isNav={isNav} />
             <div className="rooms">
-                <div className="room0">
-                    <RoomSeats roomNumber={0}/>
-                </div>
-                <div className="bar"></div>
-                <div className="room1">
-                    <RoomSeats roomNumber={1}/>
-                </div>
-                <div className="bar"></div>
-                <div className="room2">
-                    <RoomSeats roomNumber={2}/>
-                </div>
+                {
+                    isLoading ?
+                        data.data.rooms.map((prop, index) => {
+                            const className = "room" + index;
+                            const { num, m, seats } = prop;
+                            return <Fragment key={prop + index}>
+                                <div className={className}>
+                                    <RoomSeats roomNumber={num} m={m} seats={seats} basic />
+                                </div>
+                                <div className="bar"></div>
+                            </Fragment>
+                        })
+                        :
+                        updateData.data.rooms.map((prop, index) => {
+                            const className = "room" + index;
+                            const { num, m, seats } = prop;
+                            return <Fragment key={prop + index}>
+                                <div className={className}>
+                                    <RoomSeats roomNumber={num} m={m} seats={seats} />
+                                </div>
+                                <div className="bar"></div>
+                            </Fragment>
+                        })
+                }
             </div>
             <SeatModal />
+            <div className="refreshBtn">
+                <Refresh />
+            </div>
             <div className="upDownBtn" onClick={changeUpDownState} ref={nav}>
                 {
                     isNav ?
-                    <SquareImg src="/images/minus.png" length="22px" />
-                    :
-                    <SquareImg src="/images/plus.png" length="22px" />
+                        <SquareImg src="/images/minus.png" length="22px" />
+                        :
+                        <SquareImg src="/images/plus.png" length="22px" />
                 }
             </div>
             <style jsx>{`
                 .rooms{
                     display: flex;
-                    align-items: center;
                     height: 100%;
                 }
                 .rooms .bar{
@@ -72,8 +104,11 @@ const Index = () => {
                     background: #fff;
                 }
                 @media(min-width: 768px){
+                    .refreshBtn{
+                        display: none;
+                    }
                     .upDownBtn{
-                        display:none;
+                        display: none;
                     }
                     .rooms{
                         justify-content: space-between;
@@ -82,8 +117,8 @@ const Index = () => {
                 @media(max-width: 767px){
                     .rooms{
                         justify-content: center;
-                        ${(isNav ? `` : 
-                        `
+                        ${(isNav ? `` :
+                    `
                         transform: translateY(-70px);
                         `)}
                         transition: 0.5s;
@@ -93,6 +128,12 @@ const Index = () => {
                     }
                     .rooms .room${(targetRoom)}{
                         display: flex !important;
+                    }
+                    .refreshBtn{
+                        display: flex;
+                        position: fixed;
+                        bottom: 75px;
+                        right: 25px;
                     }
                     .upDownBtn{
                         display:flex;
@@ -114,6 +155,17 @@ const Index = () => {
             `}</style>
         </StyledResDiv>
     )
+}
+
+export async function getServerSideProps() {
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+        method: "GET",
+        credentials: "include",
+    });
+    const data = await res.json();
+    return {
+        props: { data }
+    }
 }
 
 export default Index;

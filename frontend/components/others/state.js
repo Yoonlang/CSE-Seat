@@ -1,14 +1,14 @@
-import {atom} from 'recoil';
+import { atom } from 'recoil';
 
-const authAtom = atom({
-    key : 'auth',
-    default: ''
+const loginAtom = atom({
+    key : 'login',
+    default: undefined
 });
 
-const userListAtom = atom({
-    key : 'userList',
-    default : []
-});
+const refreshIndexAtom = atom({
+    key: 'refreshIndex',
+    default: false
+})
 
 const todayAtom = atom({
     key : 'today',
@@ -20,6 +20,11 @@ const showRoomAtom = atom({
     default : 0
 })
 
+const inputValueAtom = atom({
+    key : 'input',
+    default : ['', '', '', '']
+})
+
 const seatModalAtom = atom({
     key : 'seatModal',
     default : {
@@ -28,8 +33,8 @@ const seatModalAtom = atom({
             roomNumber : undefined,
             isToday : undefined,
             seatNumber : undefined, 
-            one : undefined,
-            two : undefined
+            one: undefined,
+            two: undefined,
         }
     }
 })
@@ -47,4 +52,4 @@ const enrollFriendAtom = atom({
     }
 })
 
-export { authAtom, userListAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom };
+export { loginAtom, refreshIndexAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };

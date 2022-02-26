@@ -11,7 +11,7 @@ const loaders = require('./loaders');
 
 async function startServer() {
     loaders({expressApp:app});    
-    app.listen(3000, function(){
+    app.listen(8080, function(){
         console.log("start!! express server on port 3000");
     });
 }
