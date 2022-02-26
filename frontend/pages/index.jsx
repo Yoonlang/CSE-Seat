@@ -8,6 +8,7 @@ import { refreshIndexAtom, showRoomAtom } from '../components/others/state';
 import SquareImg from '../components/atoms/Img';
 import { StyledResDiv } from '../components/atoms/Div';
 import Refresh from '../components/atoms/Refresh';
+import Allocation from '../components/others/allocationAlgorithm';
 
 const Index = ({ data }) => {
     const [updateData, setUpdateData] = useState();
@@ -37,6 +38,7 @@ const Index = ({ data }) => {
     return (
         <StyledResDiv>
             <HeadTitle title="home" />
+            <Allocation />
             <IndexHeader isNav={isNav} />
             <div className="rooms">
                 {
