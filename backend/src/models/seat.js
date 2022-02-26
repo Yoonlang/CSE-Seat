@@ -2,6 +2,23 @@ const db = require('./mysql');
 const date = require('../services/date');
 
 module.exports = {
+    checkMySeat : async (seatDTO) => new Promise( async (resolve, reject) => {
+        let sql = "select * from reservation Where building_id = ? and seat_room = ? "
+        + "and seat_num = ? and part = ? and date = ? and user_sid = ?";
+        let set  = [
+            seatDTO.building_id,
+            seatDTO.seat_room,
+            seatDTO.seat_num,
+            seatDTO.part,
+            seatDTO.date,
+            seatDTO.user_sid
+        ]
+        let result = await db.query(sql,set);
+        if (!result) return reject(Error('데이터베이스 오류'));
+        else if (result.length == 1) return resolve(result[0]);
+        else if (result.length == 0) return resolve(false);
+        else return reject(new Error('database PK error'));
+    }),
     exist : async (seatDTO) => new Promise( async (resolve, reject) => {
         let sql = "select * from reservation Where building_id = ? and seat_room = ? "
         + "and seat_num = ? and part = ? and date = ?";

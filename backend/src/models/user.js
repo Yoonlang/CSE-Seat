@@ -19,7 +19,7 @@ module.exports = {
                 birth : userDTO.birth,
                 password : userDTO.password,
                 password_salt : userDTO.password_salt,
-                only_friend : userDTO.only_friend,
+                only_friend : false,
                 major : userDTO.major,
                 email : userDTO.email
             }

@@ -1,5 +1,5 @@
 const {Router} = require('express');
-const seatService = require('$/services/seat');
+const entryService = require('$/services/entry');
 const router = Router();
 const {isLoggedIn} = require('$/middlewares/auth');
 
@@ -7,14 +7,21 @@ router.get('/',async (req, res, next) => {
     res.status(200).json({result : true , data : 'hello'});
 });
 
-router.post('/check',isLoggedIn,async (req, res, next) => {
-    // let seatDTO = req.body;
-    // seatDTO.user_sid = req.user;
-    // let result = await seatService.reserve(seatDTO);
-    // if(result instanceof Error) return next(result);
+router.post('/check-in',isLoggedIn, async (req, res, next) => {
+    let entryDTO = req.body;
+    entryDTO.user_sid = req.user;
+    let result = await entryService.checkIn(entryDTO);
+    if(result instanceof Error) return next(result);
     res.status(200).json({result: true});
 });
 
+router.post('/check-out',isLoggedIn, async (req, res, next) => {
+    let entryDTO = req.body;
+    entryDTO.user_sid = req.user;
+    let result = await entryService.checkOut(entryDTO);
+    if(result instanceof Error) return next(result);
+    res.status(200).json({result: true});
+});
 
 router.use((err,req,res,next)=>{
     console.log(err);
