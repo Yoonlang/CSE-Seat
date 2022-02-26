@@ -80,6 +80,7 @@ module.exports ={
                     entryDTO.part = 1;
                     entryDTO.time = dateService.getTodayDate() + ' 18:00:00';
                     await entryModel.checkOut(entryDTO);
+                    await seatModel.deleteReservation(entryDTO);
                     if (part1ApplyId != part2ApplyId) entryDTO.apply_id = part2ApplyId;
                     entryDTO.part = 2;
                     await entryModel.checkIn(entryDTO);
@@ -88,10 +89,12 @@ module.exports ={
                 entryDTO.apply_id = part2ApplyId;
                 entryDTO.time = dateService.getNowTime();
                 await entryModel.checkOut(entryDTO);
+                await seatModel.deleteReservation(entryDTO);
             }else{
                 entryDTO.apply_id = part1ApplyId;
                 entryDTO.part = 1;
                 await entryModel.checkOut(entryDTO);
+                await seatModel.deleteReservation(entryDTO);
             }
             
         }catch(e){
