@@ -41,6 +41,7 @@ module.exports ={
                 await entryModel.checkIn(entryDTO);
             }else{
                 entryDTO.part = 2;
+                entryDTO.apply_id = part2ApplyId;
                 await entryModel.checkIn(entryDTO);
             }
             
@@ -73,13 +74,24 @@ module.exports ={
                 part2ApplyId = result.apply_id;
             }
 
-            if(entryDTO.part1){
-                entryDTO.part = 1;
-                entryDTO.apply_id = part1ApplyId;
-                await entryModel.checkIn(entryDTO);
-            }else{
+            if(entryDTO.part2){
+                if(entryDTO.part1){
+                    entryDTO.apply_id = part1ApplyId;
+                    entryDTO.part = 1;
+                    entryDTO.time = dateService.getTodayDate() + ' 18:00:00';
+                    await entryModel.checkOut(entryDTO);
+                    if (part1ApplyId != part2ApplyId) entryDTO.apply_id = part2ApplyId;
+                    entryDTO.part = 2;
+                    await entryModel.checkIn(entryDTO);
+                }
                 entryDTO.part = 2;
-                await entryModel.checkIn(entryDTO);
+                entryDTO.apply_id = part2ApplyId;
+                entryDTO.time = dateService.getNowTime();
+                await entryModel.checkOut(entryDTO);
+            }else{
+                entryDTO.apply_id = part1ApplyId;
+                entryDTO.part = 1;
+                await entryModel.checkOut(entryDTO);
             }
             
         }catch(e){
