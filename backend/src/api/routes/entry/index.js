@@ -7,10 +7,14 @@ router.get('/',async (req, res, next) => {
     res.status(200).json({result : true , data : 'hello'});
 });
 
-router.post('/check',isLoggedIn, async (req, res, next) => {
+router.post('/check-in',isLoggedIn, async (req, res, next) => {
     let entryDTO = req.body;
     entryDTO.user_sid = req.user;
-    let result = await entryService.check(entryDTO);
+    let result = await entryService.checkIn(entryDTO);
+    if(result instanceof Error) return next(result);
+    res.status(200).json({result: true});
+});
+
     if(result instanceof Error) return next(result);
     res.status(200).json({result: true});
 });

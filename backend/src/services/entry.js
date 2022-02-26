@@ -3,33 +3,88 @@ const seatModel = require('$/models/seat');
 const entryModel = require('$/models/entry');
 
 const initProperty = (entryDTO)=>{
-    if(entryDTO.isToday == 'true') entryDTO.isToday = true;
-    if(entryDTO.isToday == 'false') entryDTO.isToday = false;
-    if(entryDTO.part1 == 'true') entryDTO.part1 = true;
-    if(entryDTO.part1 == 'false') entryDTO.part1 = false;
-    if(entryDTO.part2 == 'true') entryDTO.part2 = true;
-    if(entryDTO.part2 == 'false') entryDTO.part2 = false;
     entryDTO.building_id *= 1;
     entryDTO.seat_num *= 1;
+    entryDTO.part *= 1;
     entryDTO.date = dateService.getTodayDate() ;
     entryDTO.time = dateService.getNowTime();
 }
 
 module.exports ={
-    check : async (entryDTO)=>{
+    checkIn : async (entryDTO)=>{
 
         try{
             initProperty(entryDTO);
-            let result = await seatModel.checkMySeat(entryDTO);
-            entryDTO.apply_id = result.apply_id;
-            await entryModel.check(entryDTO);
+            let part1ApplyId;
+            let part2ApplyId;
+
+            if (entryDTO.part1) {
+                entryDTO.part = 1;
+                let result = await seatModel.exist(entryDTO);
+                if (!result) throw new Error("예약 좌석이 아닙니다");
+                if (result.user_sid != entryDTO.user_sid)
+                throw new Error("예약자가 본인이 아닙니다");
+                part1ApplyId = result.apply_id;
+            }
+            if (entryDTO.part2) {
+                entryDTO.part = 2;
+                let result = await seatModel.exist(entryDTO);
+                if (!result) throw new Error("예약 좌석이 아닙니다");
+                if (result.user_sid != entryDTO.user_sid)
+                throw new Error("예약자가 본인이 아닙니다");
+                part2ApplyId = result.apply_id;
+            }
+
+            if(entryDTO.part1){
+                entryDTO.part = 1;
+                entryDTO.apply_id = part1ApplyId;
+                await entryModel.checkIn(entryDTO);
+            }else{
+                entryDTO.part = 2;
+                await entryModel.checkIn(entryDTO);
+            }
+            
         }catch(e){
             console.log('entry error: ', e);
             return e;
         }
-        //남의 좌석에 찍었는지 -> 아래와 동일
-        //없는 좌석에 찍었는지 -> part1,part2만 했는데 퇴실이 늦어진경우
-        //입력을 두번 찍었는지?
-        //출력을 두번 찍었는지?
-    }
+    },
+    checkOut : async (entryDTO)=>{
+
+        try{
+            initProperty(entryDTO);
+            let part1ApplyId;
+            let part2ApplyId;
+
+            if (entryDTO.part1) {
+                entryDTO.part = 1;
+                let result = await seatModel.exist(entryDTO);
+                if (!result) throw new Error("예약 좌석이 아닙니다");
+                if (result.user_sid != entryDTO.user_sid)
+                throw new Error("예약자가 본인이 아닙니다");
+                part1ApplyId = result.apply_id;
+            }
+            if (entryDTO.part2) {
+                entryDTO.part = 2;
+                let result = await seatModel.exist(entryDTO);
+                if (!result) throw new Error("예약 좌석이 아닙니다");
+                if (result.user_sid != entryDTO.user_sid)
+                throw new Error("예약자가 본인이 아닙니다");
+                part2ApplyId = result.apply_id;
+            }
+
+            if(entryDTO.part1){
+                entryDTO.part = 1;
+                entryDTO.apply_id = part1ApplyId;
+                await entryModel.checkIn(entryDTO);
+            }else{
+                entryDTO.part = 2;
+                await entryModel.checkIn(entryDTO);
+            }
+            
+        }catch(e){
+            console.log('entry error: ', e);
+            return e;
+        }
+    },
 }
