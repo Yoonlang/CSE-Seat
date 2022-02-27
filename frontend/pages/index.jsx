@@ -155,7 +155,7 @@ const Index = ({ data }) => {
                     }
                 }
             `}</style>
-        </StyledResDiv>
+        </StyledResDiv >
     )
 }
 
