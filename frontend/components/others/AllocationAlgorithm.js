@@ -6,16 +6,10 @@ const test = [
     [5, 8, 13, 10],
 ]
 
-const test1 = [
-    [-1, 4, 3, 5],
-    [4, 1, 0, 3],
-    [3, 0, 0, 3],
-    [3, 0, 0, 3],
-    [5, 3, 3, 5],
-]
-
 const di = [0, 1, 0, -1, 1, 1, -1, -1];
 const dj = [1, 0, -1, 0, -1, 1, 1, -1];
+const zi = [1, 1, -1, -1];
+const zj = [-1, 1, -1, 1];
 
 const seatNumber = [
     [
@@ -45,24 +39,32 @@ const seatNumber = [
     ],
 ]
 
+// [
+//     [-1, 0, 0],
+//     [0, 0, 0],
+//     [0, 0, 0],
+//     [0, 0, 0],
+//     [0, 0, 0],
+// ],
+
 const arr = [
     {
         N: 5,
         M: 3,
         seats: [
             [
-                [-1, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0],
+                [-1, 0, -1],
+                [0, -1, -1],
+                [-1, 0, -1],
+                [-1, -1, 0],
+                [-1, -1, 0],
             ],
             [
-                [-1, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0],
+                [-1, -1, 0],
+                [-1, -1, 0],
+                [0, -1, 0],
+                [0, 0, -1],
+                [0, 0, -1],
             ]
         ],
     },
@@ -120,32 +122,32 @@ const requests = [
     {
         building_id: "414",
         apply_time: "20220226170505",
-        seat_room: ["101", "104", "108"],
-        seat_num: "2",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["104"],
+        seat_room: ["101",],
         seat_num: "",
         isToday: false,
-        part1: false,
-        part2: true,
-        friends: [218155201],
+        part1: true,
+        part2: false,
+        friends: [2018115201, 2018115202, 2018115202,],
     },
     {
         building_id: "414",
-        apply_time: "20220226170507",
-        seat_room: ["104", "108"],
-        seat_num: "2",
+        apply_time: "20220226170506",
+        seat_room: ["101",],
+        seat_num: "",
         isToday: false,
         part1: true,
         part2: true,
         friends: [],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170507",
+        seat_room: ["101",],
+        seat_num: "2",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202, 2018115202,],
     },
 ]
 
@@ -157,6 +159,7 @@ const hopeNumber = [
 const seatNumChanger = (num) => {
     let seatPosition = [0, 0, 0],
         flag = false;
+    if(!num) return seatPosition;
     seatNumber.forEach((e, index) => {
         const N = e.length;
         const M = e[0].length;
@@ -209,7 +212,7 @@ const settingHopeNumber = (arr, part1, part2, num) => {
 const makePosition = (num, part, roomNum, seatNum) => {
     const N = arr[roomNum].N,
         M = arr[roomNum].M,
-        seats = arr[roomNum].seats.slice(),
+        seats = JSON.parse(JSON.stringify(arr[roomNum].seats)),
         seatPosition = seatNumChanger(seatNum);
 
     for(let k = 0; k < 2; k++){
@@ -217,6 +220,9 @@ const makePosition = (num, part, roomNum, seatNum) => {
             for(let i = 0; i < N; i++){
                 for(let j = 0; j < M; j++){
                     if(seats[k][i][j] === -1) continue;
+                    if(part[0] ^ part[1] && seats[k === 0 ? 1 : 0][i][j] === -1){
+                        seats[k][i][j] += 5;
+                    }
                     for(let l = 0; l < 8; l++){
                         let ni = di[l] + i;
                         let nj = dj[l] + j;
@@ -226,13 +232,11 @@ const makePosition = (num, part, roomNum, seatNum) => {
                         }
                         if(seats[k][ni][nj] === -1) seats[k][i][j]++;
                     }
-                    if(!(part[0] ^ part[1]) && seats[k === 0 ? 1 : 0][i][j] !== -1){
+                    if(part[0] & part[1] && seats[k === 0 ? 1 : 0][i][j] !== -1){
                         seats[k][i][j] += 20;
                     }
-                    if(seatNum && seatPosition.toString() == [k, i, j]){
+                    if(seatNum && seatPosition.toString() == [roomNum, i, j]){
                         seats[k][i][j] += 40;
-                        seats[k === 0 ? 1 : 0][i][j] += 40; // 이게 맞나?
-                        // 지금 안맞음. 여기쪽 다시.
                         for(let d = 1; d <= 2; d++){
                             for(let l = 0; l < 4; l++){
                                 let ni = di[l] * d + i;
@@ -253,21 +257,164 @@ const makePosition = (num, part, roomNum, seatNum) => {
                 }
             }
         }
-
-        console.log(seats);
-
     }
 
+    let max = -1;
+    let data;
+    const friendArr = [];
+    if(num > 1){ // 친구 신청
+        // 두개 합 기준으로 큰것부터 내림차순으로 해서 이상적인 모형 나오는지 실험해보자.
+        if(part[0] ^ part[1]){
+            for(let i = 0; i < N; i++){
+                for(let j = 0; j < M; j++){
+                    if(seats[part[0] ? 0 : 1][i][j] === -1) continue;
+                    friendArr.push([seats[part[0] ? 0 : 1][i][j], i, j]);
+                }
+            }
+        }
+        else{
+            for(let i = 0; i < N; i++){
+                for(let j = 0; j < M; j++){
+                    // 1,2부 한자리만 있는거에 대해서 고려해야함.
+                    friendArr.push([seats[0][i][j] + seats[1][i][j], i, j]);
+                }
+            }
+        }
 
+        friendArr.sort((a, b) => {
+            return a[0] - b[0];
+        })
+        while(friendArr.length){
+            const [weight, i, j] = friendArr.pop();
+            // console.log(weight, i, j);
+            for(let l = 0; l < 4; l++) {
+                let flag = false;
+                let pos;
+                if(num === 2){
+                    pos = [
+                        [i, j],
+                        [i + di[l], j + dj[l]],
+                    ];
+                }
+                else if(num === 3){
+                    pos = [
+                        [i, j],
+                        [i, j + zj[l]],
+                        [i + zi[l], j],
+                    ];
+                }
+                else{
+                    pos = [
+                        [i, j],
+                        [i, j + zj[l]],
+                        [i + zi[l], j],
+                        [i + zi[l], j + zj[l]],
+                    ];
+                }
+                
+                for(let k = 0; k < num; k++){
+                    if(pos[k][0] < 0 || pos[k][1] < 0 || pos[k][0] >= N || pos[k][1] >= M) {
+                        flag = true;
+                        break;
+                    }
+                    if(part[0] ^ part[1]){
+                        if(seats[part[0] ? 0 : 1][pos[k][0]][pos[k][1]] === -1){
+                            flag = true;
+                            break;
+                        }
+                    }
+                    else{
+                        if(seats[0][pos[k][0]][pos[k][1]] === -1 || seats[1][pos[k][0]][pos[k][1]] === -1){
+                            flag = true;
+                            break;
+                        }
+                    }
+                }
+                if(flag) continue;
+                let sum = 0;
+                for(let k = 0; k < 4; k++){
+                    if(part[0] ^ part[1])
+                        sum += seats[part[0] ? 0 : 1][pos[k][0]][pos[k][1]];
+                    else
+                        sum += seats[0][pos[k][0]][pos[k][1]] + seats[1][pos[k][0]][pos[k][1]];
+                }
+                if(sum > max) {
+                    max = sum;
+                    data = {
+                        dir: l,
+                        i: i,
+                        j: j,
+                    }
+                }
+            }
+            if(max > 0) break;
+        }
+    }
+    else{ // 혼자 신청
+        // 1,2부 신청이라면 1,2부를 합해줘야하나?
+        // 1,2부인데 원하는 자리가 있는데 1부만 있는 경우 => 원하는 자리 근처 자리가 됨.
+        if(part[0] ^ part[1]){
+            for(let i = 0; i < N; i++){
+                for(let j = 0; j < M; j++){
+                    if(seats[part[0] ? 0 : 1][i][j] > max){
+                        max = seats[part[0] ? 0 : 1][i][j];
+                        data = {
+                            i: i,
+                            j: j,
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            for(let i = 0; i < N; i++){
+                for(let j = 0; j < M; j++){
+                    if(seats[0][i][j] !== -1 && seats[1][i][j] !== -1 && seats[0][i][j] + seats[1][i][j] > max){
+                        max = seats[0][i][j] + seats[1][i][j];
+                        data = {
+                            i: i,
+                            j: j,
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // console.log(seats);
+    if(max !== -1){
+        // console.log(max, data);
+        return 1;
+    }
 
+    // 여기서 결론이 안나는 case
+    // 1,2부 자리가 갈리는 경우, 친구신청일 때 이상적인 자리가 아닌 경우
 
+    // 1,2부 에 대한 예외 케이스가 너무 곤란해서 이건 일단 1,2부냐로 나눠야겠다.
+    if(part[0] ^ part[1]){
+        // 친구, 한 파트, 이상적인 모양이 없을 때
+        // 백트래킹 통해서 제일 이쁜 자리 만들어준다
+        // 어차피 이쯤되면 남은 자리가 크게 많지 않을텐데
+        // 그냥 싹다 돌리면 안되나?
 
-    if(part === 2){
-
+        // 백트래킹 쓴다 vs 남은 자리 기준 경우의 수 다 돌린다.
     }
     else{
-        
+        if(num === 1){
+            // 혼자, 1,2부가 붙어있는 자리가 없을 때
+            // 일단 다른 방에 붙어있는 자리가 있다면 그게 우선,
+            // 아니라면 일단 이방에서 제일 붙어있는 자리로 준다.
+        }
+        else{
+            // 친구, 1,2부가 붙어있는 이상적인 자리가 없을 때.
+            // 1. 1,2부 붙은 자리 포함해서 그나마 이쁜 자리로다가 준다
+        }
     }
+
+    
+    
+    
+
+
 }
 
 const solveReq = ({seat_room, seat_num, part1, part2, friends}) => {
@@ -276,11 +423,13 @@ const solveReq = ({seat_room, seat_num, part1, part2, friends}) => {
         part = [part1, part2],
         num = friends.length + 1;
     // basic motion -> 1,2부 신청 했는데, 일단 방에 빈자리가 신청 수보다 적으면 basic motion 취소
+
     if(part1 ^ part2){
         // 1부라면
         for(let i = 0; i < 3; i++){
             if(part1){
                 if(isRoomApply[i] && emptySeat[0][i] >= num) makePosition(num, part, i, Number(seat_num));
+                // 3방 모두 자리가 없을때 처리 해줘야함. ex) 4명 신청인데 방에 3명 자리만 있을 때
             }
             else{
                 if(isRoomApply[i] && emptySeat[1][i] >= num) makePosition(num, part, i, Number(seat_num));
