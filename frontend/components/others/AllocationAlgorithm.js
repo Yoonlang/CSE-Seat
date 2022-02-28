@@ -56,8 +56,8 @@ const arr = [
                 [-1, 0, -1],
                 [0, -1, -1],
                 [-1, 0, -1],
-                [-1, -1, 0],
-                [-1, -1, 0],
+                [-1, 0, 0],
+                [0, -1, 0],
             ],
             [
                 [-1, -1, 0],
@@ -119,31 +119,31 @@ const arr = [
 ]
 
 const requests = [
-    {
-        building_id: "414",
-        apply_time: "20220226170505",
-        seat_room: ["101",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: false,
-        friends: [2018115201, 2018115202, 2018115202,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170506",
-        seat_room: ["101",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [],
-    },
+    // {
+    //     building_id: "414",
+    //     apply_time: "20220226170505",
+    //     seat_room: ["101",],
+    //     seat_num: "",
+    //     isToday: false,
+    //     part1: true,
+    //     part2: false,
+    //     friends: [2018115201,],
+    // },
+    // {
+    //     building_id: "414",
+    //     apply_time: "20220226170506",
+    //     seat_room: ["101",],
+    //     seat_num: "",
+    //     isToday: false,
+    //     part1: true,
+    //     part2: true,
+    //     friends: [],
+    // },
     {
         building_id: "414",
         apply_time: "20220226170507",
         seat_room: ["101",],
-        seat_num: "2",
+        seat_num: "",
         isToday: false,
         part1: true,
         part2: true,
@@ -209,6 +209,180 @@ const settingHopeNumber = (arr, part1, part2, num) => {
                 if(isRoomApply[j]) hopeNumber[i][j] += num;
 }
 
+const onlyException = (seats, weight, i, j, N, M) => {
+    let data = {
+        sum: weight,
+        pos: [[i, j]],
+    }
+    for(let d = 1; d <= 2; d++){
+        for(let l = 0; l < 8; l++){
+            let ni = di[l] * d + i;
+            let nj = dj[l] * d + j;
+            if(ni < 0 || nj < 0 || ni >= N || nj >= M) continue;
+            if(seats[1][ni][nj] === -1) continue;
+            if(l < 4) seats[1][ni][nj] += d === 1 ? 5 : 1;
+            else if(l < 8) seats[1][ni][nj] += d === 1 ? 3 : 0;
+        }
+    }
+    
+    let max = -1;
+    let next = {
+        i: undefined,
+        j: undefined,
+    }
+    for(let p = 0; p < N; p++){
+        for(let q = 0; q < M; q++){
+            if(seats[1][p][q] > max){
+                max = seats[1][p][q];
+                next = {
+                    i: p,
+                    j: q,
+                }
+            }
+        }
+    }
+
+    data.sum += max;
+    data.pos.push([next.i, next.j]);
+
+    for(let d = 1; d <= 2; d++){
+        for(let l = 0; l < 8; l++){
+            let ni = di[l] * d + i;
+            let nj = dj[l] * d + j;
+            if(ni < 0 || nj < 0 || ni >= N || nj >= M) continue;
+            if(seats[1][ni][nj] === -1) continue;
+            if(l < 4) seats[1][ni][nj] -= d === 1 ? 5 : 1;
+            else if(l < 8) seats[1][ni][nj] -= d === 1 ? 3 : 0;
+        }
+    }
+
+    return data;
+}
+
+const separateExceptionBacktracking = (seats, weight, i, j, N, M, num1, num2) => {
+    let data = {
+        sum: weight,
+        pos: [[num1 === 1 ? 1 : 0, i, j]],
+    };
+    if(num2 === 1) return data;
+    const isOne = num1 > 1 ? 1 : 0;
+    seats[isOne ? 0 : 1][i][j] = -1;
+    for(let d = 1; d <= 2; d++){
+        for(let l = 0; l < 8; l++){
+            let ni = di[l] * d + i;
+            let nj = dj[l] * d + j;
+            if(ni < 0 || nj < 0 || ni >= N || nj >= M) continue;
+            if(seats[0][ni][nj] === -1) continue;
+            if(l < 4) seats[0][ni][nj] += d === 1 ? 5 : 1;
+            else if(l < 8) seats[0][ni][nj] += d === 1 ? 3 : 0;
+        }
+        for(let l = 0; l < 8; l++){
+            let ni = di[l] * d + i;
+            let nj = dj[l] * d + j;
+            if(ni < 0 || nj < 0 || ni >= N || nj >= M) continue;
+            if(seats[1][ni][nj] === -1) continue;
+            if(l < 4) seats[1][ni][nj] += d === 1 ? 5 : 1;
+            else if(l < 8) seats[1][ni][nj] += d === 1 ? 3 : 0;
+        }
+    }
+
+    let max = -1;
+    let next = {
+        i: undefined,
+        j: undefined,
+    }
+    for(let p = 0; p < N; p++){
+        for(let q = 0; q < M; q++){
+            if(seats[num1 === 2 ? (isOne ? 1 : 0) : (isOne ? 0 : 1)][p][q] > max){
+                max = seats[num1 === 2 ? (isOne ? 1 : 0) : (isOne ? 0 : 1)][p][q];
+                next = {
+                    i: p,
+                    j: q,
+                }
+            }
+        }
+    }
+
+    let tempData = num1 > 1 ? separateExceptionBacktracking(seats, max, next.i, next.j, N, M, num1 - 1, num2) : separateExceptionBacktracking(seats, max, next.i, next.j, N, M, num1, num2 - 1);
+    data.sum += tempData.sum;
+    data.pos.push(...tempData.pos);
+    
+    for(let d = 1; d <= 2; d++){
+        for(let l = 0; l < 8; l++){
+            let ni = di[l] * d + i;
+            let nj = dj[l] * d + j;
+            if(ni < 0 || nj < 0 || ni >= N || nj >= M) continue;
+            if(seats[0][ni][nj] === -1) continue;
+            if(l < 4) seats[0][ni][nj] -= d === 1 ? 5 : 1;
+            else if(l < 8) seats[0][ni][nj] -= d === 1 ? 3 : 0;
+        }
+        for(let l = 0; l < 8; l++){
+            let ni = di[l] * d + i;
+            let nj = dj[l] * d + j;
+            if(ni < 0 || nj < 0 || ni >= N || nj >= M) continue;
+            if(seats[1][ni][nj] === -1) continue;
+            if(l < 4) seats[1][ni][nj] -= d === 1 ? 5 : 1;
+            else if(l < 8) seats[1][ni][nj] -= d === 1 ? 3 : 0;
+        }
+    }
+    seats[isOne ? 0 : 1][i][j] = weight;
+    return data;
+}
+
+const separateBacktracking = (seats, part, weight, i, j, N, M, num) => {
+    let data = {
+        sum: weight,
+        pos: [[i, j]],
+    };
+    if(num === 1) return data;
+    seats[part[0] ? 0 : 1][i][j] = -1;
+    for(let d = 1; d <= 2; d++){
+        for(let l = 0; l < 8; l++){
+            let ni = di[l] * d + i;
+            let nj = dj[l] * d + j;
+            if(ni < 0 || nj < 0 || ni >= N || nj >= M) continue;
+            if(seats[part[0] ? 0 : 1][ni][nj] === -1) continue;
+            if(l < 4) seats[part[0] ? 0 : 1][ni][nj] += d === 1 ? 5 : 1;
+            else if(l < 8) seats[part[0] ? 0 : 1][ni][nj] += d === 1 ? 3 : 0;
+        }
+    }
+    
+    let max = -1;
+    let next = {
+        i: undefined,
+        j: undefined,
+    }
+    for(let p = 0; p < N; p++){
+        for(let q = 0; q < M; q++){
+            if(seats[part[0] ? 0 : 1][p][q] > max){
+                max = seats[part[0] ? 0 : 1][p][q];
+                next = {
+                    i: p,
+                    j: q,
+                }
+            }
+        }
+    }
+
+    let tempData = separateBacktracking(seats, part, max, next.i, next.j, N, M, num - 1);
+    seats[part[0] ? 0 : 1][i][j] = weight;
+    data.sum += tempData.sum;
+    data.pos.push(...tempData.pos);
+
+    for(let d = 1; d <= 2; d++){
+        for(let l = 0; l < 8; l++){
+            let ni = di[l] * d + i;
+            let nj = dj[l] * d + j;
+            if(ni < 0 || nj < 0 || ni >= N || nj >= M) continue;
+            if(seats[part[0] ? 0 : 1][ni][nj] === -1) continue;
+            if(l < 4) seats[part[0] ? 0 : 1][ni][nj] -= d === 1 ? 5 : 1;
+            else if(l < 8) seats[part[0] ? 0 : 1][ni][nj] -= d === 1 ? 3 : 0;
+        }
+    }
+
+    return data;
+}
+
 const makePosition = (num, part, roomNum, seatNum) => {
     const N = arr[roomNum].N,
         M = arr[roomNum].M,
@@ -220,9 +394,7 @@ const makePosition = (num, part, roomNum, seatNum) => {
             for(let i = 0; i < N; i++){
                 for(let j = 0; j < M; j++){
                     if(seats[k][i][j] === -1) continue;
-                    if(part[0] ^ part[1] && seats[k === 0 ? 1 : 0][i][j] === -1){
-                        seats[k][i][j] += 5;
-                    }
+                    if(part[0] ^ part[1] && seats[k === 0 ? 1 : 0][i][j] === -1) seats[k][i][j] += 5;
                     for(let l = 0; l < 8; l++){
                         let ni = di[l] + i;
                         let nj = dj[l] + j;
@@ -232,9 +404,7 @@ const makePosition = (num, part, roomNum, seatNum) => {
                         }
                         if(seats[k][ni][nj] === -1) seats[k][i][j]++;
                     }
-                    if(part[0] & part[1] && seats[k === 0 ? 1 : 0][i][j] !== -1){
-                        seats[k][i][j] += 20;
-                    }
+                    if(part[0] & part[1] && seats[k === 0 ? 1 : 0][i][j] !== -1) seats[k][i][j] += 20;
                     if(seatNum && seatPosition.toString() == [roomNum, i, j]){
                         seats[k][i][j] += 40;
                         for(let d = 1; d <= 2; d++){
@@ -262,8 +432,7 @@ const makePosition = (num, part, roomNum, seatNum) => {
     let max = -1;
     let data;
     const friendArr = [];
-    if(num > 1){ // 친구 신청
-        // 두개 합 기준으로 큰것부터 내림차순으로 해서 이상적인 모형 나오는지 실험해보자.
+    if(num > 1){
         if(part[0] ^ part[1]){
             for(let i = 0; i < N; i++){
                 for(let j = 0; j < M; j++){
@@ -286,7 +455,6 @@ const makePosition = (num, part, roomNum, seatNum) => {
         })
         while(friendArr.length){
             const [weight, i, j] = friendArr.pop();
-            // console.log(weight, i, j);
             for(let l = 0; l < 4; l++) {
                 let flag = false;
                 let pos;
@@ -332,7 +500,7 @@ const makePosition = (num, part, roomNum, seatNum) => {
                 }
                 if(flag) continue;
                 let sum = 0;
-                for(let k = 0; k < 4; k++){
+                for(let k = 0; k < num; k++){
                     if(part[0] ^ part[1])
                         sum += seats[part[0] ? 0 : 1][pos[k][0]][pos[k][1]];
                     else
@@ -341,6 +509,7 @@ const makePosition = (num, part, roomNum, seatNum) => {
                 if(sum > max) {
                     max = sum;
                     data = {
+                        isIdeal: true,
                         dir: l,
                         i: i,
                         j: j,
@@ -359,6 +528,7 @@ const makePosition = (num, part, roomNum, seatNum) => {
                     if(seats[part[0] ? 0 : 1][i][j] > max){
                         max = seats[part[0] ? 0 : 1][i][j];
                         data = {
+                            isIdeal: true,
                             i: i,
                             j: j,
                         }
@@ -372,6 +542,7 @@ const makePosition = (num, part, roomNum, seatNum) => {
                     if(seats[0][i][j] !== -1 && seats[1][i][j] !== -1 && seats[0][i][j] + seats[1][i][j] > max){
                         max = seats[0][i][j] + seats[1][i][j];
                         data = {
+                            isIdeal: true,
                             i: i,
                             j: j,
                         }
@@ -380,41 +551,85 @@ const makePosition = (num, part, roomNum, seatNum) => {
             }
         }
     }
-    // console.log(seats);
+    console.log(seats);
+
+
     if(max !== -1){
         // console.log(max, data);
         return 1;
     }
 
-    // 여기서 결론이 안나는 case
-    // 1,2부 자리가 갈리는 경우, 친구신청일 때 이상적인 자리가 아닌 경우
-
-    // 1,2부 에 대한 예외 케이스가 너무 곤란해서 이건 일단 1,2부냐로 나눠야겠다.
     if(part[0] ^ part[1]){
         // 친구, 한 파트, 이상적인 모양이 없을 때
-        // 백트래킹 통해서 제일 이쁜 자리 만들어준다
-        // 어차피 이쯤되면 남은 자리가 크게 많지 않을텐데
-        // 그냥 싹다 돌리면 안되나?
+        let friendArr1 = [];
+        for(let i = 0; i < N; i++){
+            for(let j = 0; j < M; j++){
+                if(seats[part[0] ? 0 : 1][i][j] === -1) continue;
+                friendArr1.push([seats[part[0] ? 0 : 1][i][j], i, j]);
+            }
+        }
+        friendArr1.sort((a, b) => {
+            return a[0] - b[0];
+        })
 
-        // 백트래킹 쓴다 vs 남은 자리 기준 경우의 수 다 돌린다.
+        let max = -1;
+        let posData;
+        while(friendArr1.length){
+            const [weight, i, j] = friendArr1.pop();
+            let separateData = separateBacktracking(seats, part, weight, i, j, N, M, num);
+            if(separateData.sum > max){
+                max = separateData.sum;
+                posData = separateData.pos;
+            }
+        }
+        // 어차피 다 돌릴건데 소팅은 와 하냐?
+        console.log(max, posData);
     }
     else{
         if(num === 1){
-            // 혼자, 1,2부가 붙어있는 자리가 없을 때
-            // 일단 다른 방에 붙어있는 자리가 있다면 그게 우선,
-            // 아니라면 일단 이방에서 제일 붙어있는 자리로 준다.
+            let onlyArr = [];
+            for(let i = 0; i < N; i++){
+                for(let j = 0; j < M; j++){
+                        if(seats[0][i][j] === -1) continue;
+                        onlyArr.push([seats[0][i][j], i, j]);
+                }
+            }
+            onlyArr.sort((a, b) => {
+                return a[0] - b[0];
+            })
+
+            while(onlyArr.length){
+                const [weight, i, j] = onlyArr.pop();
+                let onlyData = onlyException(seats, weight, i, j, N, M);
+                console.log(onlyData);
+            }
         }
         else{
             // 친구, 1,2부가 붙어있는 이상적인 자리가 없을 때.
-            // 1. 1,2부 붙은 자리 포함해서 그나마 이쁜 자리로다가 준다
+            let friendArr2 = [];
+            for(let i = 0; i < N; i++){
+                for(let j = 0; j < M; j++){
+                    if(seats[0][i][j] === -1) continue;
+                    friendArr2.push([seats[0][i][j], i, j]);
+                }
+            }
+            friendArr2.sort((a, b) => {
+                return a[0] - b[0];
+            })
+
+            let max = -1;
+            let posData;
+            while(friendArr2.length){
+                const [weight, i, j] = friendArr2.pop();
+                let separateExceptionData = separateExceptionBacktracking(seats, weight, i, j, N, M, num + 1, num);
+                if(separateExceptionData.sum > max){
+                    max = separateExceptionData.sum;
+                    posData = separateExceptionData.pos;
+                }
+            }
+            console.log(max, posData);
         }
     }
-
-    
-    
-    
-
-
 }
 
 const solveReq = ({seat_room, seat_num, part1, part2, friends}) => {
@@ -423,7 +638,13 @@ const solveReq = ({seat_room, seat_num, part1, part2, friends}) => {
         part = [part1, part2],
         num = friends.length + 1;
     // basic motion -> 1,2부 신청 했는데, 일단 방에 빈자리가 신청 수보다 적으면 basic motion 취소
+    // 친구신청인데, 우선하는 자리가 있다 => 그래도 1,2부 붙어있는 빈자리가 최고지.
+    // 그니까 1,2부 붙어있는 자리 2개 2개씩 방 나뉘는게
+    // 한방에서 2명 자리 붙어있고, 나머지 두명은 옮기는거보다 낫다 이거지.
+    // => 이거대로 구현 ㄱ
+    // 이게 맞나 생각 한번 해보고
 
+    // 현재 makePosition이 끝까지 다해주는게 아니라는점 유의하면서 구현하기.
     if(part1 ^ part2){
         // 1부라면
         for(let i = 0; i < 3; i++){
@@ -441,6 +662,13 @@ const solveReq = ({seat_room, seat_num, part1, part2, friends}) => {
         for(let i = 0; i < 3; i++){
             if(isRoomApply[i] && Math.min(emptySeat[0][i], emptySeat[1][i]) >= num) makePosition(num, part, i, Number(seat_num));
         }
+
+        // 1,2부, 친구신청이라면 친구 수만큼 강의실에 1,2부 같이 있는 좌석이 있는지 확인
+        // 좌석이 없다? => 좌석 있는 수만큼 줄여서 num 넣고, 다른 방에도 넣어
+        // 근데 전체 방 보니까 1,2부 같이 있는 좌석이 숫자만큼 없어.
+        // 그럴때 이제 짜바리로 넣어주는거지.
+        // 이건 밖에서 판단하자.
+        // 안에서는 그냥 점수맞춰서 최대한 자리 잘 주면 끝.
     }
 }
 
