@@ -1,11 +1,3 @@
-const test = [
-    [-1, 4, 3, 5],
-    [4, 1, 5, 3],
-    [3, 5, 30, 8],
-    [8, 10, 40, 13],
-    [5, 8, 13, 10],
-]
-
 const di = [0, 1, 0, -1, 1, 1, -1, -1];
 const dj = [1, 0, -1, 0, -1, 1, 1, -1];
 const zi = [1, 1, -1, -1];
@@ -39,33 +31,25 @@ const seatNumber = [
     ],
 ]
 
-// [
-//     [-1, 0, 0],
-//     [0, 0, 0],
-//     [0, 0, 0],
-//     [0, 0, 0],
-//     [0, 0, 0],
-// ],
-
 const arr = [
     {
         N: 5,
         M: 3,
         seats: [
             [
-                [-1, 0, -1],
-                [0, -1, -1],
-                [-1, 0, -1],
                 [-1, 0, 0],
-                [0, -1, 0],
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0],
             ],
             [
-                [-1, -1, 0],
-                [-1, -1, 0],
-                [0, -1, 0],
-                [0, 0, -1],
-                [0, 0, -1],
-            ]
+                [-1, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0],
+            ],
         ],
     },
     {
@@ -104,7 +88,7 @@ const arr = [
                 [-1, -1, 0, 0, 0],
                 [0, -1, 0, 0, 0],
                 [-1, -1, 0, 0, 0],
-                [-1, -1, 0, 0, 0],
+                [0, -1, 0, 0, 0],
             ],
             [
                 [0, 0, 0, 0, 0],
@@ -112,43 +96,43 @@ const arr = [
                 [-1, -1, 0, 0, 0],
                 [0, -1, 0, 0, 0],
                 [-1, -1, 0, 0, 0],
-                [-1, -1, 0, 0, 0],
+                [0, -1, 0, 0, 0],
             ],
         ],
     },
 ]
 
 const requests = [
+    {
+        building_id: "414",
+        apply_time: "20220226170505",
+        seat_room: ["101", "104", "108"],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [1, 2,],
+    },
     // {
     //     building_id: "414",
-    //     apply_time: "20220226170505",
+    //     apply_time: "20220226170506",
+    //     seat_room: ["101", "104"],
+    //     seat_num: "",
+    //     isToday: false,
+    //     part1: true,
+    //     part2: false,
+    //     friends: [1, 2, ],
+    // },
+    // {
+    //     building_id: "414",
+    //     apply_time: "20220226170507",
     //     seat_room: ["101",],
     //     seat_num: "",
     //     isToday: false,
     //     part1: true,
     //     part2: false,
-    //     friends: [2018115201,],
+    //     friends: [2018115201, 2018115202, 2018115202,],
     // },
-    // {
-    //     building_id: "414",
-    //     apply_time: "20220226170506",
-    //     seat_room: ["101",],
-    //     seat_num: "",
-    //     isToday: false,
-    //     part1: true,
-    //     part2: true,
-    //     friends: [],
-    // },
-    {
-        building_id: "414",
-        apply_time: "20220226170507",
-        seat_room: ["101",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202, 2018115202,],
-    },
 ]
 
 const hopeNumber = [
@@ -189,6 +173,8 @@ const handleEmptySeat = () => {
                         if(arr[i].seats[j][p][q] === 0) emptySeatNum[j][i]++;
     return emptySeatNum;
 }
+
+const emptySeat = handleEmptySeat();
 
 const handleRoomApply = (arr) => {
     const isRoomApply = [false, false, false];
@@ -430,7 +416,13 @@ const makePosition = (num, part, roomNum, seatNum) => {
     }
 
     let max = -1;
-    let data;
+    let data = {
+        pos: [],
+        isDone: false,
+        roomNum: roomNum,
+        num: num,
+        max: -1,
+    };
     const friendArr = [];
     if(num > 1){
         if(part[0] ^ part[1]){
@@ -444,7 +436,6 @@ const makePosition = (num, part, roomNum, seatNum) => {
         else{
             for(let i = 0; i < N; i++){
                 for(let j = 0; j < M; j++){
-                    // 1,2부 한자리만 있는거에 대해서 고려해야함.
                     friendArr.push([seats[0][i][j] + seats[1][i][j], i, j]);
                 }
             }
@@ -508,30 +499,21 @@ const makePosition = (num, part, roomNum, seatNum) => {
                 }
                 if(sum > max) {
                     max = sum;
-                    data = {
-                        isIdeal: true,
-                        dir: l,
-                        i: i,
-                        j: j,
-                    }
+                    data.isDone = true;
+                    for(let k = 0; k < num; k++) data.pos.push([pos[k][0], pos[k][1]]);
                 }
             }
             if(max > 0) break;
         }
     }
-    else{ // 혼자 신청
-        // 1,2부 신청이라면 1,2부를 합해줘야하나?
-        // 1,2부인데 원하는 자리가 있는데 1부만 있는 경우 => 원하는 자리 근처 자리가 됨.
+    else{
         if(part[0] ^ part[1]){
             for(let i = 0; i < N; i++){
                 for(let j = 0; j < M; j++){
                     if(seats[part[0] ? 0 : 1][i][j] > max){
                         max = seats[part[0] ? 0 : 1][i][j];
-                        data = {
-                            isIdeal: true,
-                            i: i,
-                            j: j,
-                        }
+                        data.isDone = true;
+                        data.pos.push([i, j]);
                     }
                 }
             }
@@ -541,26 +523,20 @@ const makePosition = (num, part, roomNum, seatNum) => {
                 for(let j = 0; j < M; j++){
                     if(seats[0][i][j] !== -1 && seats[1][i][j] !== -1 && seats[0][i][j] + seats[1][i][j] > max){
                         max = seats[0][i][j] + seats[1][i][j];
-                        data = {
-                            isIdeal: true,
-                            i: i,
-                            j: j,
-                        }
+                        data.isDone = true;
+                        data.pos.push([i, j]);
                     }
                 }
             }
         }
     }
-    console.log(seats);
-
-
     if(max !== -1){
-        // console.log(max, data);
-        return 1;
+        data.max = max;
+        return data;
     }
 
+    let posData;
     if(part[0] ^ part[1]){
-        // 친구, 한 파트, 이상적인 모양이 없을 때
         let friendArr1 = [];
         for(let i = 0; i < N; i++){
             for(let j = 0; j < M; j++){
@@ -571,9 +547,7 @@ const makePosition = (num, part, roomNum, seatNum) => {
         friendArr1.sort((a, b) => {
             return a[0] - b[0];
         })
-
-        let max = -1;
-        let posData;
+        
         while(friendArr1.length){
             const [weight, i, j] = friendArr1.pop();
             let separateData = separateBacktracking(seats, part, weight, i, j, N, M, num);
@@ -582,8 +556,9 @@ const makePosition = (num, part, roomNum, seatNum) => {
                 posData = separateData.pos;
             }
         }
-        // 어차피 다 돌릴건데 소팅은 와 하냐?
-        console.log(max, posData);
+        data.pos = posData;
+        data.isDone = true;
+        data.max = max;
     }
     else{
         if(num === 1){
@@ -601,11 +576,16 @@ const makePosition = (num, part, roomNum, seatNum) => {
             while(onlyArr.length){
                 const [weight, i, j] = onlyArr.pop();
                 let onlyData = onlyException(seats, weight, i, j, N, M);
-                console.log(onlyData);
+                if(onlyData.sum > max){
+                    max = onlyData.sum;
+                    posData = onlyData.pos;
+                }
             }
+            data.pos = posData;
+            data.isDone = true;
+            data.max = max;
         }
         else{
-            // 친구, 1,2부가 붙어있는 이상적인 자리가 없을 때.
             let friendArr2 = [];
             for(let i = 0; i < N; i++){
                 for(let j = 0; j < M; j++){
@@ -627,49 +607,189 @@ const makePosition = (num, part, roomNum, seatNum) => {
                     posData = separateExceptionData.pos;
                 }
             }
-            console.log(max, posData);
+            data.pos = posData;
+            data.isDone = true;
+            data.max = max;
         }
     }
+
+    return data;
 }
 
-const solveReq = ({seat_room, seat_num, part1, part2, friends}) => {
-    const emptySeat = handleEmptySeat(),
-        isRoomApply = handleRoomApply(seat_room),
-        part = [part1, part2],
-        num = friends.length + 1;
-    // basic motion -> 1,2부 신청 했는데, 일단 방에 빈자리가 신청 수보다 적으면 basic motion 취소
-    // 친구신청인데, 우선하는 자리가 있다 => 그래도 1,2부 붙어있는 빈자리가 최고지.
-    // 그니까 1,2부 붙어있는 자리 2개 2개씩 방 나뉘는게
-    // 한방에서 2명 자리 붙어있고, 나머지 두명은 옮기는거보다 낫다 이거지.
-    // => 이거대로 구현 ㄱ
-    // 이게 맞나 생각 한번 해보고
+const selectSeats = ({isDone, pos, roomNum, num}, part, isRoomApply) => {
+    if(isDone){
+        pos.forEach((e) => {
+            if(part[0]) arr[roomNum].seats[0][e[0]][e[1]] = -1;
+            if(part[1]) arr[roomNum].seats[1][e[0]][e[1]] = -1;
+        })
+        for(let i = 0; i < 2; i++)
+            for(let j = 0; j < 3; j++)
+                if(part[i]){
+                    if(isRoomApply[j]) hopeNumber[i][j] -= num;
+                    if(j === roomNum) emptySeat[i][j] -= num;
+                }
+    }
+    else
+        for(let i = 0; i < 2; i++)
+            for(let j = 0; j < 3; j++)
+                if(part[i])
+                    if(isRoomApply[j]) hopeNumber[i][j] -= num;
+}
 
-    // 현재 makePosition이 끝까지 다해주는게 아니라는점 유의하면서 구현하기.
+const solveReq = (seat_room, seat_num, part1, part2, num) => {
+    if(num === 0) return ;
+    const isRoomApply = handleRoomApply(seat_room),
+        part = [part1, part2];
+    let data = [];
+    let flag = false;
+    const res = []
     if(part1 ^ part2){
-        // 1부라면
         for(let i = 0; i < 3; i++){
-            if(part1){
-                if(isRoomApply[i] && emptySeat[0][i] >= num) makePosition(num, part, i, Number(seat_num));
-                // 3방 모두 자리가 없을때 처리 해줘야함. ex) 4명 신청인데 방에 3명 자리만 있을 때
+            if(isRoomApply[i] && emptySeat[part1 ? 0 : 1][i] >= num) {
+                data.push(makePosition(num, part, i, Number(seat_num)));
+                flag = true;
+            }
+        }
+        if(flag){
+            data.sort((a, b) => {
+                if(emptySeat[part1 ? 0 : 1][a.roomNum] / hopeNumber[part1 ? 0 : 1][a.roomNum] === emptySeat[part1 ? 0 : 1][b.roomNum] / hopeNumber[part1 ? 0 : 1][b.roomNum])
+                    return a.max > b.max;
+                return emptySeat[part1 ? 0 : 1][a.roomNum] / hopeNumber[part1 ? 0 : 1][a.roomNum] - emptySeat[part1 ? 0 : 1][b.roomNum] / hopeNumber[part1 ? 0 : 1][b.roomNum];
+            })
+            res.push(data.pop());
+            selectSeats(res[res.length - 1], part, isRoomApply);
+            return res;
+        }
+
+        let capacity = 0,
+            maxCapacity = 0,
+            twoCapacity = 0;
+        for(let i = 0; i < 3; i++){
+            if(isRoomApply[i]) {
+                capacity += emptySeat[part1 ? 0 : 1][i];
+                maxCapacity = emptySeat[part1 ? 0 : 1][i] > maxCapacity ? emptySeat[part1 ? 0 : 1][i] : maxCapacity;
+                if(emptySeat[part1 ? 0 : 1][i] === 2) twoCapacity++;
+            }
+        }
+        if(capacity < num) solveReq(seat_room, seat_num, part1, part2, num - 1).forEach(prop => res.push(prop));
+        else{
+            if(maxCapacity === 3){
+                if(twoCapacity >= 2){
+                    solveReq(seat_room, seat_num, part1, part2, 2)?.forEach(prop => res.push(prop));
+                    solveReq(seat_room, seat_num, part1, part2, 2)?.forEach(prop => res.push(prop));
+                }
+                else{
+                    solveReq(seat_room, seat_num, part1, part2, 3)?.forEach(prop => res.push(prop));
+                    solveReq(seat_room, seat_num, part1, part2, 1)?.forEach(prop => res.push(prop));
+                }
             }
             else{
-                if(isRoomApply[i] && emptySeat[1][i] >= num) makePosition(num, part, i, Number(seat_num));
+                if(num === 4){
+                    if(twoCapacity >= 2){
+                        solveReq(seat_room, seat_num, part1, part2, 2)?.forEach(prop => res.push(prop));
+                        solveReq(seat_room, seat_num, part1, part2, 2)?.forEach(prop => res.push(prop));
+                    }
+                    else{
+                        solveReq(seat_room, seat_num, part1, part2, 3)?.forEach(prop => res.push(prop));
+                        solveReq(seat_room, seat_num, part1, part2, 1)?.forEach(prop => res.push(prop));
+                    }
+                }
+                else if(num === 3){
+                    if(twoCapacity >= 1){
+                        solveReq(seat_room, seat_num, part1, part2, 2)?.forEach(prop => res.push(prop));
+                        solveReq(seat_room, seat_num, part1, part2, 1)?.forEach(prop => res.push(prop));
+                    }
+                    else{
+                        solveReq(seat_room, seat_num, part1, part2, 1)?.forEach(prop => res.push(prop));
+                        solveReq(seat_room, seat_num, part1, part2, 1)?.forEach(prop => res.push(prop));
+                        solveReq(seat_room, seat_num, part1, part2, 1)?.forEach(prop => res.push(prop));
+                    }
+                }
+                else if(num === 2){
+                    solveReq(seat_room, seat_num, part1, part2, 1)?.forEach(prop => res.push(prop));
+                    solveReq(seat_room, seat_num, part1, part2, 1)?.forEach(prop => res.push(prop));
+                }
             }
         }
     }
     else{
-        // 1,2부 둘다 신청
         for(let i = 0; i < 3; i++){
-            if(isRoomApply[i] && Math.min(emptySeat[0][i], emptySeat[1][i]) >= num) makePosition(num, part, i, Number(seat_num));
+            if(isRoomApply[i] && Math.min(emptySeat[0][i], emptySeat[1][i]) >= num) {
+                data.push(makePosition(num, part, i, Number(seat_num)));
+                flag = true;
+            }
+        }
+        if(flag){
+            data.sort((a, b) => {
+                const orderA = Math.min(emptySeat[0][a.roomNum] / hopeNumber[0][a.roomNum], emptySeat[1][a.roomNum] / hopeNumber[1][a.roomNum]),
+                    orderB = Math.min(emptySeat[0][b.roomNum] / hopeNumber[0][b.roomNum], emptySeat[1][b.roomNum] / hopeNumber[1][b.roomNum]);
+                if(orderA === orderB) return a.max > b.max;
+                return orderA - orderB;
+            })
+            res.push(data.pop());
+            selectSeats(res[res.length - 1], part, isRoomApply);
+            return res;
         }
 
-        // 1,2부, 친구신청이라면 친구 수만큼 강의실에 1,2부 같이 있는 좌석이 있는지 확인
-        // 좌석이 없다? => 좌석 있는 수만큼 줄여서 num 넣고, 다른 방에도 넣어
-        // 근데 전체 방 보니까 1,2부 같이 있는 좌석이 숫자만큼 없어.
-        // 그럴때 이제 짜바리로 넣어주는거지.
-        // 이건 밖에서 판단하자.
-        // 안에서는 그냥 점수맞춰서 최대한 자리 잘 주면 끝.
+        let capacity = [0, 0],
+            maxCapacity = [0, 0],
+            twoCapacity = [0, 0],
+            maxBoth = [999, 999, 999];
+        for(let d = 0; d < 2; d++){
+            for(let i = 0; i < 3; i++){
+                if(isRoomApply[i]) {
+                    maxBoth[i] = Math.min(emptySeat[d][i], maxBoth[i]);
+                    capacity[d] += emptySeat[d][i];
+                    maxCapacity[d] = emptySeat[d][i] > maxCapacity[d] ? emptySeat[d][i] : maxCapacity[d];
+                    if(emptySeat[d][i] === 2) twoCapacity[d]++;
+                }
+            }
+        }
+        if(capacity[0] < num || capacity[1] < num){
+            if(capacity[0] < num && capacity[1] < num) solveReq(seat_room, seat_num, part1, part2, num - 1)?.forEach(prop => res.push(prop));
+            else if(capacity[0] < num){
+                solveReq(seat_room, seat_num, part1, part2, num - 1)?.forEach(prop => res.push(prop));
+                solveReq(seat_room, seat_num, false, part2, 1)?.forEach(prop => res.push(prop));
+            }
+            else{
+                solveReq(seat_room, seat_num, part1, part2, num - 1)?.forEach(prop => res.push(prop));
+                solveReq(seat_room, seat_num, part1, false, 1)?.forEach(prop => res.push(prop));
+            }
+        }
+        else{
+            let sumOfMaxBoth = 0;
+            let twoBoth = 0;
+            let maxOfBoth = 0;
+            for(let i = 0; i < 3; i++){
+                if(isRoomApply[i]) {
+                    sumOfMaxBoth += maxBoth[i];
+                    maxOfBoth = maxBoth[i] > maxOfBoth ? maxBoth[i] : maxOfBoth;
+                    if(maxBoth[i] >= 2) twoBoth++;
+                }
+            }
+            if(sumOfMaxBoth >= num){
+                if(num === 4 && twoBoth >= 2){
+                    solveReq(seat_room, seat_num, part1, part2, 2)?.forEach(prop => res.push(prop));
+                    solveReq(seat_room, seat_num, part1, part2, 2)?.forEach(prop => res.push(prop));
+                }
+                else {
+                    solveReq(seat_room, seat_num, part1, part2, num - 1)?.forEach(prop => res.push(prop));
+                    solveReq(seat_room, seat_num, part1, part2, 1)?.forEach(prop => res.push(prop));
+                }
+            }
+            else{
+                if(maxOfBoth === 0){
+                    solveReq(seat_room, seat_num, part1, false, num)?.forEach(prop => res.push(prop));
+                    solveReq(seat_room, seat_num, false, part2, num)?.forEach(prop => res.push(prop));
+                }
+                else{
+                    solveReq(seat_room, seat_num, part1, part2, maxOfBoth)?.forEach(prop => res.push(prop));
+                    solveReq(seat_room, seat_num, part1, part2, num - maxOfBoth)?.forEach(prop => res.push(prop));
+                }
+            }
+        }        
     }
+    return res;
 }
 
 const Allocation = () => {
@@ -679,16 +799,17 @@ const Allocation = () => {
     sortedRequests.forEach((e) => {
         settingHopeNumber(e.seat_room, e.part1, e.part2, e.friends.length + 1);
     })
-    sortedRequests.forEach((e) => {
-        solveReq(e);
+    sortedRequests.forEach(({seat_room, seat_num, part1, part2, friends}, index) => {
+        const data = (solveReq(seat_room, seat_num, part1, part2, friends.length + 1));
+        console.log(data);
+        // 이제 위치는 받았고, 사람을 기준으로 자리를 배정해준다.
+        // 이때, 한 자리에서 1,2부가 같다면 하나의 res가 나오면 되고,
+        // 1,2부 자리가 다르다면 res는 2개가 나와야한다.
+        // 안 겹치도록 apply_id도 부여해야한다. ( 친구 공통 )
+        // 유저 sid도 보내야한다. 본인이면 user id에 0 넣어서 보내주자.
+        // 나머지 보내야할것들 : part, building_id, seat_room, seat_num, date(그대로)
     })
-
-    // console.log(sortedRequests);
-    // 이제 requests들 하나씩 꺼내면서 수행하면 됨.
-
-
     return <></>
 }
-
 
 export default Allocation;
