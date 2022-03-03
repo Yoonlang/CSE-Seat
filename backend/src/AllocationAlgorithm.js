@@ -37,11 +37,11 @@ const arr = [
         M: 3,
         seats: [
             [
-                [-1, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0],
+                [-1, 0, -1],
+                [-1, 0, -1],
+                [-1, 0, -1],
+                [-1, 0, -1],
+                [-1, -1, -1],
             ],
             [
                 [-1, 0, 0],
@@ -102,6 +102,39 @@ const arr = [
     },
 ]
 
+// const requests = [
+//     {
+//         building_id: "414",
+//         apply_time: "20220226170505",
+//         seat_room: ["101",],
+//         seat_num: "",
+//         isToday: false,
+//         part1: true,
+//         part2: true,
+//         friends: [1, 2, 3,],
+//     },
+//     {
+//         building_id: "414",
+//         apply_time: "20220226170506",
+//         seat_room: ["101", "104"],
+//         seat_num: "",
+//         isToday: false,
+//         part1: true,
+//         part2: false,
+//         friends: [1, 2, ],
+//     },
+//     {
+//         building_id: "414",
+//         apply_time: "20220226170506",
+//         seat_room: ["101", "104"],
+//         seat_num: "",
+//         isToday: false,
+//         part1: true,
+//         part2: false,
+//         friends: [1, 2, 3, ],
+//     },
+// ]
+
 const requests = [
     {
         building_id: "414",
@@ -113,26 +146,186 @@ const requests = [
         part2: true,
         friends: [1, 2,],
     },
-    // {
-    //     building_id: "414",
-    //     apply_time: "20220226170506",
-    //     seat_room: ["101", "104"],
-    //     seat_num: "",
-    //     isToday: false,
-    //     part1: true,
-    //     part2: false,
-    //     friends: [1, 2, ],
-    // },
-    // {
-    //     building_id: "414",
-    //     apply_time: "20220226170507",
-    //     seat_room: ["101",],
-    //     seat_num: "",
-    //     isToday: false,
-    //     part1: true,
-    //     part2: false,
-    //     friends: [2018115201, 2018115202, 2018115202,],
-    // },
+    {
+        building_id: "414",
+        apply_time: "20220226170506",
+        seat_room: ["101", "104"],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: false,
+        friends: [1, 2, ],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170507",
+        seat_room: ["101",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202, 2018115202,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170507",
+        seat_room: ["101",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202, 2018115202,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["101",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202, 2018115202,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["101", "104",],
+        seat_num: "2",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202, 2018115202,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["104",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202, 2018115202,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["104",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["104",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["104",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202, 2018115202,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["104",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202, 2018115202,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["104",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202, 2018115202,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["104",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["108",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202, 1,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["108",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202, 1,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["108",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202, 1,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["108",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["108",],
+        seat_num: "",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202, 1,],
+    },
+    {
+        building_id: "414",
+        apply_time: "20220226170508",
+        seat_room: ["101", "104", "108",],
+        seat_num: "47",
+        isToday: false,
+        part1: true,
+        part2: true,
+        friends: [2018115201, 2018115202, 1,],
+    },
 ]
 
 const hopeNumber = [
@@ -140,13 +333,17 @@ const hopeNumber = [
     [0, 0, 0],
 ]
 
+const backToSeatNumber = (roomNum, i, j) => {
+    return seatNumber[roomNum][i][j];
+}
+
 const seatNumChanger = (num) => {
     let seatPosition = [0, 0, 0],
         flag = false;
     if(!num) return seatPosition;
     seatNumber.forEach((e, index) => {
-        const N = e.length;
-        const M = e[0].length;
+        const N = e.length,
+            M = e[0].length;
         for(let i = 0; i < N; i++){
             for(let j = 0; j < M; j++){
                 if(num === e[i][j]){
@@ -187,8 +384,8 @@ const handleRoomApply = (arr) => {
 }
 
 const settingHopeNumber = (arr, part1, part2, num) => {
-    const isRoomApply = handleRoomApply(arr);
-    const part = [part1, part2];
+    const isRoomApply = handleRoomApply(arr),
+        part = [part1, part2];
     for(let i = 0; i < 2; i++)
         if(part[i])
             for(let j = 0; j < 3; j++)
@@ -447,8 +644,8 @@ const makePosition = (num, part, roomNum, seatNum) => {
         while(friendArr.length){
             const [weight, i, j] = friendArr.pop();
             for(let l = 0; l < 4; l++) {
-                let flag = false;
-                let pos;
+                let flag = false,
+                    pos;
                 if(num === 2){
                     pos = [
                         [i, j],
@@ -492,10 +689,8 @@ const makePosition = (num, part, roomNum, seatNum) => {
                 if(flag) continue;
                 let sum = 0;
                 for(let k = 0; k < num; k++){
-                    if(part[0] ^ part[1])
-                        sum += seats[part[0] ? 0 : 1][pos[k][0]][pos[k][1]];
-                    else
-                        sum += seats[0][pos[k][0]][pos[k][1]] + seats[1][pos[k][0]][pos[k][1]];
+                    if(part[0] ^ part[1]) sum += seats[part[0] ? 0 : 1][pos[k][0]][pos[k][1]];
+                    else sum += seats[0][pos[k][0]][pos[k][1]] + seats[1][pos[k][0]][pos[k][1]];
                 }
                 if(sum > max) {
                     max = sum;
@@ -618,9 +813,12 @@ const makePosition = (num, part, roomNum, seatNum) => {
 
 const selectSeats = ({isDone, pos, roomNum, num}, part, isRoomApply) => {
     if(isDone){
-        pos.forEach((e) => {
-            if(part[0]) arr[roomNum].seats[0][e[0]][e[1]] = -1;
-            if(part[1]) arr[roomNum].seats[1][e[0]][e[1]] = -1;
+        pos?.forEach((e) => {
+            if(e.length === 3) arr[roomNum].seats[e[0]][e[1]][e[2]] = -1;
+            else{
+                if(part[0]) arr[roomNum].seats[0][e[0]][e[1]] = -1;
+                if(part[1]) arr[roomNum].seats[1][e[0]][e[1]] = -1;
+            }
         })
         for(let i = 0; i < 2; i++)
             for(let j = 0; j < 3; j++)
@@ -643,6 +841,7 @@ const solveReq = (seat_room, seat_num, part1, part2, num) => {
     let data = [];
     let flag = false;
     const res = []
+    
     if(part1 ^ part2){
         for(let i = 0; i < 3; i++){
             if(isRoomApply[i] && emptySeat[part1 ? 0 : 1][i] >= num) {
@@ -657,7 +856,7 @@ const solveReq = (seat_room, seat_num, part1, part2, num) => {
                 return emptySeat[part1 ? 0 : 1][a.roomNum] / hopeNumber[part1 ? 0 : 1][a.roomNum] - emptySeat[part1 ? 0 : 1][b.roomNum] / hopeNumber[part1 ? 0 : 1][b.roomNum];
             })
             res.push(data.pop());
-            selectSeats(res[res.length - 1], part, isRoomApply);
+            selectSeats(res[res.length - 1], part, isRoomApply);    
             return res;
         }
 
@@ -671,7 +870,8 @@ const solveReq = (seat_room, seat_num, part1, part2, num) => {
                 if(emptySeat[part1 ? 0 : 1][i] === 2) twoCapacity++;
             }
         }
-        if(capacity < num) solveReq(seat_room, seat_num, part1, part2, num - 1).forEach(prop => res.push(prop));
+        
+        if(capacity < num) solveReq(seat_room, seat_num, part1, part2, num - 1)?.forEach(prop => res.push(prop));
         else{
             if(maxCapacity === 3){
                 if(twoCapacity >= 2){
@@ -728,6 +928,7 @@ const solveReq = (seat_room, seat_num, part1, part2, num) => {
             })
             res.push(data.pop());
             selectSeats(res[res.length - 1], part, isRoomApply);
+            
             return res;
         }
 
@@ -799,17 +1000,93 @@ const Allocation = () => {
     sortedRequests.forEach((e) => {
         settingHopeNumber(e.seat_room, e.part1, e.part2, e.friends.length + 1);
     })
-    sortedRequests.forEach(({seat_room, seat_num, part1, part2, friends}, index) => {
-        const data = (solveReq(seat_room, seat_num, part1, part2, friends.length + 1));
-        console.log(data);
-        // 이제 위치는 받았고, 사람을 기준으로 자리를 배정해준다.
-        // 이때, 한 자리에서 1,2부가 같다면 하나의 res가 나오면 되고,
-        // 1,2부 자리가 다르다면 res는 2개가 나와야한다.
-        // 안 겹치도록 apply_id도 부여해야한다. ( 친구 공통 )
-        // 유저 sid도 보내야한다. 본인이면 user id에 0 넣어서 보내주자.
-        // 나머지 보내야할것들 : part, building_id, seat_room, seat_num, date(그대로)
-    })
-    return <></>
-}
+    sortedRequests.forEach(({apply_time, seat_room, seat_num, part1, part2, friends}, index) => {
+        const data = (solveReq(seat_room, seat_num, part1, part2, friends.length + 1)),
+            realNumberOfRoom = ["101", "104", "108"],
+            applySid = [0, ...friends],
+            allocation = [
+            [false, false],
+            [false, false],
+            [false, false],
+            [false, false],
+        ];
+        const res = [],
+            findNextUser = (num, part) => {
+                for(let i = 0; i < num; i++){
+                    let flag = true;
+                    for(let d = 0; d < 2; d++){
+                        if(part[d])
+                            if(allocation[i][d] === true){
+                                flag = false;
+                                break;
+                            }
+                    }
+                    if(flag) {
+                        for(let d = 0; d < 2; d++)
+                            if(part[d]) allocation[i][d] = true;
+                        return applySid[i];
+                    }
+                }
+            }
+        data.forEach(props => {
+            if(props?.isDone){
+                if(props.pos[0].length === 3){
+                    props.pos.sort((a, b) => {
+                        if(a[1] === b[1]) return a[2] - b[2];
+                        return a[1] - b[1];
+                    })
+                    while(props.pos.length){
+                        const [part, i, j] = props.pos?.pop();
+                        if(props.pos.length > 0 &&
+                            part !== props.pos[props.pos.length - 1][0] &&
+                            i === props.pos[props.pos.length - 1][1] &&
+                            j === props.pos[props.pos.length - 1][2] ){
+                            props.pos.pop();
+                            res.push({
+                                apply_id: index,
+                                building_id: "414",
+                                apply_time: apply_time,
+                                seat_room: realNumberOfRoom[props.roomNum],
+                                seat_num: backToSeatNumber(props.roomNum, i, j),
+                                part: [true, true],
+                                user_sid: findNextUser(props.num, [true, true]),
+                            })
+                        }
+                        else{
+                            res.push({
+                                apply_id: index,
+                                building_id: "414",
+                                apply_time: apply_time,
+                                seat_room: realNumberOfRoom[props.roomNum],
+                                seat_num: backToSeatNumber(props.roomNum, i, j),
+                                part: [part === 0 ? true : false, part === 1 ? true : false],
+                                user_sid: findNextUser(props.num, [part === 0 ? true : false, part === 1 ? true : false]),
+                            })
+                        }
+                    }
+                }
+                else{
+                    while(props.pos.length){
+                        const [i, j] = props.pos?.pop();
+                        res.push({
+                            apply_id: index,
+                            building_id: "414",
+                            apply_time: apply_time,
+                            seat_room: realNumberOfRoom[props.roomNum],
+                            seat_num: backToSeatNumber(props.roomNum, i, j),
+                            part: [part1, part2],
+                            user_sid: findNextUser(props.num, [part1, part2]),
+                        })
+                    }
+                }
+            }
+        })
+        
+        console.log(res);
+        console.log("====================");
 
-export default Allocation;
+    })
+
+};
+
+Allocation();
