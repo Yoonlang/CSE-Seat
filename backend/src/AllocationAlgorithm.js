@@ -37,11 +37,11 @@ const arr = [
         M: 3,
         seats: [
             [
-                [-1, 0, -1],
-                [-1, 0, -1],
-                [-1, 0, -1],
-                [-1, 0, -1],
-                [-1, -1, -1],
+                [-1, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0],
             ],
             [
                 [-1, 0, 0],
@@ -102,49 +102,16 @@ const arr = [
     },
 ]
 
-// const requests = [
-//     {
-//         building_id: "414",
-//         apply_time: "20220226170505",
-//         seat_room: ["101",],
-//         seat_num: "",
-//         isToday: false,
-//         part1: true,
-//         part2: true,
-//         friends: [1, 2, 3,],
-//     },
-//     {
-//         building_id: "414",
-//         apply_time: "20220226170506",
-//         seat_room: ["101", "104"],
-//         seat_num: "",
-//         isToday: false,
-//         part1: true,
-//         part2: false,
-//         friends: [1, 2, ],
-//     },
-//     {
-//         building_id: "414",
-//         apply_time: "20220226170506",
-//         seat_room: ["101", "104"],
-//         seat_num: "",
-//         isToday: false,
-//         part1: true,
-//         part2: false,
-//         friends: [1, 2, 3, ],
-//     },
-// ]
-
 const requests = [
     {
         building_id: "414",
         apply_time: "20220226170505",
-        seat_room: ["101", "104", "108"],
+        seat_room: ["101", "104", "108",],
         seat_num: "",
         isToday: false,
         part1: true,
         part2: true,
-        friends: [1, 2,],
+        friends: [1, 2, 3,],
     },
     {
         building_id: "414",
@@ -158,173 +125,13 @@ const requests = [
     },
     {
         building_id: "414",
-        apply_time: "20220226170507",
-        seat_room: ["101",],
+        apply_time: "20220226170506",
+        seat_room: ["101", "104"],
         seat_num: "",
         isToday: false,
         part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202, 2018115202,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170507",
-        seat_room: ["101",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202, 2018115202,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["101",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202, 2018115202,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["101", "104",],
-        seat_num: "2",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202, 2018115202,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["104",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202, 2018115202,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["104",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["104",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["104",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202, 2018115202,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["104",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202, 2018115202,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["104",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202, 2018115202,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["104",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["108",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202, 1,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["108",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202, 1,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["108",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202, 1,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["108",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["108",],
-        seat_num: "",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202, 1,],
-    },
-    {
-        building_id: "414",
-        apply_time: "20220226170508",
-        seat_room: ["101", "104", "108",],
-        seat_num: "47",
-        isToday: false,
-        part1: true,
-        part2: true,
-        friends: [2018115201, 2018115202, 1,],
+        part2: false,
+        friends: [1, 2, 3, ],
     },
 ]
 
@@ -397,7 +204,7 @@ const onlyException = (seats, weight, i, j, N, M) => {
         sum: weight,
         pos: [[i, j]],
     }
-    for(let d = 1; d <= 2; d++){
+    for(let d = 1; d <= 2; d++)
         for(let l = 0; l < 8; l++){
             let ni = di[l] * d + i;
             let nj = dj[l] * d + j;
@@ -406,15 +213,14 @@ const onlyException = (seats, weight, i, j, N, M) => {
             if(l < 4) seats[1][ni][nj] += d === 1 ? 5 : 1;
             else if(l < 8) seats[1][ni][nj] += d === 1 ? 3 : 0;
         }
-    }
     
     let max = -1;
     let next = {
         i: undefined,
         j: undefined,
     }
-    for(let p = 0; p < N; p++){
-        for(let q = 0; q < M; q++){
+    for(let p = 0; p < N; p++)
+        for(let q = 0; q < M; q++)
             if(seats[1][p][q] > max){
                 max = seats[1][p][q];
                 next = {
@@ -422,13 +228,11 @@ const onlyException = (seats, weight, i, j, N, M) => {
                     j: q,
                 }
             }
-        }
-    }
 
     data.sum += max;
     data.pos.push([next.i, next.j]);
 
-    for(let d = 1; d <= 2; d++){
+    for(let d = 1; d <= 2; d++)
         for(let l = 0; l < 8; l++){
             let ni = di[l] * d + i;
             let nj = dj[l] * d + j;
@@ -437,7 +241,6 @@ const onlyException = (seats, weight, i, j, N, M) => {
             if(l < 4) seats[1][ni][nj] -= d === 1 ? 5 : 1;
             else if(l < 8) seats[1][ni][nj] -= d === 1 ? 3 : 0;
         }
-    }
 
     return data;
 }
@@ -474,8 +277,8 @@ const separateExceptionBacktracking = (seats, weight, i, j, N, M, num1, num2) =>
         i: undefined,
         j: undefined,
     }
-    for(let p = 0; p < N; p++){
-        for(let q = 0; q < M; q++){
+    for(let p = 0; p < N; p++)
+        for(let q = 0; q < M; q++)
             if(seats[num1 === 2 ? (isOne ? 1 : 0) : (isOne ? 0 : 1)][p][q] > max){
                 max = seats[num1 === 2 ? (isOne ? 1 : 0) : (isOne ? 0 : 1)][p][q];
                 next = {
@@ -483,8 +286,6 @@ const separateExceptionBacktracking = (seats, weight, i, j, N, M, num1, num2) =>
                     j: q,
                 }
             }
-        }
-    }
 
     let tempData = num1 > 1 ? separateExceptionBacktracking(seats, max, next.i, next.j, N, M, num1 - 1, num2) : separateExceptionBacktracking(seats, max, next.i, next.j, N, M, num1, num2 - 1);
     data.sum += tempData.sum;
@@ -519,7 +320,7 @@ const separateBacktracking = (seats, part, weight, i, j, N, M, num) => {
     };
     if(num === 1) return data;
     seats[part[0] ? 0 : 1][i][j] = -1;
-    for(let d = 1; d <= 2; d++){
+    for(let d = 1; d <= 2; d++)
         for(let l = 0; l < 8; l++){
             let ni = di[l] * d + i;
             let nj = dj[l] * d + j;
@@ -528,15 +329,14 @@ const separateBacktracking = (seats, part, weight, i, j, N, M, num) => {
             if(l < 4) seats[part[0] ? 0 : 1][ni][nj] += d === 1 ? 5 : 1;
             else if(l < 8) seats[part[0] ? 0 : 1][ni][nj] += d === 1 ? 3 : 0;
         }
-    }
     
     let max = -1;
     let next = {
         i: undefined,
         j: undefined,
     }
-    for(let p = 0; p < N; p++){
-        for(let q = 0; q < M; q++){
+    for(let p = 0; p < N; p++)
+        for(let q = 0; q < M; q++)
             if(seats[part[0] ? 0 : 1][p][q] > max){
                 max = seats[part[0] ? 0 : 1][p][q];
                 next = {
@@ -544,15 +344,13 @@ const separateBacktracking = (seats, part, weight, i, j, N, M, num) => {
                     j: q,
                 }
             }
-        }
-    }
 
     let tempData = separateBacktracking(seats, part, max, next.i, next.j, N, M, num - 1);
     seats[part[0] ? 0 : 1][i][j] = weight;
     data.sum += tempData.sum;
     data.pos.push(...tempData.pos);
 
-    for(let d = 1; d <= 2; d++){
+    for(let d = 1; d <= 2; d++)
         for(let l = 0; l < 8; l++){
             let ni = di[l] * d + i;
             let nj = dj[l] * d + j;
@@ -561,8 +359,6 @@ const separateBacktracking = (seats, part, weight, i, j, N, M, num) => {
             if(l < 4) seats[part[0] ? 0 : 1][ni][nj] -= d === 1 ? 5 : 1;
             else if(l < 8) seats[part[0] ? 0 : 1][ni][nj] -= d === 1 ? 3 : 0;
         }
-    }
-
     return data;
 }
 
@@ -572,9 +368,9 @@ const makePosition = (num, part, roomNum, seatNum) => {
         seats = JSON.parse(JSON.stringify(arr[roomNum].seats)),
         seatPosition = seatNumChanger(seatNum);
 
-    for(let k = 0; k < 2; k++){
-        if(part[k]){
-            for(let i = 0; i < N; i++){
+    for(let k = 0; k < 2; k++)
+        if(part[k])
+            for(let i = 0; i < N; i++)
                 for(let j = 0; j < M; j++){
                     if(seats[k][i][j] === -1) continue;
                     if(part[0] ^ part[1] && seats[k === 0 ? 1 : 0][i][j] === -1) seats[k][i][j] += 5;
@@ -608,9 +404,6 @@ const makePosition = (num, part, roomNum, seatNum) => {
                         }
                     }
                 }
-            }
-        }
-    }
 
     let max = -1;
     let data = {
@@ -619,24 +412,20 @@ const makePosition = (num, part, roomNum, seatNum) => {
         roomNum: roomNum,
         num: num,
         max: -1,
+        part: part,
     };
     const friendArr = [];
     if(num > 1){
-        if(part[0] ^ part[1]){
-            for(let i = 0; i < N; i++){
+        if(part[0] ^ part[1])
+            for(let i = 0; i < N; i++)
                 for(let j = 0; j < M; j++){
                     if(seats[part[0] ? 0 : 1][i][j] === -1) continue;
                     friendArr.push([seats[part[0] ? 0 : 1][i][j], i, j]);
                 }
-            }
-        }
-        else{
-            for(let i = 0; i < N; i++){
-                for(let j = 0; j < M; j++){
+        else
+            for(let i = 0; i < N; i++)
+                for(let j = 0; j < M; j++)
                     friendArr.push([seats[0][i][j] + seats[1][i][j], i, j]);
-                }
-            }
-        }
 
         friendArr.sort((a, b) => {
             return a[0] - b[0];
@@ -695,7 +484,9 @@ const makePosition = (num, part, roomNum, seatNum) => {
                 if(sum > max) {
                     max = sum;
                     data.isDone = true;
-                    for(let k = 0; k < num; k++) data.pos.push([pos[k][0], pos[k][1]]);
+                    let posData = [];
+                    for(let k = 0; k < num; k++) posData.push([pos[k][0], pos[k][1]]);
+                    data.pos = posData;
                 }
             }
             if(max > 0) break;
@@ -703,26 +494,22 @@ const makePosition = (num, part, roomNum, seatNum) => {
     }
     else{
         if(part[0] ^ part[1]){
-            for(let i = 0; i < N; i++){
-                for(let j = 0; j < M; j++){
-                    if(seats[part[0] ? 0 : 1][i][j] > max){
+            for(let i = 0; i < N; i++)
+                for(let j = 0; j < M; j++)
+                    if(seats[part[0] ? 0 : 1][i][j] > max) {
                         max = seats[part[0] ? 0 : 1][i][j];
                         data.isDone = true;
-                        data.pos.push([i, j]);
+                        data.pos = [[i, j]];
                     }
-                }
-            }
         }
         else{
-            for(let i = 0; i < N; i++){
-                for(let j = 0; j < M; j++){
-                    if(seats[0][i][j] !== -1 && seats[1][i][j] !== -1 && seats[0][i][j] + seats[1][i][j] > max){
+            for(let i = 0; i < N; i++)
+                for(let j = 0; j < M; j++)
+                    if(seats[0][i][j] !== -1 && seats[1][i][j] !== -1 && seats[0][i][j] + seats[1][i][j] > max) {
                         max = seats[0][i][j] + seats[1][i][j];
                         data.isDone = true;
-                        data.pos.push([i, j]);
+                        data.pos = [[i, j]];
                     }
-                }
-            }
         }
     }
     if(max !== -1){
@@ -733,12 +520,11 @@ const makePosition = (num, part, roomNum, seatNum) => {
     let posData;
     if(part[0] ^ part[1]){
         let friendArr1 = [];
-        for(let i = 0; i < N; i++){
+        for(let i = 0; i < N; i++)
             for(let j = 0; j < M; j++){
                 if(seats[part[0] ? 0 : 1][i][j] === -1) continue;
                 friendArr1.push([seats[part[0] ? 0 : 1][i][j], i, j]);
             }
-        }
         friendArr1.sort((a, b) => {
             return a[0] - b[0];
         })
@@ -758,12 +544,11 @@ const makePosition = (num, part, roomNum, seatNum) => {
     else{
         if(num === 1){
             let onlyArr = [];
-            for(let i = 0; i < N; i++){
+            for(let i = 0; i < N; i++)
                 for(let j = 0; j < M; j++){
                         if(seats[0][i][j] === -1) continue;
                         onlyArr.push([seats[0][i][j], i, j]);
                 }
-            }
             onlyArr.sort((a, b) => {
                 return a[0] - b[0];
             })
@@ -782,12 +567,11 @@ const makePosition = (num, part, roomNum, seatNum) => {
         }
         else{
             let friendArr2 = [];
-            for(let i = 0; i < N; i++){
+            for(let i = 0; i < N; i++)
                 for(let j = 0; j < M; j++){
                     if(seats[0][i][j] === -1) continue;
                     friendArr2.push([seats[0][i][j], i, j]);
                 }
-            }
             friendArr2.sort((a, b) => {
                 return a[0] - b[0];
             })
@@ -843,12 +627,11 @@ const solveReq = (seat_room, seat_num, part1, part2, num) => {
     const res = []
     
     if(part1 ^ part2){
-        for(let i = 0; i < 3; i++){
+        for(let i = 0; i < 3; i++)
             if(isRoomApply[i] && emptySeat[part1 ? 0 : 1][i] >= num) {
                 data.push(makePosition(num, part, i, Number(seat_num)));
                 flag = true;
             }
-        }
         if(flag){
             data.sort((a, b) => {
                 if(emptySeat[part1 ? 0 : 1][a.roomNum] / hopeNumber[part1 ? 0 : 1][a.roomNum] === emptySeat[part1 ? 0 : 1][b.roomNum] / hopeNumber[part1 ? 0 : 1][b.roomNum])
@@ -863,14 +646,12 @@ const solveReq = (seat_room, seat_num, part1, part2, num) => {
         let capacity = 0,
             maxCapacity = 0,
             twoCapacity = 0;
-        for(let i = 0; i < 3; i++){
+        for(let i = 0; i < 3; i++)
             if(isRoomApply[i]) {
                 capacity += emptySeat[part1 ? 0 : 1][i];
                 maxCapacity = emptySeat[part1 ? 0 : 1][i] > maxCapacity ? emptySeat[part1 ? 0 : 1][i] : maxCapacity;
                 if(emptySeat[part1 ? 0 : 1][i] === 2) twoCapacity++;
             }
-        }
-        
         if(capacity < num) solveReq(seat_room, seat_num, part1, part2, num - 1)?.forEach(prop => res.push(prop));
         else{
             if(maxCapacity === 3){
@@ -913,12 +694,11 @@ const solveReq = (seat_room, seat_num, part1, part2, num) => {
         }
     }
     else{
-        for(let i = 0; i < 3; i++){
+        for(let i = 0; i < 3; i++)
             if(isRoomApply[i] && Math.min(emptySeat[0][i], emptySeat[1][i]) >= num) {
                 data.push(makePosition(num, part, i, Number(seat_num)));
                 flag = true;
             }
-        }
         if(flag){
             data.sort((a, b) => {
                 const orderA = Math.min(emptySeat[0][a.roomNum] / hopeNumber[0][a.roomNum], emptySeat[1][a.roomNum] / hopeNumber[1][a.roomNum]),
@@ -936,16 +716,14 @@ const solveReq = (seat_room, seat_num, part1, part2, num) => {
             maxCapacity = [0, 0],
             twoCapacity = [0, 0],
             maxBoth = [999, 999, 999];
-        for(let d = 0; d < 2; d++){
-            for(let i = 0; i < 3; i++){
+        for(let d = 0; d < 2; d++)
+            for(let i = 0; i < 3; i++)
                 if(isRoomApply[i]) {
                     maxBoth[i] = Math.min(emptySeat[d][i], maxBoth[i]);
                     capacity[d] += emptySeat[d][i];
                     maxCapacity[d] = emptySeat[d][i] > maxCapacity[d] ? emptySeat[d][i] : maxCapacity[d];
                     if(emptySeat[d][i] === 2) twoCapacity[d]++;
                 }
-            }
-        }
         if(capacity[0] < num || capacity[1] < num){
             if(capacity[0] < num && capacity[1] < num) solveReq(seat_room, seat_num, part1, part2, num - 1)?.forEach(prop => res.push(prop));
             else if(capacity[0] < num){
@@ -958,9 +736,9 @@ const solveReq = (seat_room, seat_num, part1, part2, num) => {
             }
         }
         else{
-            let sumOfMaxBoth = 0;
-            let twoBoth = 0;
-            let maxOfBoth = 0;
+            let sumOfMaxBoth = 0,
+                twoBoth = 0,
+                maxOfBoth = 0;
             for(let i = 0; i < 3; i++){
                 if(isRoomApply[i]) {
                     sumOfMaxBoth += maxBoth[i];
@@ -1000,6 +778,7 @@ const Allocation = () => {
     sortedRequests.forEach((e) => {
         settingHopeNumber(e.seat_room, e.part1, e.part2, e.friends.length + 1);
     })
+    const res = [];
     sortedRequests.forEach(({apply_time, seat_room, seat_num, part1, part2, friends}, index) => {
         const data = (solveReq(seat_room, seat_num, part1, part2, friends.length + 1)),
             realNumberOfRoom = ["101", "104", "108"],
@@ -1009,8 +788,7 @@ const Allocation = () => {
             [false, false],
             [false, false],
             [false, false],
-        ];
-        const res = [],
+        ],
             findNextUser = (num, part) => {
                 for(let i = 0; i < num; i++){
                     let flag = true;
@@ -1027,66 +805,70 @@ const Allocation = () => {
                         return applySid[i];
                     }
                 }
-            }
+            };
         data.forEach(props => {
             if(props?.isDone){
                 if(props.pos[0].length === 3){
                     props.pos.sort((a, b) => {
-                        if(a[1] === b[1]) return a[2] - b[2];
-                        return a[1] - b[1];
+                        if(a[1] === b[1]) return b[2] - a[2];
+                        return b[1] - a[1];
                     })
                     while(props.pos.length){
-                        const [part, i, j] = props.pos?.pop();
+                        const [tempPart, i, j] = props.pos?.pop();
+                        let isOnly = true;
                         if(props.pos.length > 0 &&
-                            part !== props.pos[props.pos.length - 1][0] &&
+                            tempPart !== props.pos[props.pos.length - 1][0] &&
                             i === props.pos[props.pos.length - 1][1] &&
-                            j === props.pos[props.pos.length - 1][2] ){
-                            props.pos.pop();
-                            res.push({
-                                apply_id: index,
-                                building_id: "414",
-                                apply_time: apply_time,
-                                seat_room: realNumberOfRoom[props.roomNum],
-                                seat_num: backToSeatNumber(props.roomNum, i, j),
-                                part: [true, true],
-                                user_sid: findNextUser(props.num, [true, true]),
-                            })
-                        }
-                        else{
-                            res.push({
-                                apply_id: index,
-                                building_id: "414",
-                                apply_time: apply_time,
-                                seat_room: realNumberOfRoom[props.roomNum],
-                                seat_num: backToSeatNumber(props.roomNum, i, j),
-                                part: [part === 0 ? true : false, part === 1 ? true : false],
-                                user_sid: findNextUser(props.num, [part === 0 ? true : false, part === 1 ? true : false]),
-                            })
-                        }
-                    }
-                }
-                else{
-                    while(props.pos.length){
-                        const [i, j] = props.pos?.pop();
+                            j === props.pos[props.pos.length - 1][2]) {
+                                isOnly = false;
+                                props.pos.pop();
+                            }
+                        const part = isOnly ? (tempPart === 0 ? [true, false] : [false, true]) : props.part;
                         res.push({
                             apply_id: index,
                             building_id: "414",
                             apply_time: apply_time,
                             seat_room: realNumberOfRoom[props.roomNum],
                             seat_num: backToSeatNumber(props.roomNum, i, j),
-                            part: [part1, part2],
-                            user_sid: findNextUser(props.num, [part1, part2]),
-                        })
+                            part: part,
+                            user_sid: findNextUser(props.num, part),
+                        });
                     }
+                }
+                else{
+                    if(props.num === 1 && props.pos.length === 2){
+                        for(let t = 0; t < 2; t++){
+                            const [i, j] = props.pos?.pop(),
+                                part = t === 0 ? [false, true] : [true, false];
+                            res.push({
+                                apply_id: index,
+                                building_id: "414",
+                                apply_time: apply_time,
+                                seat_room: realNumberOfRoom[props.roomNum],
+                                seat_num: backToSeatNumber(props.roomNum, i, j),
+                                part: part,
+                                user_sid: findNextUser(friends.length + 1, part),
+                            });
+                        }
+                    }
+                    else
+                        while(props.pos.length){
+                            const [i, j] = props.pos?.pop();
+                            res.push({
+                                apply_id: index,
+                                building_id: "414",
+                                apply_time: apply_time,
+                                seat_room: realNumberOfRoom[props.roomNum],
+                                seat_num: backToSeatNumber(props.roomNum, i, j),
+                                part: props.part,
+                                user_sid: findNextUser(friends.length + 1, props.part),
+                            })
+                        }
                 }
             }
         })
-        
-        console.log(res);
-        console.log("====================");
-
     })
-
+    console.log(res);
 };
 
 Allocation();
