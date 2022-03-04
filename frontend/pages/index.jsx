@@ -83,7 +83,7 @@ const Index = ({ data }) => {
                 }
                 .rooms .bar{
                     width: 0;
-                    height: 400px;
+                    height: 600px;
                     border: 1px solid #eee;
                     border-width: 0 1px 0 0;
                 }

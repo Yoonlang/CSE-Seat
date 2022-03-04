@@ -108,10 +108,11 @@ const SeatingChartModal = ({ data }) => {
                 display: flex;
                 justify-content: space-between;
                 height: 100%;
+                overflow: scroll;
             }
             .rooms .bar{
                 width: 0;
-                height: 80%;
+                height: 90%;
                 border: 1px solid #eee;
                 border-width: 0 1px 0 0;
             }
