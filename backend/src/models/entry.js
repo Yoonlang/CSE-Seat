@@ -33,7 +33,18 @@ module.exports = {
         else
             return reject(new Error('database PK error'))
     }),
-
-
+    getCheckInData : async (entryDTO) => new Promise( async (resolve, reject) => {
+        let sql = "select * from entry_log where apply_id = ? and reservation_sid = ? and part = ?";
+        let set  = [
+            entryDTO.apply_id,
+            entryDTO.user_sid,
+            entryDTO.part
+        ]
+        let result = await db.query(sql,set);
+        if (!result) return reject(Error('log findOne error'));
+        else if (result.length == 1) return resolve(result[0]);
+        else if (result.length == 0) return resolve(false);
+        else return reject(new Error('database PK error'));
+    }),
 
 }

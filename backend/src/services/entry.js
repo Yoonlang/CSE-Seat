@@ -44,7 +44,7 @@ module.exports ={
                 entryDTO.apply_id = part2ApplyId;
                 await entryModel.checkIn(entryDTO);
             }
-            
+            return {inTime: entryDTO.time}
         }catch(e){
             console.log('entry error: ', e);
             return e;
@@ -56,7 +56,7 @@ module.exports ={
             initProperty(entryDTO);
             let part1ApplyId;
             let part2ApplyId;
-
+            let inTime;
             if (entryDTO.part1) {
                 entryDTO.part = 1;
                 let result = await seatModel.exist(entryDTO);
@@ -74,14 +74,17 @@ module.exports ={
                 part2ApplyId = result.apply_id;
             }
             
+            
             let nowTime = new Date(dateService.getNowTime());
-            let t = dateService.getTodayDate() + ' 18:00:00';
+            let t = new Date(dateService.getTodayDate() + ' 18:00:00');
+
             if(entryDTO.part2 && nowTime>t){
                 if(entryDTO.part1){
 
                     entryDTO.apply_id = part1ApplyId;
                     entryDTO.part = 1;
                     entryDTO.time = dateService.getTodayDate() + ' 18:00:00';
+                    inTime = await entryModel.getCheckInData(entryDTO).then((data)=>data.in_time);
                     await entryModel.checkOut(entryDTO);
                     await seatModel.deleteReservation(entryDTO);
                     if (part1ApplyId != part2ApplyId) entryDTO.apply_id = part2ApplyId;
@@ -91,15 +94,17 @@ module.exports ={
                 entryDTO.part = 2;
                 entryDTO.apply_id = part2ApplyId;
                 entryDTO.time = dateService.getNowTime();
+                if(!inTime) inTime = await entryModel.getCheckInData(entryDTO).then((data)=>data.in_time);
                 await entryModel.checkOut(entryDTO);
                 await seatModel.deleteReservation(entryDTO);
             }else{
                 entryDTO.apply_id = part1ApplyId;
                 entryDTO.part = 1;
+                inTime = await entryModel.getCheckInData(entryDTO).then((data)=>data.in_time);
                 await entryModel.checkOut(entryDTO);
                 await seatModel.deleteReservation(entryDTO);
             }
-            
+            return {inTime : inTime,outTime : entryDTO.time}
         }catch(e){
             console.log('entry error: ', e);
             return e;
