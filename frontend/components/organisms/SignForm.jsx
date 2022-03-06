@@ -7,6 +7,7 @@ import Checkbox from "../atoms/Checkbox";
 
 const SignForm = () => {
     const [isLoginForm, setIsLoginForm] = useState(true);
+    const [isFailed, setIsFailed] = useState(false);
     const [isFileUpload, setIsFileUpload] = useState(false);
     const [isSamePassword, setIsSamePassword] = useState(false);
     const fileInput = useRef();
@@ -24,22 +25,26 @@ const SignForm = () => {
     const handleSignIn = async (e) => {
         if (inputValue[0].length >= 4 && inputValue[1].length >= 4) {
             e.preventDefault();
-            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/login/process", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    sid: inputValue[0],
-                    password: inputValue[1]
+            try {
+                const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/login/process", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        sid: inputValue[0],
+                        password: inputValue[1]
+                    })
                 })
-            })
-            const data = await res.json();
-            if (data.result === false) {
-                // 로그인이 실패했다는 걸 보여줘야해.
+                const data = await res.json();
+                if (data.result === false) {
+                    setIsFailed(true);
+                }
+                setIsLogin(data.result);
+            } catch (e) {
+                console.log("error: ", e);
             }
-            setIsLogin(data.result);
         }
     }
 
@@ -57,6 +62,13 @@ const SignForm = () => {
         else setIsSamePassword(false);
 
     }, [inputValue[2], inputValue[3]])
+
+    useEffect(() => {
+        if (isFailed)
+            setTimeout(() => {
+                setIsFailed(false);
+            }, 300);
+    }, [isFailed])
 
     return (
         <>
@@ -140,12 +152,19 @@ const SignForm = () => {
                     height: 40px;
                     border:none;
                     outline:none;
+                    ${(isFailed ? `
+                    background: #da2127;
+                    transition: 0.1s;
+                    ` : `
                     background: #5C9EFF;
+                    transition: 1s;
+                    `)}
                     color: #fff;
                     font-size: 14px;
                     font-weight: 550;
                     letter-spacing: 3px;
                     margin: 10px 0;
+                    transition-property: background;
                 }
                 .changeBtn{
                     position: absolute;

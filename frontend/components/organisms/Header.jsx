@@ -20,13 +20,22 @@ const Header = () => {
     }
 
     const signOut = async () => {
-        await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/logout", {
-            method: "GET",
-            credentials: "include",
-        });
-        setIsLogin(false);
-        setIsMenuClick(false);
-        setRefreshData(!refreshData);
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/logout", {
+                method: "GET",
+                credentials: "include",
+            });
+            const data = await res.json();
+            if (data.result === false) {
+                throw ("Can't log out!");
+            }
+            setIsLogin(false);
+        } catch (e) {
+            console.log("error: ", e);
+        } finally {
+            setIsMenuClick(false);
+            setRefreshData(!refreshData);
+        }
     }
 
     const closeModal = (e) => {

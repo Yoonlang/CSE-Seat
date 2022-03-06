@@ -18,7 +18,7 @@ const Checker = () => {
             const data = await res.json();
             data.result === true ? setIsLogin(true) : setIsLogin(false);
         } catch (e) {
-            console.log("error: ", e);
+            console.log("Error: ", e);
         }
     }, [pathname]);
 
