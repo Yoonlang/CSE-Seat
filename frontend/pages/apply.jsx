@@ -392,14 +392,20 @@ const Apply = ({ data }) => {
     )
 }
 
-export async function getServerSideProps() {
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
-        method: "GET",
-    });
-    const data = await res.json();
-
+export async function getStaticProps() {
+    try {
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+            method: "GET",
+        });
+        const data = await res.json();
+        return {
+            props: { data }
+        }
+    } catch (e) {
+        console.log("error: ", e);
+    }
     return {
-        props: { data }
+        props: {}
     }
 }
 

@@ -1,9 +1,13 @@
 import { useRef, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import { indexLoadingAtom, refreshIndexAtom } from '../others/state';
 
 const seatColor = ['#ffffff', '#969696', '#0F5BCC', '#007435', '#5C9DFF', '#D60505'];
 
 const Seat = ({ length = "50px", left = 0, right = 0, dist = 0, width = 26, isColor = false, hidden = false }) => {
     const canvasRef = useRef();
+    const refreshData = useRecoilValue(refreshIndexAtom);
+    const isLoading = useRecoilValue(indexLoadingAtom);
     const leng = length.slice(0, length.match("px").index);
 
     useEffect(() => {
@@ -75,8 +79,7 @@ const Seat = ({ length = "50px", left = 0, right = 0, dist = 0, width = 26, isCo
 
         fillLeft(left);
         fillRight(right);
-
-    })
+    }, [refreshData, isLoading, left, right])
 
     return (
         <>

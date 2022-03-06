@@ -1,17 +1,17 @@
 import React, { useState, useRef, useEffect, Fragment } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import RoomSeats from '../components/molecules/RoomSeats';
 import IndexHeader from '../components/organisms/IndexHeader';
 import SeatModal from '../components/organisms/SeatModal';
 import HeadTitle from '../components/others/headTitle';
-import { refreshIndexAtom, showRoomAtom } from '../components/others/state';
+import { indexLoadingAtom, refreshIndexAtom, showRoomAtom } from '../components/others/state';
 import SquareImg from '../components/atoms/Img';
 import { StyledResDiv } from '../components/atoms/Div';
 import Refresh from '../components/atoms/Refresh';
 
 const Index = ({ data }) => {
     const [updateData, setUpdateData] = useState();
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useRecoilState(indexLoadingAtom);
     const [isNav, setIsNav] = useState(true);
     const targetRoom = useRecoilValue(showRoomAtom);
     const refreshData = useRecoilValue(refreshIndexAtom);
@@ -52,7 +52,7 @@ const Index = ({ data }) => {
                             </Fragment>
                         })
                         :
-                        updateData.data.rooms.map((prop, index) => {
+                        updateData?.data.rooms.map((prop, index) => {
                             const className = "room" + index;
                             const { num, m, seats } = prop;
                             return <Fragment key={prop + index}>
@@ -83,7 +83,7 @@ const Index = ({ data }) => {
                 }
                 .rooms .bar{
                     width: 0;
-                    height: 400px;
+                    height: 600px;
                     border: 1px solid #eee;
                     border-width: 0 1px 0 0;
                 }
@@ -153,11 +153,11 @@ const Index = ({ data }) => {
                     }
                 }
             `}</style>
-        </StyledResDiv>
+        </StyledResDiv >
     )
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
         method: "GET",
         credentials: "include",
