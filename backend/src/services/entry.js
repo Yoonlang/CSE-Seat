@@ -73,9 +73,12 @@ module.exports ={
                 throw new Error("예약자가 본인이 아닙니다");
                 part2ApplyId = result.apply_id;
             }
-
-            if(entryDTO.part2){
+            
+            let nowTime = new Date(dateService.getNowTime());
+            let t = dateService.getTodayDate() + ' 18:00:00';
+            if(entryDTO.part2 && nowTime>t){
                 if(entryDTO.part1){
+
                     entryDTO.apply_id = part1ApplyId;
                     entryDTO.part = 1;
                     entryDTO.time = dateService.getTodayDate() + ' 18:00:00';
