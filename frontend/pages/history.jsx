@@ -1,7 +1,6 @@
 import { BorderDiv, PageDiv } from "../components/atoms/Div";
 import HeadTitle from "../components/others/headTitle"
 import styled from "styled-components";
-import { useEffect } from "react";
 import SeatHistory from "../components/organisms/SeatHistory";
 
 const HistoryDiv = styled(BorderDiv)`
@@ -9,14 +8,6 @@ const HistoryDiv = styled(BorderDiv)`
 `;
 
 const History = () => {
-
-    useEffect(() => {
-        // fetch user data
-        // user data를 atom으로 받아오는게 더 낫지 않을까?
-        // History에 넣어두면 메인페이지에서 입/퇴실 누를 때 곤란할거같은데
-        // 지금은 UI 설계만 하고 나중에 테스트 해보자.
-    }, [])
-
     return (
         <PageDiv dis="flex" ali="center" dir="column">
             <HeadTitle title="history" />
