@@ -35,6 +35,19 @@ module.exports = {
         else if (result.length == 0) return resolve(false);
         else return reject(new Error('database PK error'));
     }),
+    existInDate : async (seatDTO) => new Promise( async (resolve, reject) => {
+        let sql = "select * from reservation Where user_sid = ? and date = ?";
+        let set  = [
+            seatDTO.user_sid,
+            seatDTO.date,
+        ]
+        let result = await db.query(sql,set);
+        if (!result) return reject(Error('reservation error'));
+        else if (result.length == 1 || result.length == 2) return resolve(result[0]);
+        else if (result.length == 0) return resolve(false);
+        else return reject(new Error('database PK error'));
+    }),
+    
     apply : async (seatDTO) => new Promise( async (resolve, reject) => {
         let sql = "INSERT INTO reservation_apply SET ?"
         set = {
