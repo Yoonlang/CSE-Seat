@@ -7,8 +7,8 @@ const SeatModal = () => {
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     const [modalState, setModalState] = useRecoilState(seatModalAtom);
     const { isModalOpen, seatInfo: { one, two, roomNumber, isToday, seatNumber } } = modalState
-    const [oneColor, setOneColor] = useState('');
-    const [twoColor, setTwoColor] = useState('');
+    const [oneColor, setOneColor] = useState('#ffffff');
+    const [twoColor, setTwoColor] = useState('#ffffff');
     const [isMySeat, setIsMySeat] = useState([false, false]);
     const [isReadyToRequest, setIsReadyToRequest] = useState([false, false]);
     const modalOutside = useRef();

@@ -7,6 +7,7 @@ const Seat = ({ length = "50px", left = 0, right = 0, dist = 0, width = 26, isCo
     const leng = length.slice(0, length.match("px").index);
 
     useEffect(() => {
+        console.log("seat");
         if (!isColor) {
             left = seatColor[left];
             right = seatColor[right];
@@ -76,7 +77,7 @@ const Seat = ({ length = "50px", left = 0, right = 0, dist = 0, width = 26, isCo
         fillLeft(left);
         fillRight(right);
 
-    })
+    }, [])
 
     return (
         <>
