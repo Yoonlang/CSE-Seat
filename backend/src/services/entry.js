@@ -64,6 +64,10 @@ module.exports ={
                 if (result.user_sid != entryDTO.user_sid)
                 throw new Error("예약자가 본인이 아닙니다");
                 part1ApplyId = result.apply_id;
+                entryDTO.apply_id = result.apply_id;
+                if (!(await entryModel.getCheckInData(entryDTO))){
+                    throw new Error("아직 체크인하지 않았습니다.");
+                } 
             }
             if (entryDTO.part2) {
                 entryDTO.part = 2;
@@ -72,6 +76,11 @@ module.exports ={
                 if (result.user_sid != entryDTO.user_sid)
                 throw new Error("예약자가 본인이 아닙니다");
                 part2ApplyId = result.apply_id;
+                entryDTO.apply_id = result.apply_id;
+                if(!entryDTO.part1)//part1이 off인상황에만 체크인 확인
+                    if (!(await entryModel.getCheckInData(entryDTO))){
+                        throw new Error("아직 체크인하지 않았습니다.");
+                    } 
             }
             
             
