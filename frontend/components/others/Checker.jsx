@@ -10,12 +10,16 @@ const Checker = () => {
     const [isLogin, setIsLogin] = useRecoilState(loginAtom);
 
     useEffect(async () => {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `/user/login/check`, {
-            method: "GET",
-            credentials: "include",
-        })
-        const data = await res.json();
-        data.result === true ? setIsLogin(true) : setIsLogin(false);
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `/user/login/check`, {
+                method: "GET",
+                credentials: "include",
+            })
+            const data = await res.json();
+            data.result === true ? setIsLogin(true) : setIsLogin(false);
+        } catch (e) {
+            console.log("error: ", e);
+        }
     }, [pathname]);
 
     useEffect(() => {

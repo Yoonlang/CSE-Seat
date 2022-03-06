@@ -393,13 +393,19 @@ const Apply = ({ data }) => {
 }
 
 export async function getStaticProps() {
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
-        method: "GET",
-    });
-    const data = await res.json();
-
+    try {
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+            method: "GET",
+        });
+        const data = await res.json();
+        return {
+            props: { data }
+        }
+    } catch (e) {
+        console.log("error: ", e);
+    }
     return {
-        props: { data }
+        props: {}
     }
 }
 

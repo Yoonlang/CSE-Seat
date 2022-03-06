@@ -266,7 +266,6 @@ const SeatModal = () => {
                 width: 160px;
                 height: 40px;
                 font-size: 18px;
-                
             }
             .time > div > div > span{
                 margin-left: 5px;

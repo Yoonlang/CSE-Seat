@@ -34,7 +34,7 @@ const SeatingChartModal = ({ data }) => {
 
                     <div className="rooms">
                         {
-                            data.data.rooms.map((prop, index) => {
+                            data?.data.rooms.map((prop, index) => {
                                 const className = "room" + index;
                                 const { num, m, seats } = prop;
                                 return <Fragment key={prop + index}>
