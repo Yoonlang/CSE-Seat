@@ -40,17 +40,19 @@ module.exports = {
       }
 
       initProperty(seatDTO);
-      var result = await seatModel.existInDate(seatDTO);
-      if (result) throw Error("이미 예약하셨습니다.");
-
+    
       if (seatDTO.part1) {
         seatDTO.part = 1;
-        let result = await seatModel.exist(seatDTO);
+        let result = await seatModel.existInDate(seatDTO);
+        if (result) throw Error("이미 예약하셨습니다.");
+        result = await seatModel.exist(seatDTO);
         if (result) throw Error("이미 예약된 좌석입니다.");
       }
       if (seatDTO.part2) {
         seatDTO.part = 2;
-        let result = await seatModel.exist(seatDTO);
+        let result = await seatModel.existInDate(seatDTO);
+        if (result) throw Error("이미 예약하셨습니다.");
+        result = await seatModel.exist(seatDTO);
         if (result) throw Error("이미 예약된 좌석입니다.");
       }
 

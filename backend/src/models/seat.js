@@ -36,10 +36,11 @@ module.exports = {
         else return reject(new Error('database PK error'));
     }),
     existInDate : async (seatDTO) => new Promise( async (resolve, reject) => {
-        let sql = "select * from reservation Where user_sid = ? and date = ?";
+        let sql = "select * from reservation Where user_sid = ? and date = ? and part = ?";
         let set  = [
             seatDTO.user_sid,
             seatDTO.date,
+            seatDTO.part
         ]
         let result = await db.query(sql,set);
         if (!result) return reject(Error('reservation error'));
