@@ -127,30 +127,22 @@ const SeatModal = () => {
 
     const test = async (isCheckIn) => {
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
-        try {
-            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    building_id: "414",
-                    seat_room: roomNumber.toString(),
-                    seat_num: seatNumber.toString(),
-                    isToday: isToday,
-                    part: isMySeat,
-                })
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                building_id: "414",
+                seat_room: roomNumber.toString(),
+                seat_num: seatNumber.toString(),
+                part1: isMySeat[0],
+                part2: isMySeat[1],
             })
-            const data = await res.json();
-            console.log(data);
-        }
-        catch (excep) {
-
-        }
-        finally {
-
-        }
+        })
+        const data = await res.json();
+        console.log(data);
     }
 
     useEffect(() => {
