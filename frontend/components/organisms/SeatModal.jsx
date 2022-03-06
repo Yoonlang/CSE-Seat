@@ -125,6 +125,26 @@ const SeatModal = () => {
         if (isReadyToRequest[0] | isReadyToRequest[1]) submitReq();
     }
 
+    const test = async (isCheckIn) => {
+        const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                building_id: "414",
+                seat_room: roomNumber.toString(),
+                seat_num: seatNumber.toString(),
+                part1: isMySeat[0],
+                part2: isMySeat[1],
+            })
+        })
+        const data = await res.json();
+        console.log(data);
+    }
+
     useEffect(() => {
         modalOutside.current.style.display = isModalOpen ? "flex" : "none";
         setOneColor(seatColor[one]);
@@ -166,10 +186,10 @@ const SeatModal = () => {
                         <>
                             <div className="check">
                                 <div>
-                                    <button>입실</button><span>22.01.19<span className="space" />06 : 24</span>
+                                    <button onClick={() => test(true)}>입실</button><span>22.01.19<span className="space" />06 : 24</span>
                                 </div>
                                 <div>
-                                    <button>퇴실</button><span>22.01.19<span className="space" />06 : 24</span>
+                                    <button onClick={() => test(false)}>퇴실</button><span>22.01.19<span className="space" />06 : 24</span>
                                 </div>
                             </div>
                             <button className="submit" onClick={clickBtn}>자리 수정</button>

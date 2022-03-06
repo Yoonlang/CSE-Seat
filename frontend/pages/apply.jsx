@@ -392,7 +392,7 @@ const Apply = ({ data }) => {
     )
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
     const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
         method: "GET",
     });

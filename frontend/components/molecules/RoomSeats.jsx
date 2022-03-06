@@ -82,7 +82,6 @@ const RoomSeats = ({ roomNumber = 0, length = "50px", basic = false, m, seats })
                     margin-bottom: 40px;
                     width: 100%;
                     max-width: 400px;
-                    overflow: hidden;
                 }
                 .seatTitle{
                     width: 100%;
