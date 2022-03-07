@@ -12,7 +12,7 @@ const SignForm = () => {
     const [isSamePassword, setIsSamePassword] = useState(false);
     const fileInput = useRef();
     const inputValue = useRecoilValue(inputValueAtom);
-    const setIsLogin = useSetRecoilState(loginAtom);
+    const setLoginData = useSetRecoilState(loginAtom);
 
     const changeFormState = () => {
         setIsLoginForm(!isLoginForm);
@@ -40,8 +40,12 @@ const SignForm = () => {
                 const data = await res.json();
                 if (data.result === false) {
                     setIsFailed(true);
+                    throw ("Can't login");
                 }
-                setIsLogin(data.result);
+                setLoginData({
+                    isLogin: true,
+                    sid: undefined,
+                });
             } catch (e) {
                 console.log("error: ", e);
             }
@@ -94,11 +98,10 @@ const SignForm = () => {
                         <input type="file" id="inputFile"
                             accept="image/*"
                             ref={fileInput}
-                            onChange={
-                                () => {
-                                    setIsFileUpload(true);
-                                }
-                            } required />
+                            onChange={() => {
+                                setIsFileUpload(true);
+                            }}
+                            required />
                         <SignInput src="/images/lock.png"
                             type="password"
                             placeholder="비밀번호" num={2} />

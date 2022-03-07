@@ -15,7 +15,7 @@ const SeatHistory = ({ date, part, seatNum, seatRoom, detail, isCancel }) => {
                 {
                     part[0] ?
                         <div>
-                            <span>1부 : 101호 47번 좌석</span>
+                            <span>1부 : {seatRoom}호 {seatNum}번 좌석</span>
                             <button>입실</button>
                             <button>퇴실</button>
                         </div> : ``
@@ -23,7 +23,7 @@ const SeatHistory = ({ date, part, seatNum, seatRoom, detail, isCancel }) => {
                 {
                     part[1] ?
                         <div>
-                            <span>2부 : 101호 47번 좌석</span>
+                            <span>2부 : {seatRoom}호 {seatNum}번 좌석</span>
                             <button>입실</button>
                             <button>퇴실</button>
                         </div> : ``
@@ -68,6 +68,9 @@ const SeatHistory = ({ date, part, seatNum, seatRoom, detail, isCancel }) => {
                 align-items: center;
                 gap: 5px;
             }
+            .history > div > span{
+                width: 160px;
+            }
             .history > div > button{
                 width: 50px;
                 height: 25px;
@@ -98,9 +101,6 @@ const SeatHistory = ({ date, part, seatNum, seatRoom, detail, isCancel }) => {
                 .history > button{
                     width: 80px;
                     font-size: 12px;
-                }
-                .history > div > span{
-                    margin-right: 5px;
                 }
             }
         `}</style>

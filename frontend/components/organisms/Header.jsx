@@ -10,7 +10,8 @@ import { useRouter } from "next/router";
 const Header = () => {
     const router = useRouter();
     const [isMenuClick, setIsMenuClick] = useState(false);
-    const [isLogin, setIsLogin] = useRecoilState(loginAtom);
+    const [loginData, setLoginData] = useRecoilState(loginAtom);
+    const { isLogin, sid } = loginData;
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     const modalOutside = useRef();
 
@@ -29,7 +30,10 @@ const Header = () => {
             if (data.result === false) {
                 throw ("Can't log out!");
             }
-            setIsLogin(false);
+            setLoginData({
+                isLogin: false,
+                sid: undefined,
+            });
         } catch (e) {
             console.log("error: ", e);
         } finally {
@@ -56,7 +60,7 @@ const Header = () => {
                 {
                     isLogin ?
                         <div className="loginInfoA" onClick={clickMenu}>
-                            <Div width="60px">홍길동</Div>
+                            <Div width="60px">{sid}</Div>
                         </div>
                         :
                         <div className="loginInfoA">
@@ -68,7 +72,7 @@ const Header = () => {
                 {
                     isLogin ?
                         <div className="loginInfoB" onClick={clickMenu}>
-                            <Div width="60px">홍길동</Div>
+                            <Div width="60px">{sid}</Div>
                         </div>
                         :
                         <div className="loginInfoB">
