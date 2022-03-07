@@ -10,7 +10,8 @@ import { useRouter } from "next/router";
 const Header = () => {
     const router = useRouter();
     const [isMenuClick, setIsMenuClick] = useState(false);
-    const [isLogin, setIsLogin] = useRecoilState(loginAtom);
+    const [loginData, setLoginData] = useRecoilState(loginAtom);
+    const { isLogin, sid } = loginData;
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     const modalOutside = useRef();
 
@@ -20,13 +21,25 @@ const Header = () => {
     }
 
     const signOut = async () => {
-        await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/logout", {
-            method: "GET",
-            credentials: "include",
-        });
-        setIsLogin(false);
-        setIsMenuClick(false);
-        setRefreshData(!refreshData);
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/logout", {
+                method: "GET",
+                credentials: "include",
+            });
+            const data = await res.json();
+            if (data.result === false) {
+                throw ("Can't log out!");
+            }
+            setLoginData({
+                isLogin: false,
+                sid: undefined,
+            });
+        } catch (e) {
+            console.log("error: ", e);
+        } finally {
+            setIsMenuClick(false);
+            setRefreshData(!refreshData);
+        }
     }
 
     const closeModal = (e) => {
@@ -47,7 +60,7 @@ const Header = () => {
                 {
                     isLogin ?
                         <div className="loginInfoA" onClick={clickMenu}>
-                            <Div width="60px">홍길동</Div>
+                            <Div width="60px">{sid}</Div>
                         </div>
                         :
                         <div className="loginInfoA">
@@ -59,7 +72,7 @@ const Header = () => {
                 {
                     isLogin ?
                         <div className="loginInfoB" onClick={clickMenu}>
-                            <Div width="60px">홍길동</Div>
+                            <Div width="60px">{sid}</Div>
                         </div>
                         :
                         <div className="loginInfoB">

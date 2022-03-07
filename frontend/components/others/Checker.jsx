@@ -7,7 +7,8 @@ const Checker = () => {
     const router = useRouter();
     const { pathname } = router;
     const [isFetching, setIsFetching] = useState(true);
-    const [isLogin, setIsLogin] = useRecoilState(loginAtom);
+    const [loginData, setLoginData] = useRecoilState(loginAtom);
+    const { isLogin } = loginData;
 
     useEffect(async () => {
         try {
@@ -16,9 +17,15 @@ const Checker = () => {
                 credentials: "include",
             })
             const data = await res.json();
-            data.result === true ? setIsLogin(true) : setIsLogin(false);
+            data.result === true ? setLoginData({
+                isLogin: true,
+                sid: data.sid,
+            }) : setLoginData({
+                isLogin: false,
+                sid: undefined,
+            });
         } catch (e) {
-            console.log("error: ", e);
+            console.log("Error: ", e);
         }
     }, [pathname]);
 

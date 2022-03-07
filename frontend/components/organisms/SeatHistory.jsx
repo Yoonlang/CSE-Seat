@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DetailHistory from "../molecules/DetailHistory";
 
-const SeatHistory = () => {
+const SeatHistory = ({ date, part, seatNum, seatRoom, detail, isCancel }) => {
     const [isOpenModal, setIsOpenModal] = useState(false);
 
     const handleModal = () => {
@@ -11,20 +11,29 @@ const SeatHistory = () => {
     return (
         <>
             <div className="history">
-                <span>22년 1월 19일</span>
-                <div>
-                    <span>1부 : 101호 47번 좌석</span>
-                    <button>입실</button>
-                    <button>퇴실</button>
-                </div>
-                <div>
-                    <span>2부 : 101호 47번 좌석</span>
-                    <button>입실</button>
-                    <button>퇴실</button>
-                </div>
+                <span>{date}</span>
+                {
+                    part[0] ?
+                        <div>
+                            <span>1부 : {seatRoom}호 {seatNum}번 좌석</span>
+                            <button>입실</button>
+                            <button>퇴실</button>
+                        </div> : ``
+                }
+                {
+                    part[1] ?
+                        <div>
+                            <span>2부 : {seatRoom}호 {seatNum}번 좌석</span>
+                            <button>입실</button>
+                            <button>퇴실</button>
+                        </div> : ``
+                }
                 <button onClick={handleModal}>자세히 보기</button>
             </div>
-            <DetailHistory isOpenModal={isOpenModal} />
+            <DetailHistory
+                isOpenModal={isOpenModal}
+                detail={detail}
+            />
             <style jsx>{`
             .history{
                 display: grid;
@@ -37,6 +46,9 @@ const SeatHistory = () => {
                 box-shadow: 0 -1px #ddd;
                 white-space: nowrap;
                 font-size: 16px;
+                ${isCancel ? `
+                    background: #eee;
+                ` : ``}
             }
             .history > span{
                 align-self: start;
@@ -55,6 +67,9 @@ const SeatHistory = () => {
                 display: flex;
                 align-items: center;
                 gap: 5px;
+            }
+            .history > div > span{
+                width: 160px;
             }
             .history > div > button{
                 width: 50px;
@@ -86,9 +101,6 @@ const SeatHistory = () => {
                 .history > button{
                     width: 80px;
                     font-size: 12px;
-                }
-                .history > div > span{
-                    margin-right: 5px;
                 }
             }
         `}</style>

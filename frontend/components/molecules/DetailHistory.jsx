@@ -1,12 +1,13 @@
 
-const DetailHistory = ({ isOpenModal = false }) => {
-
+const DetailHistory = ({ isOpenModal = false, detail: { applyTime, isCancel } }) => {
+    const splitApplyTime = applyTime.split(/:|-| |\n/);
+    const handledApplyTime = `${splitApplyTime[0]}년 ${splitApplyTime[1][0] === '0' ? splitApplyTime[1][1] : splitApplyTime[1]}월 ${splitApplyTime[2][0] === '0' ? splitApplyTime[2][1] : splitApplyTime[2]}일 ${splitApplyTime[3][0] === '0' ? splitApplyTime[3][1] : splitApplyTime[3]}시 ${splitApplyTime[4][0] === '0' ? splitApplyTime[4][1] : splitApplyTime[4]}분`;
     return (
         <>
             <div className="detail">
                 <div>
-                    신청 날짜 및 시간 : 22.01.19   18:02<br />
-                    취소 날짜 및 시간 : (취소 했을 때만)<br /><br />
+                    신청 날짜 및 시간 : {handledApplyTime} <br />
+                    {isCancel ? <>취소된 신청입니다. < br /></> : ``}<br />
                     1부 입실 :   22.01.19   10:02<br />
                     1부 퇴실 :   22.01.19   18:00<br />
                     2부 입실 :   22.01.19   18:00<br />
@@ -32,6 +33,7 @@ const DetailHistory = ({ isOpenModal = false }) => {
             flex-wrap: wrap;
             border-width: 0 0 1px 0;
             box-shadow: 0 -1px #ddd;
+            ${isCancel ? `background: #eee;` : ``}
         }
         .detail > div{
             display: flex;
