@@ -7,6 +7,13 @@ router.get('/',async (req, res, next) => {
     res.status(200).json({result : true , data : 'hello'});
 });
 
+router.post('/application',isLoggedIn,async (req, res, next) => {
+    let seatDTO = req.body;
+    seatDTO.user_sid = req.user;
+    let result = await seatService.apply(seatDTO); // 수정 필요
+    if(result instanceof Error) return next(result);
+    res.status(200).json({result: true});
+});
 router.post('/reservation',isLoggedIn,async (req, res, next) => {
     let seatDTO = req.body;
     seatDTO.user_sid = req.user;
