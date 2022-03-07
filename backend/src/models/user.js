@@ -7,7 +7,7 @@ module.exports = {
         if (result.length > 0)
             return resolve(result[0]);
         else if(result.length == 0)
-            return resolve(null);
+            return resolve(false);
         return reject(new Error('database error.'));
     }),
     insert : async(userDTO) => {

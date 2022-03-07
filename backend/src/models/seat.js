@@ -69,7 +69,7 @@ module.exports = {
             sql = "INSERT INTO want_rooms SET ?";
             set = {
                 apply_id : insertId,
-                want_seat_room : seatDTO.seat_room[i],
+                seat_room : seatDTO.seat_room[i],
             }
             result = await db.query(sql,set);
             if (!result || result.affectedRows == 0)

@@ -2,11 +2,10 @@ const seatModel = require("$/models/seat");
 const logModel = require("$/models/log");
 const dateService = require("../services/date");
 const entryModel = require("../models/entry");
+const userModel = require("../models/user")
 
 const initProperty = (seatDTO) => {
-  seatDTO.building_id *= 1;
-  seatDTO.seat_room = seatDTO.seat_room[0] * 1; // 임시
-  seatDTO.seat_num *= 1;
+  seatDTO.seat_room = seatDTO.seat_room[0]; // 임시
   seatDTO.date = seatDTO.isToday
     ? dateService.getTodayDate()
     : dateService.getTomorrowDate();
@@ -19,7 +18,39 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
+const checkRightSeat = (rooms, seat)=>{
+
+  for (const i in rooms){
+    if (rooms[i] === "101"){
+      if (2<= seat*1 && seat*1 <= 15) return true;
+    }
+    else if(rooms[i] === "104"){
+      if (16<= seat*1 && seat*1 <= 47) return true;
+    }
+    else if(rooms[i] === "108"){
+      if (48<= seat*1 && seat*1 <= 71) return true;
+    }
+  }  
+  return false;
+}
 module.exports = {
+  apply: async (seatDTO) => {
+    try{
+      if (checkRightSeat(seatDTO.seat_room, seatDTO.seat_num) == false)
+        throw new Error('잘못된 좌석번호입니다.');
+      for (const i in seatDTO.friends){
+        if (!await userModel.findById(seatDTO.friends[i]))
+        throw new Error('친구의 학번이 잘못 입력되었거나 유저목록에 존재하지 않습니다.')
+      }
+      seatDTO.date = dateService.getTomorrowDate();
+      seatDTO.apply_time = dateService.getNowTime();
+      let insertId = await seatModel.apply(seatDTO);
+      return true;
+    }catch(e){
+      console.log(e);
+      return e;
+    }
+  },
   reserve: async (seatDTO) => {
     //실시간 방식
     try {
