@@ -63,7 +63,7 @@ module.exports = {
         }
         let result = await db.query(sql,set);
         if (!result || result.affectedRows == 0)
-            return reject(new Error('database Pk error'));
+            return reject(new Error('reservation application Pk error'));
         let insertId = result.insertId;
         for (const i in seatDTO.seat_room){
             sql = "INSERT INTO want_rooms SET ?";
@@ -73,7 +73,17 @@ module.exports = {
             }
             result = await db.query(sql,set);
             if (!result || result.affectedRows == 0)
-                return reject(new Error('database Pk error'));
+                return reject(new Error('want_rooms Pk error'));
+        }
+        for (const i in seatDTO.friends){
+            sql = "INSERT INTO friend_request SET ?";
+            set = {
+                apply_id : insertId,
+                friend_sid : seatDTO.friends[i],
+            }
+            result = await db.query(sql,set);
+            if (!result || result.affectedRows == 0)
+                return reject(new Error('friend request Pk error'));
         }
         return resolve(result.insertId);
     }),
