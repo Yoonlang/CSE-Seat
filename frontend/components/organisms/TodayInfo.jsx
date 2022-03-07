@@ -4,17 +4,19 @@ import { MyLink } from "../atoms/Div";
 
 const TodayInfo = () => {
     const [isSelectCancel, setIsSelectCancel] = useState(false);
-    const [checkboxState, setCheckboxState] = useState([0, 0, 0, 2]);
+    const [checkboxState, setCheckboxState] = useState([0, 0, 0, 0]);
 
     const handleCancel = () => {
-        // 자리 취소 누르고 아무것도 행동 안하거나 이상 없으면 그냥 boolean만 바꿔줘
         if (isSelectCancel) {
-            alert("신청");
+            if (checkboxState.some((prop) => {
+                return prop === 1;
+            })) {
+                alert("신청");
+                setCheckboxState([0, 0, 0, 0]);
+            }
             setIsSelectCancel(false);
         }
-        else {
-            setIsSelectCancel(true);
-        }
+        else setIsSelectCancel(true);
     }
 
     const clickCheckbox = (index) => {
