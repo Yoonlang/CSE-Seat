@@ -4,12 +4,6 @@ const dateService = require("../services/date");
 const entryModel = require("../models/entry");
 
 const initProperty = (seatDTO) => {
-  if (seatDTO.isToday == "true") seatDTO.isToday = true;
-  if (seatDTO.isToday == "false") seatDTO.isToday = false;
-  if (seatDTO.part1 == "true") seatDTO.part1 = true;
-  if (seatDTO.part1 == "false") seatDTO.part1 = false;
-  if (seatDTO.part2 == "true") seatDTO.part2 = true;
-  if (seatDTO.part2 == "false") seatDTO.part2 = false;
   seatDTO.building_id *= 1;
   seatDTO.seat_room = seatDTO.seat_room[0] * 1; // 임시
   seatDTO.seat_num *= 1;
