@@ -2,12 +2,27 @@ import { BorderDiv, PageDiv } from "../components/atoms/Div";
 import HeadTitle from "../components/others/headTitle"
 import styled from "styled-components";
 import SeatHistory from "../components/organisms/SeatHistory";
+import { useEffect } from "react";
 
 const HistoryDiv = styled(BorderDiv)`
     max-width: 723px;
 `;
 
 const History = () => {
+
+    useEffect(async () => {
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/history", {
+                method: "GET",
+                credentials: "include",
+            });
+            const data = await res.json();
+            console.log(data);
+        } catch (e) {
+            console.log("Error: ", e);
+        }
+    }, []);
+
     return (
         <PageDiv dis="flex" ali="center" dir="column">
             <HeadTitle title="history" />

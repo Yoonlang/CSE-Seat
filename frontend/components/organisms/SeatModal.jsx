@@ -121,14 +121,14 @@ const SeatModal = () => {
             else if (isMySeat[0] | isMySeat[1]) {
                 if (isMySeat[0]) {
                     await fetchingCancel(true, false, false);
-                    fetchingReservation(false, true);
+                    await fetchingReservation(false, true);
                 }
                 else {
                     await fetchingCancel(false, true, false);
-                    fetchingReservation(true, false);
+                    await fetchingReservation(true, false);
                 }
             }
-            else fetchingReservation();
+            else await fetchingReservation();
         }
     }
 
