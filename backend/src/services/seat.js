@@ -1,6 +1,7 @@
 const seatModel = require("$/models/seat");
 const logModel = require("$/models/log");
 const dateService = require("../services/date");
+const entryModel = require("../models/entry");
 
 const initProperty = (seatDTO) => {
   if (seatDTO.isToday == "true") seatDTO.isToday = true;
@@ -104,10 +105,14 @@ module.exports = {
       }
       if (seatDTO.part1) {
         seatDTO.part = 1;
+        seatDTO.apply_id = part1ApplyId;
+        if (await entryModel.getCheckInData(seatDTO)) throw new Error('이미 입실하셔서 취소가 불가능합니다.');
         await seatModel.deleteReservation(seatDTO);
       }
       if (seatDTO.part2) {
         seatDTO.part = 2;
+        seatDTO.apply_id = part1ApplyId;
+        if (await entryModel.getCheckInData(seatDTO)) throw new Error('이미 입실하셔서 취소가 불가능합니다.');
         await seatModel.deleteReservation(seatDTO);
       }
       if(seatDTO.part1 && seatDTO.part2){
