@@ -2,13 +2,15 @@ import { BorderDiv, PageDiv } from "../components/atoms/Div";
 import HeadTitle from "../components/others/headTitle"
 import styled from "styled-components";
 import SeatHistory from "../components/organisms/SeatHistory";
-import { useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 const HistoryDiv = styled(BorderDiv)`
     max-width: 723px;
 `;
 
 const History = () => {
+    const [data, setData] = useState();
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(async () => {
         try {
@@ -17,7 +19,12 @@ const History = () => {
                 credentials: "include",
             });
             const data = await res.json();
-            console.log(data);
+            if (data.result === true) {
+                setData(data);
+                setIsLoading(false);
+            }
+            else
+                throw ("Can't load history");
         } catch (e) {
             console.log("Error: ", e);
         }
@@ -29,9 +36,26 @@ const History = () => {
             <HistoryDiv>
                 <div className="title">입퇴실 / 신청 기록 열람</div>
                 <div className="seatHistorys">
-                    <SeatHistory />
-                    <SeatHistory />
-                    <SeatHistory />
+                    {
+                        isLoading ?
+                            `` :
+                            data?.data.map((prop, index) => {
+                                console.log(prop);
+                                const { date, part1, part2, seat_num, seat_room, apply_time: applyTime, cancel_marker: isCancel } = prop;
+                                const splitDate = date.split('-');
+                                const handledDate = `${splitDate[0]}년 ${splitDate[1][0] === '0' ? splitDate[1][1] : splitDate[1]}월 ${splitDate[2][0] === '0' ? splitDate[2][1] : splitDate[2]}일`
+                                return <Fragment key={prop, index}>
+                                    <SeatHistory
+                                        date={handledDate}
+                                        part={[part1, part2]}
+                                        seatNum={seat_num}
+                                        seatRoom={seat_room}
+                                        detail={{ applyTime, isCancel }}
+                                        isCancel={isCancel}
+                                    />
+                                </Fragment>
+                            })
+                    }
                 </div>
             </HistoryDiv>
             <style jsx>{`
