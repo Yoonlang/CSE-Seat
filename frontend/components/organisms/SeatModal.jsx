@@ -1,9 +1,11 @@
+import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { Seat, seatColor } from "../atoms/Seat";
-import { refreshIndexAtom, seatModalAtom } from "../others/state";
+import { loginAtom, refreshIndexAtom, seatModalAtom } from "../others/state";
 
 const SeatModal = () => {
+    const loginData = useRecoilValue(loginAtom);
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     const [modalState, setModalState] = useRecoilState(seatModalAtom);
     const { isModalOpen, seatInfo: { one, two, roomNumber, isToday, seatNumber } } = modalState
@@ -13,6 +15,7 @@ const SeatModal = () => {
     const [isReadyToRequest, setIsReadyToRequest] = useState([false, false]);
     const modalOutside = useRef();
     const cancelBtn = useRef();
+    const router = useRouter();
 
     const changeColor = (color) => {
         if (color === seatColor[0]) return seatColor[4];
@@ -52,52 +55,65 @@ const SeatModal = () => {
     };
 
     const fetchingCancel = async (one = isReadyToRequest[0], two = isReadyToRequest[1], isFinish = true) => {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation-cancel", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                building_id: "414",
-                seat_room: roomNumber.toString(),
-                seat_num: seatNumber.toString(),
-                isToday: isToday,
-                part1: one,
-                part2: two,
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation-cancel", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    building_id: "414",
+                    seat_room: roomNumber.toString(),
+                    seat_num: seatNumber.toString(),
+                    isToday: isToday,
+                    part1: one,
+                    part2: two,
+                })
             })
-        })
-        const data = await res.json();
-        if ((data.result === true) & isFinish) {
+            const data = await res.json();
+            if ((data.result === true) & isFinish)
+                closeModal();
+            else if (data.result === false)
+                throw ("Can't cancel!");
+        } catch (e) {
+            console.log("Error: ", e);
+        } finally {
             setRefreshData(!refreshData);
-            closeModal();
         }
     }
 
     const fetchingReservation = async (one = isReadyToRequest[0], two = isReadyToRequest[1]) => {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                building_id: "414",
-                seat_room: [roomNumber.toString()],
-                seat_num: seatNumber.toString(),
-                isToday: isToday,
-                part1: one,
-                part2: two,
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    building_id: "414",
+                    seat_room: [roomNumber.toString()],
+                    seat_num: seatNumber.toString(),
+                    isToday: isToday,
+                    part1: one,
+                    part2: two,
+                })
             })
-        })
-        const data = await res.json();
-        if (data.result === true) {
+            const data = await res.json();
+            if (data.result === true)
+                closeModal();
+            else
+                throw ("Can't reserve");
+        } catch (e) {
+            console.log("Error: ", e);
+        } finally {
             setRefreshData(!refreshData);
-            closeModal();
         }
     }
 
     const submitReq = async () => {
+        if (loginData.isLogin === false) router.push('/sign')
         if (isReadyToRequest[0] ^ isReadyToRequest[1]) {
             if (isReadyToRequest[0] & isMySeat[0]) fetchingCancel();
             else if (isReadyToRequest[0]) fetchingReservation();
@@ -109,14 +125,14 @@ const SeatModal = () => {
             else if (isMySeat[0] | isMySeat[1]) {
                 if (isMySeat[0]) {
                     await fetchingCancel(true, false, false);
-                    fetchingReservation(false, true);
+                    await fetchingReservation(false, true);
                 }
                 else {
                     await fetchingCancel(false, true, false);
-                    fetchingReservation(true, false);
+                    await fetchingReservation(true, false);
                 }
             }
-            else fetchingReservation();
+            else await fetchingReservation();
         }
     }
 
@@ -127,22 +143,31 @@ const SeatModal = () => {
 
     const test = async (isCheckIn) => {
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                building_id: "414",
-                seat_room: roomNumber.toString(),
-                seat_num: seatNumber.toString(),
-                part1: isMySeat[0],
-                part2: isMySeat[1],
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    building_id: "414",
+                    seat_room: roomNumber.toString(),
+                    seat_num: seatNumber.toString(),
+                    part1: isMySeat[0],
+                    part2: isMySeat[1],
+                })
             })
-        })
-        const data = await res.json();
-        console.log(data);
+            const data = await res.json();
+            if (data.result === false)
+                throw ("Can't check");
+            if (!isCheckIn) {
+                setRefreshData(!refreshData);
+                closeModal();
+            }
+        } catch (e) {
+            console.log("Error: ", e);
+        }
     }
 
     useEffect(() => {

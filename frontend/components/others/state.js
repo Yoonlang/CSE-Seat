@@ -2,8 +2,11 @@ import { atom } from 'recoil';
 
 const loginAtom = atom({
     key : 'login',
-    default: undefined
-});
+    default: {
+        isLogin: false,
+        sid: undefined,
+    }
+})
 
 const indexLoadingAtom = atom({
     key: 'indexLoading',

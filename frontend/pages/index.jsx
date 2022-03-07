@@ -22,12 +22,16 @@ const Index = ({ data }) => {
     }
 
     useEffect(async () => {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
-            method: "GET",
-            credentials: "include",
-        })
-        const fetchingData = await res.json();
-        setUpdateData(fetchingData);
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+                method: "GET",
+                credentials: "include",
+            })
+            const fetchingData = await res.json();
+            setUpdateData(fetchingData);
+        } catch (e) {
+            console.log("error: ", e);
+        }
     }, [refreshData]);
 
     useEffect(() => {
@@ -41,7 +45,7 @@ const Index = ({ data }) => {
             <div className="rooms">
                 {
                     isLoading ?
-                        data.data.rooms.map((prop, index) => {
+                        data?.data.rooms.map((prop, index) => {
                             const className = "room" + index;
                             const { num, m, seats } = prop;
                             return <Fragment key={prop + index}>
@@ -158,13 +162,19 @@ const Index = ({ data }) => {
 }
 
 export async function getStaticProps() {
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
-        method: "GET",
-        credentials: "include",
-    });
-    const data = await res.json();
+    try {
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+            method: "GET",
+        });
+        const data = await res.json();
+        return {
+            props: { data }
+        }
+    } catch (e) {
+        console.log("error: ", e);
+    }
     return {
-        props: { data }
+        props: {}
     }
 }
 
