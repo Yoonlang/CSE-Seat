@@ -159,9 +159,12 @@ const SeatModal = () => {
                 })
             })
             const data = await res.json();
-            console.log(data);
             if (data.result === false)
                 throw ("Can't check");
+            if (!isCheckIn) {
+                setRefreshData(!refreshData);
+                closeModal();
+            }
         } catch (e) {
             console.log("Error: ", e);
         }
