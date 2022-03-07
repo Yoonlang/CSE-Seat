@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { SignInput } from "../atoms/Input";
 import SquareImg from "../atoms/Img";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { inputValueAtom, loginAtom } from "../others/state";
 import Checkbox from "../atoms/Checkbox";
 
@@ -11,7 +11,7 @@ const SignForm = () => {
     const [isFileUpload, setIsFileUpload] = useState(false);
     const [isSamePassword, setIsSamePassword] = useState(false);
     const fileInput = useRef();
-    const inputValue = useRecoilValue(inputValueAtom);
+    const [inputValue, setInputValue] = useRecoilState(inputValueAtom);
     const setLoginData = useSetRecoilState(loginAtom);
 
     const changeFormState = () => {
@@ -46,6 +46,10 @@ const SignForm = () => {
                     isLogin: true,
                     sid: undefined,
                 });
+                setInputValue([
+                    inputValue[0],
+                    '', '', ''
+                ])
             } catch (e) {
                 console.log("error: ", e);
             }
