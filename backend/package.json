@@ -4,7 +4,8 @@
   "description": "KNU-SEAT back-end",
   "main": "./src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./src/index.js",
+    "dev": "nodemon ./src/index.js"
   },
   "author": "chanwooDev",
   "license": "ISC",
@@ -34,9 +35,5 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
-  },  
-  "scripts": {
-    "start": "node ./src/index.js",
-    "dev": "nodemon ./src/index.js"
   }
 }
