@@ -2,7 +2,8 @@ const seatModel = require("$/models/seat");
 const logModel = require("$/models/log");
 const dateService = require("../services/date");
 const entryModel = require("../models/entry");
-const userModel = require("../models/user")
+const userModel = require("../models/user");
+const { json } = require("express");
 
 const initProperty = (seatDTO) => {
   seatDTO.date = seatDTO.isToday
@@ -30,16 +31,25 @@ const checkRightSeat = (rooms, seat)=>{
 module.exports = {
   apply: async (seatDTO) => {
     try{
-      if (checkRightSeat(seatDTO.seat_room, seatDTO.seat_num) == false)
-        throw new Error('잘못된 좌석번호입니다.');
+      const json = {result :true, data:{seat: true, frineds : [true, true, true]}};
+      if (checkRightSeat(seatDTO.seat_room, seatDTO.seat_num) == false){
+        json.result = false;
+        return json.data.seat = false;
+      }
+        
+      
       for (const i in seatDTO.friends){
-        if (!await userModel.findById(seatDTO.friends[i]))
-        throw new Error('친구의 학번이 잘못 입력되었거나 유저목록에 존재하지 않습니다.')
+        if (!await userModel.findById(seatDTO.friends[i])){
+          json.result = false;
+          json.data.frineds[i] = false;
+          return json;
+        }
+        
       }
       seatDTO.date = dateService.getTomorrowDate();
       seatDTO.apply_time = dateService.getNowTime();
       let insertId = await seatModel.apply(seatDTO);
-      return true;
+      return json;
     }catch(e){
       console.log(e);
       return e;
