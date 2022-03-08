@@ -85,7 +85,7 @@ module.exports = {
             if (!result || result.affectedRows == 0)
                 return reject(new Error('friend request Pk error'));
         }
-        return resolve(result.insertId);
+        return resolve(insertId);
     }),
     reserve: async (seatDTO) => new Promise( async (resolve, reject) => {
         let sql = "INSERT INTO reservation SET ?"
