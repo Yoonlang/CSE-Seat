@@ -34,7 +34,7 @@ const getSeats = async (sid,rNum) => {
         }
         let seatList = await reservationModel.findList(seatDTO);
         for (let i = 0; i<seatList.length; i++){
-            let location = seatsMap.get(seatList[i].seat_num);
+            let location = seatsMap.get(seatList[i].seat_num*1);
             let y = location[0];
             let x = location[1];
 
