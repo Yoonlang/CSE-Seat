@@ -43,10 +43,7 @@ const Checker = () => {
             }
         }
     }, [pathname, isFetching, isLogin]);
-
     return <></>
 }
-
-
 
 export default Checker;

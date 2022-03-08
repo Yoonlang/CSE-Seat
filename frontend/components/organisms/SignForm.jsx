@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { SignInput } from "../atoms/Input";
 import SquareImg from "../atoms/Img";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { inputValueAtom, loginAtom } from "../others/state";
 import Checkbox from "../atoms/Checkbox";
 
