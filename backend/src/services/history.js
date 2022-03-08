@@ -2,6 +2,23 @@ const seatChartModel = require('../models/seat_chart')
 const historyModel = require('../models/history')
 const dateService = require('./date')
 
+const makeRoomsArr = async(apply_id)=>{
+  rooms = [];
+  roomsData = await historyModel.findRoomsById(apply_id);
+  for (const i in roomsData){
+    rooms.push(roomsData[i].seat_room);
+  }
+  return rooms;
+}
+const makeFriendsArr = async(apply_id)=>{
+  friends = [];
+  friendsData = await historyModel.findFriendsById(apply_id);
+  for (const i in friendsData){
+    friends.push(friendsData[i].friend_sid);
+  }
+  return friends;
+}
+
 const makeHistorys = async (historyDTO)=>{
   try {
     let result = await historyModel.getHistorys(historyDTO);
@@ -24,6 +41,8 @@ const makeHistorys = async (historyDTO)=>{
         delete result[i].in_time;
         delete result[i].out_time;
         delete result[i].part;
+        result[i].seat_room = await makeRoomsArr(result[i].apply_id);
+        result[i].friends = await makeFriendsArr(result[i].apply_id);
         dataSet.push(result[i]);
         prev_id = result[i].apply_id;
         result[i].part1 == 1 ? result[i].part1 = true : result[i].part1 = false;
@@ -38,5 +57,6 @@ const makeHistorys = async (historyDTO)=>{
   }
 }
 module.exports = {
-    getHistorys : makeHistorys
+    getHistorys : makeHistorys,
+    makeRoomsArr : makeRoomsArr,
 }

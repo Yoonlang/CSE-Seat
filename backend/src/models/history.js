@@ -17,4 +17,26 @@ module.exports = {
             return resolve(result);
         return reject(Error('History finding error'));
     }),
+    findRoomsById: async (apply_id) => new Promise( async (resolve, reject) => {
+      let sql = "select * from want_rooms where apply_id = ?";
+      let set  = [
+          apply_id
+      ]
+      
+      let result = await db.query(sql,set);
+      if (result)
+          return resolve(result);
+      return reject(Error('History finding error'));
+  }),
+    findFriendsById: async (apply_id) => new Promise( async (resolve, reject) => {
+      let sql = "select * from friend_request where apply_id = ?";
+      let set  = [
+          apply_id
+      ]
+      
+      let result = await db.query(sql,set);
+      if (result)
+          return resolve(result);
+      return reject(Error('History finding error'));
+  }),
 }
