@@ -19,12 +19,15 @@ module.exports = {
         const set = {
             apply_id : seatDTO.apply_id,
             apply_user_sid : seatDTO.user_sid,
-            reservation_sid : seatDTO.user_sid,  //현재는 신청자 == 앉을 사람
+            reservation_sid : seatDTO.user_sid,
             part1 : seatDTO.part1,
             part2 : seatDTO.part2,
-            building_id : seatDTO.building_id,
-            seat_room : seatDTO.seat_room,
-            seat_num : seatDTO.seat_num,
+            part1_building_id : seatDTO.part1_building_id,
+            part1_seat_room : seatDTO.part1_seat_room,
+            part1_seat_num : seatDTO.part1_seat_num,
+            part2_building_id : seatDTO.part2_building_id,  //내일 자리 예악 개발되면 수정
+            part2_seat_room : seatDTO.part2_seat_room,
+            part2_seat_num : seatDTO.part2_seat_num,
             date : seatDTO.date,
             cancel_marker : false
         }
@@ -36,7 +39,6 @@ module.exports = {
     }),
     updateCancel : async (seatDTO) => new Promise( async (resolve, reject) => {
         let sql = "UPDATE reservation_log SET ? WHERE apply_id = ? and reservation_sid = ?";
-
         const set = {
             cancel_marker : true
         }
@@ -56,7 +58,6 @@ module.exports = {
             part1 : !seatDTO.part1,
             part2 : !seatDTO.part2
         }
-        console.log(set);
         let result = await db.query(sql,[set,
             seatDTO.apply_id,
             seatDTO.user_sid
