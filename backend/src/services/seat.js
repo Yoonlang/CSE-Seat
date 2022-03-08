@@ -14,7 +14,7 @@ const initProperty = (seatDTO) => {
 
 
 const checkRightSeat = (rooms, seat)=>{
-
+  if (seat === '') return true;
   for (const i in rooms){
     if (rooms[i] === "101"){
       if (2<= seat*1 && seat*1 <= 15) return true;
