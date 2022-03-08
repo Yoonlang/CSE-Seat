@@ -29,7 +29,18 @@ const Apply = ({ data }) => {
     const [isRoomHope, setIsRoomHope] = useState([true, true, true]);
     const [seatHope, setSeatHope] = useState('');
     const [friendHope, setFriendHope] = useState(['', '', '']);
+    const [wrongData, setWrongData] = useState([0, 0, 0, 0]);
     const setIsOpenSeatModal = useSetRecoilState(seatingChartModalAtom);
+
+    const shake = () => {
+        setWrongData([1, 1, 1, 1]);
+    }
+
+    const refreshWrong = (num) => {
+        const tempWrongData = [...wrongData];
+        tempWrongData[num] = 0;
+        setWrongData(tempWrongData);
+    }
 
     const clickTime = (prop) => {
         const tempTimeHope = isTimeHope.slice(0, 2);
@@ -71,6 +82,7 @@ const Apply = ({ data }) => {
     }
 
     const submit = async (e) => {
+        shake();
         e.preventDefault();
         const room = handleRoom();
         const time = handleTime();
@@ -127,9 +139,15 @@ const Apply = ({ data }) => {
                         <span>(중복 가능)</span><br /><br />
                         <span>체크 안할 시 임의 배정</span>
                     </span>
-                    <div className="roomBtn0" onClick={() => clickRoom(0)}>101호</div>
-                    <div className="roomBtn1" onClick={() => clickRoom(1)}>104호</div>
-                    <div className="roomBtn2" onClick={() => clickRoom(2)}>108호</div>
+                    {
+                        rooms.map((prop, index) => {
+                            return <div
+                                key={prop, index}
+                                className={`roomBtn${index}`}
+                                onClick={() => clickRoom(index)}
+                            >{prop}호</div>;
+                        })
+                    }
                 </div>
                 <div className="bar" />
                 <div className="seat">
@@ -137,10 +155,14 @@ const Apply = ({ data }) => {
                         원하는 자리<br /><br />
                         <span>미입력 시 임의 배정</span>
                     </span>
-                    <input type="text"
+                    <input
+                        className="input3"
+                        type="text"
                         placeholder="숫자만 입력"
                         onChange={handleSeat}
-                        value={seatHope} />
+                        value={seatHope}
+                        animation={wrongData[3]}
+                        onFocus={() => refreshWrong(3)} />
                     <div><div className="seatModalBtn" onClick={clickSeatModalBtn}>자리 배치표</div></div>
                 </div>
                 <div className="bar" />
@@ -150,18 +172,20 @@ const Apply = ({ data }) => {
                         <span>(최대 3명)</span><br /><br />
                         <span>자리가 없을 시 따로 앉거나<br />일부 인원만 배정될 수 있음.</span>
                     </span>
-                    <input type="text"
-                        placeholder="학번 입력"
-                        onChange={(e) => handleFriend(0, e)}
-                        value={friendHope[0]} />
-                    <input type="text"
-                        placeholder="학번 입력"
-                        onChange={(e) => handleFriend(1, e)}
-                        value={friendHope[1]} />
-                    <input type="text"
-                        placeholder="학번 입력"
-                        onChange={(e) => handleFriend(2, e)}
-                        value={friendHope[2]} />
+                    {
+                        friendHope.map((prop, index) => {
+                            return <input
+                                key={prop, index}
+                                className={`input${index}`}
+                                type="text"
+                                placeholder="학번 입력"
+                                onChange={(e) => handleFriend(index, e)}
+                                value={prop}
+                                animation={wrongData[index]}
+                                onFocus={() => refreshWrong(index)}
+                            />
+                        })
+                    }
                 </div>
                 <button onClick={submit}>신청하기</button>
             </ApplyForm >
@@ -356,6 +380,27 @@ const Apply = ({ data }) => {
                     font-size: 12px;
                     color: #aaa;
                 }
+                .input0[animation="1"]{
+                    border: 2px solid #da2127 !important;
+                    animation-duration: 0.5s;
+                    animation-name: shake;
+                }
+                .input1[animation="1"]{
+                    border: 2px solid #da2127 !important;
+                    animation-duration: 0.5s;
+                    animation-name: shake;
+                }
+                .input2[animation="1"]{
+                    border: 2px solid #da2127 !important;
+                    animation-duration: 0.5s;
+                    animation-name: shake;
+                }
+                .input3[animation="1"]{
+                    border: 2px solid #da2127 !important;
+                    animation-duration: 0.5s;
+                    animation-name: shake;
+                    animation-iteration-count: 1;
+                }
                 .seat > div{
                     display: flex;
                     justify-content: flex-end;
@@ -391,6 +436,23 @@ const Apply = ({ data }) => {
                     font-weight: 600;
                     letter-spacing: 4px;
                     cursor: pointer;
+                }
+                @keyframes shake{
+                    25%{
+                       transform: translate(20px);
+                    }
+                    50%{
+                        transform: translate(-10px);
+                    }
+                    70%{
+                        transform: translate(5px);
+                    }
+                    90%{
+                        transform: translate(-2px);
+                    }
+                    100%{
+                        transform: translate(0);
+                    }
                 }
             `}</style>
         </PageDiv >
