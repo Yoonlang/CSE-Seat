@@ -54,7 +54,7 @@ const Info = () => {
                     }
                 }
             `}</style>
-        </PageDiv>
+        </PageDiv >
     )
 }
 

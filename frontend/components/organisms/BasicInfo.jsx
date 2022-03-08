@@ -43,14 +43,6 @@ const BasicInfo = (data) => {
             border-width: 0 1px 0 0;
 
         }
-        @media(min-width: 768px){
-            div{
-            }
-        }
-        @media(max-width: 767px){
-            div{
-            }
-        }
     `}</style>
     </>);
 }

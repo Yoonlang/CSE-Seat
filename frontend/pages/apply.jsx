@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { PageDiv } from "../components/atoms/Div";
 import HeadTitle from "../components/others/headTitle"
@@ -6,6 +6,7 @@ import SeatingChartModal from "../components/organisms/SeatingChartModal";
 import { useSetRecoilState } from "recoil";
 import { seatingChartModalAtom } from "../components/others/state";
 import { ColorTable } from "../components/molecules/ColorTables";
+import { useRouter } from "next/router";
 
 const ApplyForm = styled.form`
     display: flex;
@@ -31,6 +32,7 @@ const Apply = ({ data }) => {
     const [friendHope, setFriendHope] = useState(['', '', '']);
     const [wrongData, setWrongData] = useState([0, 0, 0, 0]);
     const setIsOpenSeatModal = useSetRecoilState(seatingChartModalAtom);
+    const router = useRouter();
 
     const shake = () => {
         setWrongData([1, 1, 1, 1]);
@@ -82,13 +84,14 @@ const Apply = ({ data }) => {
     }
 
     const submit = async (e) => {
-        // shake();
         e.preventDefault();
+        // friendHope 배열 순서 바꿔주기
         const room = handleRoom();
         const time = handleTime();
         const friends = friendHope.filter((prop) => {
             return prop.length !== 0
         })
+        console.log(friendHope);
         console.log(friends);
         try {
             const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/application", {
@@ -107,7 +110,13 @@ const Apply = ({ data }) => {
                 })
             })
             const data = await res.json();
-            console.log(data);
+            if (data.result === true) {
+                alert("신청되었습니다.");
+                router.replace('/');
+            }
+            else {
+                shake();
+            }
         } catch (e) {
             console.log("Error: ", e);
         }
