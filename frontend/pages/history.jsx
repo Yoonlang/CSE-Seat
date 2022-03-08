@@ -41,7 +41,6 @@ const History = () => {
                         isLoading ?
                             `` :
                             data?.data.map((prop, index) => {
-                                // console.log(prop);
                                 const { date, part1, part2, seat_num, seat_room, apply_time: applyTime, cancel_marker: isCancel } = prop;
                                 const splitDate = date.split('-');
                                 const handledDate = `${splitDate[0]}년 ${splitDate[1][0] === '0' ? splitDate[1][1] : splitDate[1]}월 ${splitDate[2][0] === '0' ? splitDate[2][1] : splitDate[2]}일`

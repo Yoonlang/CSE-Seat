@@ -82,13 +82,14 @@ const Apply = ({ data }) => {
     }
 
     const submit = async (e) => {
-        shake();
+        // shake();
         e.preventDefault();
         const room = handleRoom();
         const time = handleTime();
         const friends = friendHope.filter((prop) => {
             return prop.length !== 0
         })
+        console.log(friends);
         try {
             const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/application", {
                 method: "POST",
