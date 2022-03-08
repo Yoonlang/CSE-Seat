@@ -70,29 +70,34 @@ const Apply = ({ data }) => {
         return checkTime === 0 ? [true, true] : isTimeHope;
     }
 
-    const submit = (e) => {
-        // 신청 처리가 되면 문구 뜨면서 처리해야함.
+    const submit = async (e) => {
         e.preventDefault();
         const room = handleRoom();
         const time = handleTime();
-        // console.log(seatHope);
-        // console.log(friendHope);
-
-        fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                building_id: "414",
-                seat_room: room,
-                seat_num: seatHope,
-                isToday: false,
-                part1: time[0],
-                part2: time[1],
-            })
+        const friends = friendHope.filter((prop) => {
+            return prop.length !== 0
         })
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/application", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    building_id: "414",
+                    seat_room: room,
+                    seat_num: seatHope,
+                    part1: time[0],
+                    part2: time[1],
+                    friends: friends,
+                })
+            })
+            const data = await res.json();
+            console.log(data);
+        } catch (e) {
+            console.log("Error: ", e);
+        }
     }
 
     return (

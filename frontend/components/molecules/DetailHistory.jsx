@@ -6,7 +6,7 @@ const DetailHistory = ({ isOpenModal = false, detail: { applyTime, isCancel } })
         <>
             <div className="detail">
                 <div>
-                    신청 날짜 및 시간 : {handledApplyTime} <br />
+                    신청 날짜 및 시간 : <br className="br" /> {handledApplyTime} <br />
                     {isCancel ? <>취소된 신청입니다. < br /></> : ``}<br />
                     1부 입실 :   22.01.19   10:02<br />
                     1부 퇴실 :   22.01.19   18:00<br />
@@ -62,6 +62,9 @@ const DetailHistory = ({ isOpenModal = false, detail: { applyTime, isCancel } })
             }
             .detail > div{
                 width: 100%;
+            }
+            .br{
+                display: none;
             }
         }
     `}</style>

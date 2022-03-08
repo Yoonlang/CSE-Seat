@@ -20,6 +20,7 @@ const History = () => {
             });
             const data = await res.json();
             if (data.result === true) {
+                console.log(data);
                 setData(data);
                 setIsLoading(false);
             }
