@@ -3,12 +3,12 @@ const LocalStrategy = require ('passport-local').Strategy
 const userService = require('$/services/user')
 
 passport.serializeUser(function(user, done){
-    console.log('passport session save : ', user.sid)
+    //console.log('passport session save : ', user.sid)
     done(null, user.sid)
 });
 
 passport.deserializeUser(function(sid, done){
-    console.log('passport session getdata : ', sid)
+    //console.log('passport session getdata : ', sid)
     done(null, sid); //user라는 객체에 담아 request로 전달한다
 })
 
