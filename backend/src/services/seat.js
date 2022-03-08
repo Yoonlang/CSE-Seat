@@ -34,7 +34,8 @@ module.exports = {
       const json = {result :true, data:{seat: true, frineds : [true, true, true]}};
       if (checkRightSeat(seatDTO.seat_room, seatDTO.seat_num) == false){
         json.result = false;
-        return json.data.seat = false;
+        json.data.seat = false
+        return json;
       }
         
       
