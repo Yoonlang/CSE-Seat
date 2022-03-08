@@ -51,21 +51,41 @@ module.exports = {
     
     apply : async (seatDTO) => new Promise( async (resolve, reject) => {
         let sql = "INSERT INTO reservation_apply SET ?"
-        set = {
+        let set = {
             user_sid : seatDTO.user_sid,
             apply_time : seatDTO.apply_time,
             want_building_id : seatDTO.building_id,
-            want_seat_room : seatDTO.seat_room,
+            
             want_seat_num : seatDTO.seat_num,
             reservation_date : seatDTO.date,
             part1 : seatDTO.part1,
             part2 : seatDTO.part2,
         }
         let result = await db.query(sql,set);
-        if (result && result.affectedRows > 0)
-            return resolve(result.insertId);
-        else
-            return reject(new Error('database PK error'))
+        if (!result || result.affectedRows == 0)
+            return reject(new Error('reservation application Pk error'));
+        let insertId = result.insertId;
+        for (const i in seatDTO.seat_room){
+            sql = "INSERT INTO want_rooms SET ?";
+            set = {
+                apply_id : insertId,
+                seat_room : seatDTO.seat_room[i],
+            }
+            result = await db.query(sql,set);
+            if (!result || result.affectedRows == 0)
+                return reject(new Error('want_rooms Pk error'));
+        }
+        for (const i in seatDTO.friends){
+            sql = "INSERT INTO friend_request SET ?";
+            set = {
+                apply_id : insertId,
+                friend_sid : seatDTO.friends[i],
+            }
+            result = await db.query(sql,set);
+            if (!result || result.affectedRows == 0)
+                return reject(new Error('friend request Pk error'));
+        }
+        return resolve(insertId);
     }),
     reserve: async (seatDTO) => new Promise( async (resolve, reject) => {
         let sql = "INSERT INTO reservation SET ?"

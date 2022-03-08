@@ -34,14 +34,20 @@ module.exports ={
                 throw new Error("예약자가 본인이 아닙니다");
                 part2ApplyId = result.apply_id;
             }
-
             if(entryDTO.part1){
                 entryDTO.part = 1;
                 entryDTO.apply_id = part1ApplyId;
+                if (await entryModel.getCheckInData(entryDTO)){
+                    throw new Error('이미 입실하셨습니다.')
+                }
                 await entryModel.checkIn(entryDTO);
+                
             }else{
                 entryDTO.part = 2;
                 entryDTO.apply_id = part2ApplyId;
+                if (await entryModel.getCheckInData(entryDTO)){
+                    throw new Error('이미 입실하셨습니다.')
+                }
                 await entryModel.checkIn(entryDTO);
             }
             return {inTime: entryDTO.time}
