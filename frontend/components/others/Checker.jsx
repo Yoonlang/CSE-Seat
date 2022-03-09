@@ -19,10 +19,10 @@ const Checker = () => {
             const data = await res.json();
             data.result === true ? setLoginData({
                 isLogin: true,
-                sid: data.sid,
+                name: data.name,
             }) : setLoginData({
                 isLogin: false,
-                sid: undefined,
+                name: undefined,
             });
         } catch (e) {
             console.log("Error: ", e);
