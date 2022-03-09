@@ -3,8 +3,6 @@ import HeadTitle from "../components/others/headTitle"
 import styled from "styled-components";
 import SeatHistory from "../components/organisms/SeatHistory";
 import { Fragment, useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { loginAtom } from "../components/others/state";
 
 const HistoryDiv = styled(BorderDiv)`
     max-width: 723px;
@@ -13,28 +11,25 @@ const HistoryDiv = styled(BorderDiv)`
 const History = () => {
     const [data, setData] = useState();
     const [isLoading, setIsLoading] = useState(true);
-    const loginData = useRecoilValue(loginAtom);
 
     useEffect(async () => {
-        if (loginData.isLogin === true) {
-            try {
-                const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/history", {
-                    method: "GET",
-                    credentials: "include",
-                });
-                const data = await res.json();
-                console.log(data);
-                if (data.result === true) {
-                    setData(data);
-                    setIsLoading(false);
-                }
-                else
-                    throw ("Can't load history");
-            } catch (e) {
-                console.log("Error: ", e);
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/history", {
+                method: "GET",
+                credentials: "include",
+            });
+            const data = await res.json();
+            // console.log(data);
+            if (data.result === true) {
+                setData(data);
+                setIsLoading(false);
             }
+            else
+                throw ("Can't load history");
+        } catch (e) {
+            console.log("Error: ", e);
         }
-    }, [loginData.isLogin]);
+    }, []);
 
     return (
         <PageDiv dis="flex" ali="center" dir="column">
