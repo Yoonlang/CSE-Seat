@@ -4,6 +4,7 @@ const dateService = require("../services/date");
 const entryModel = require("../models/entry");
 const userModel = require("../models/user");
 const { json } = require("express");
+const user = require("../models/user");
 
 const initProperty = (seatDTO) => {
   seatDTO.date = seatDTO.isToday
@@ -37,7 +38,7 @@ module.exports = {
         json.data.seat = false;
       }
       for (const i in seatDTO.friends){
-        if (!await userModel.findById(seatDTO.friends[i])){
+        if (!await userModel.findById(seatDTO.friends[i]) || seatDTO.friends[i] === seatDTO.user_sid){
           json.result = false;
           json.data.friends[i] = false;
         }
