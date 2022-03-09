@@ -25,12 +25,14 @@ const Index = ({ data }) => {
     useEffect(async () => {
         if (loginData.isLogin !== undefined)
             try {
+                console.log("main start", loginData);
                 const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
                     method: "GET",
                     credentials: "include",
                 })
                 const fetchingData = await res.json();
                 setUpdateData(fetchingData);
+                console.log("main end");
             } catch (e) {
                 console.log("error: ", e);
             }
