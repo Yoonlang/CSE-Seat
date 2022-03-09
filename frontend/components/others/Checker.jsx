@@ -10,8 +10,10 @@ const Checker = () => {
     const [loginData, setLoginData] = useRecoilState(loginAtom);
     const { isLogin } = loginData;
 
+
     useEffect(async () => {
         try {
+            console.log("check start");
             const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `/user/login/check`, {
                 method: "GET",
                 credentials: "include",
@@ -24,6 +26,7 @@ const Checker = () => {
                 isLogin: false,
                 name: undefined,
             });
+            console.log("check end");
         } catch (e) {
             console.log("Error: ", e);
         }
