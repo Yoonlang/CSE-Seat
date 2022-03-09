@@ -3,6 +3,8 @@ import HeadTitle from "../components/others/headTitle"
 import styled from "styled-components";
 import SeatHistory from "../components/organisms/SeatHistory";
 import { Fragment, useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { loginAtom } from "../components/others/state";
 
 const HistoryDiv = styled(BorderDiv)`
     max-width: 723px;
@@ -11,25 +13,28 @@ const HistoryDiv = styled(BorderDiv)`
 const History = () => {
     const [data, setData] = useState();
     const [isLoading, setIsLoading] = useState(true);
+    const loginData = useRecoilValue(loginAtom);
 
     useEffect(async () => {
-        try {
-            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/history", {
-                method: "GET",
-                credentials: "include",
-            });
-            const data = await res.json();
-            if (data.result === true) {
+        if (loginData.isLogin === true) {
+            try {
+                const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/history", {
+                    method: "GET",
+                    credentials: "include",
+                });
+                const data = await res.json();
                 console.log(data);
-                setData(data);
-                setIsLoading(false);
+                if (data.result === true) {
+                    setData(data);
+                    setIsLoading(false);
+                }
+                else
+                    throw ("Can't load history");
+            } catch (e) {
+                console.log("Error: ", e);
             }
-            else
-                throw ("Can't load history");
-        } catch (e) {
-            console.log("Error: ", e);
         }
-    }, []);
+    }, [loginData.isLogin]);
 
     return (
         <PageDiv dis="flex" ali="center" dir="column">
@@ -41,16 +46,17 @@ const History = () => {
                         isLoading ?
                             `` :
                             data?.data.map((prop, index) => {
-                                const { date, part1, part2, seat_num, seat_room, apply_time: applyTime, cancel_marker: isCancel } = prop;
+                                const { apply: { time: applyTime }, cancel_marker: isCancel, date, part1, part1End, part2, state, want } = prop;
                                 const splitDate = date.split('-');
                                 const handledDate = `${splitDate[0]}년 ${splitDate[1][0] === '0' ? splitDate[1][1] : splitDate[1]}월 ${splitDate[2][0] === '0' ? splitDate[2][1] : splitDate[2]}일`
                                 return <Fragment key={prop, index}>
                                     <SeatHistory
                                         date={handledDate}
-                                        part={[part1, part2]}
-                                        seatNum={seat_num}
-                                        seatRoom={seat_room}
-                                        detail={{ applyTime, isCancel }}
+                                        part1={part1}
+                                        part1End={part1End}
+                                        part2={part2}
+                                        state={state}
+                                        detail={{ applyTime, isCancel, want }}
                                         isCancel={isCancel}
                                     />
                                 </Fragment>
