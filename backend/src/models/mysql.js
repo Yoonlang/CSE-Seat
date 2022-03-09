@@ -19,10 +19,9 @@ module.exports = {
 
     query : async (sql, set) => {
         const connection = await pool.getConnection(async conn => conn);
-        
         try {
-            await connection.beginTransaction();
-            [result, fields] = await connection.query(sql,set);
+            const [result, fields] = await connection.query(sql,set);
+
             await connection.commit();
             connection.release();
             return result;
