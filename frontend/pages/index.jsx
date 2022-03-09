@@ -15,6 +15,7 @@ const Index = ({ data }) => {
     const [isNav, setIsNav] = useState(true);
     const targetRoom = useRecoilValue(showRoomAtom);
     const refreshData = useRecoilValue(refreshIndexAtom);
+    const loginData = useRecoilValue(loginAtom);
     const nav = useRef();
 
     const changeUpDownState = () => {
@@ -22,17 +23,18 @@ const Index = ({ data }) => {
     }
 
     useEffect(async () => {
-        try {
-            const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
-                method: "GET",
-                credentials: "include",
-            })
-            const fetchingData = await res.json();
-            setUpdateData(fetchingData);
-        } catch (e) {
-            console.log("error: ", e);
-        }
-    }, [refreshData]);
+        if (loginData.isLogin !== undefined)
+            try {
+                const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+                    method: "GET",
+                    credentials: "include",
+                })
+                const fetchingData = await res.json();
+                setUpdateData(fetchingData);
+            } catch (e) {
+                console.log("error: ", e);
+            }
+    }, [refreshData, loginData.isLogin]);
 
     useEffect(() => {
         if (updateData !== undefined) setIsLoading(false);
