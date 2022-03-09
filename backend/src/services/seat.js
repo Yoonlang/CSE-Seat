@@ -31,22 +31,19 @@ const checkRightSeat = (rooms, seat)=>{
 module.exports = {
   apply: async (seatDTO) => {
     try{
-      const json = {result :true, data:{seat: true, frineds : [true, true, true]}};
+      const json = {result :true, data:{seat: true, friends : [true, true, true]}};
       if (checkRightSeat(seatDTO.seat_room, seatDTO.seat_num) == false){
         json.result = false;
-        json.data.seat = false
-        return json;
+        json.data.seat = false;
       }
-        
-      
       for (const i in seatDTO.friends){
         if (!await userModel.findById(seatDTO.friends[i])){
           json.result = false;
-          json.data.frineds[i] = false;
-          return json;
+          json.data.friends[i] = false;
         }
-        
       }
+      if(json.result == false) return json;
+      
       seatDTO.date = dateService.getTomorrowDate();
       seatDTO.apply_time = dateService.getNowTime();
       let insertId = await seatModel.apply(seatDTO);
