@@ -1,5 +1,6 @@
+import { Fragment } from "react";
 
-const DetailHistory = ({ isOpenModal = false, detail: { applyTime, isCancel } }) => {
+const DetailHistory = ({ isOpenModal = false, detail: { applyTime, isCancel, want: { friends, seat_num: seatNum, seat_room: seatRoom } } }) => {
     const splitApplyTime = applyTime.split(/:|-| |\n/);
     const handledApplyTime = `${splitApplyTime[0]}년 ${splitApplyTime[1][0] === '0' ? splitApplyTime[1][1] : splitApplyTime[1]}월 ${splitApplyTime[2][0] === '0' ? splitApplyTime[2][1] : splitApplyTime[2]}일 ${splitApplyTime[3][0] === '0' ? splitApplyTime[3][1] : splitApplyTime[3]}시 ${splitApplyTime[4][0] === '0' ? splitApplyTime[4][1] : splitApplyTime[4]}분`;
     return (
@@ -15,15 +16,32 @@ const DetailHistory = ({ isOpenModal = false, detail: { applyTime, isCancel } })
                 </div>
                 <div>
                     <span>
-                        원하는 강의실 : 101호, 104호, 108호<br />
-                        원하는 자리 : &nbsp;47
+                        원하는 강의실 :&nbsp;
+                        {
+                            seatRoom.join('호, ')
+                        }
+                        호<br />
+                        {
+                            seatNum === null ?
+                                `` : `
+                            원하는 자리 : ${seatNum}번
+                            `
+                        }
                     </span>
-                    입력한 친구 :<br />
-                    <div>
-                        2018115201<br />
-                        2018115202<br />
-                        2018115203<br />
-                    </div>
+                    {
+                        friends?.length === 0 ?
+                            `` : `
+                        입력한 친구 :<br />
+                        <div>
+                        ${friends.map((prop, index) => {
+                                return <Fragment key={prop, index}>
+                                    {prop}<br />
+                                </Fragment>
+                            })
+                            }
+                        </div>
+                        `
+                    }
                 </div>
             </div>
             <style jsx>{`

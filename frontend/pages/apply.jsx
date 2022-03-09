@@ -34,8 +34,8 @@ const Apply = ({ data }) => {
     const setIsOpenSeatModal = useSetRecoilState(seatingChartModalAtom);
     const router = useRouter();
 
-    const handleWrong = ({ seat, frineds }) => {
-        const BoolToNum = frineds.map((prop) => {
+    const handleWrong = ({ seat, friends }) => {
+        const BoolToNum = friends.map((prop) => {
             return prop ? 0 : 1;
         })
         setWrongData([...BoolToNum, seat === true ? 0 : 1]);
@@ -98,7 +98,6 @@ const Apply = ({ data }) => {
             newFriendHope.push('');
         }
         setFriendHope(newFriendHope);
-        console.log(newFriendHope);
         try {
             const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/application", {
                 method: "POST",
@@ -116,7 +115,6 @@ const Apply = ({ data }) => {
                 })
             })
             const data = await res.json();
-            console.log(data);
             if (data.result === true) {
                 alert("신청되었습니다.");
                 router.replace('/');
@@ -478,6 +476,7 @@ export async function getStaticProps() {
     try {
         const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
             method: "GET",
+            credentials: "include",
         });
         const data = await res.json();
         return {

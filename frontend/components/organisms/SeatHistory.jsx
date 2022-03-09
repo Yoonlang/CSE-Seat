@@ -1,29 +1,31 @@
 import { useState } from "react";
 import DetailHistory from "../molecules/DetailHistory";
 
-const SeatHistory = ({ date, part, seatNum, seatRoom, detail, isCancel }) => {
+const SeatHistory = ({ date, part1, part2, part1End, state, detail, isCancel }) => {
     const [isOpenModal, setIsOpenModal] = useState(false);
 
     const handleModal = () => {
         setIsOpenModal(!isOpenModal);
     }
 
+    // 여기서 part1End, state, part1,2 유무를 통해 입퇴실 버튼 보이게하는거 조절
+
     return (
         <>
             <div className="history">
                 <span>{date}</span>
                 {
-                    part[0] ?
+                    part1.isPart ?
                         <div>
-                            <span>1부 : {seatRoom}호 {seatNum}번 좌석</span>
+                            <span>1부 : {part1.seat_room}호 {part1.seat_num}번 좌석</span>
                             <button>입실</button>
                             <button>퇴실</button>
                         </div> : ``
                 }
                 {
-                    part[1] ?
+                    part2.isPart ?
                         <div>
-                            <span>2부 : {seatRoom}호 {seatNum}번 좌석</span>
+                            <span>2부 : {part2.seat_room}호 {part2.seat_num}번 좌석</span>
                             <button>입실</button>
                             <button>퇴실</button>
                         </div> : ``
