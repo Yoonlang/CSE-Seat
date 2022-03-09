@@ -4,7 +4,7 @@ import RoomSeats from '../components/molecules/RoomSeats';
 import IndexHeader from '../components/organisms/IndexHeader';
 import SeatModal from '../components/organisms/SeatModal';
 import HeadTitle from '../components/others/headTitle';
-import { indexLoadingAtom, refreshIndexAtom, showRoomAtom } from '../components/others/state';
+import { indexLoadingAtom, loginAtom, refreshIndexAtom, showRoomAtom } from '../components/others/state';
 import SquareImg from '../components/atoms/Img';
 import { StyledResDiv } from '../components/atoms/Div';
 import Refresh from '../components/atoms/Refresh';
