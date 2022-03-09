@@ -4,7 +4,7 @@ const loginAtom = atom({
     key : 'login',
     default: {
         isLogin: undefined,
-        sid: undefined,
+        name: undefined,
     }
 })
 

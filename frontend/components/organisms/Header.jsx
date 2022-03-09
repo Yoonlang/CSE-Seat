@@ -11,7 +11,7 @@ const Header = () => {
     const router = useRouter();
     const [isMenuClick, setIsMenuClick] = useState(false);
     const [loginData, setLoginData] = useRecoilState(loginAtom);
-    const { isLogin, sid } = loginData;
+    const { isLogin, name } = loginData;
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     const modalOutside = useRef();
 
@@ -32,7 +32,7 @@ const Header = () => {
             }
             setLoginData({
                 isLogin: false,
-                sid: undefined,
+                name: undefined,
             });
         } catch (e) {
             console.log("error: ", e);
@@ -60,7 +60,7 @@ const Header = () => {
                 {
                     isLogin ?
                         <div className="loginInfoA" onClick={clickMenu}>
-                            <Div width="60px">{sid}</Div>
+                            <Div width="60px">{name}</Div>
                         </div>
                         :
                         <div className="loginInfoA">
@@ -72,7 +72,7 @@ const Header = () => {
                 {
                     isLogin ?
                         <div className="loginInfoB" onClick={clickMenu}>
-                            <Div width="60px">{sid}</Div>
+                            <Div width="60px">{name}</Div>
                         </div>
                         :
                         <div className="loginInfoB">
