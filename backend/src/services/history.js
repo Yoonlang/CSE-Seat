@@ -85,6 +85,11 @@ const makeHistorys = async (historyDTO)=>{
           seat_room : result[i].part2_seat_room,
           seat_num : result[i].part2_seat_num,
         }
+        
+        result[i].part1.inTime = null;
+        result[i].part1.outTime = null;
+        result[i].part2.inTime = null;
+        result[i].part2.outTime = null;
 
         if(result[i].part == 1){
           result[i].part1.inTime = result[i].in_time;
