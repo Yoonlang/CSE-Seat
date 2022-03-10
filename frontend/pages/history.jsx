@@ -71,6 +71,7 @@ const History = () => {
                     flex-direction: column;
                     width: 100%;
                     height: 100%;
+                    background: rgba(251,251,251,0.98);
                 }
             `}</style>
         </PageDiv>

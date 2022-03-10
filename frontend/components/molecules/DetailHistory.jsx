@@ -70,9 +70,15 @@ const DetailHistory = ({ isOpenModal = false, detail: { applyTime, isCancel, wan
             display: ${(isOpenModal ? 'flex' : 'none')};
             height: 100%;
             flex-wrap: wrap;
+            border:solid;
             border-width: 0 0 1px 0;
-            box-shadow: 0 -1px #ddd;
-            ${isCancel ? `background: #eee;` : ``}
+            ${isCancel ? `
+            background: #dedede;
+            border-color: #ddd;
+            ` : `
+            background: #fff;
+            border-color: #eee;
+            `}
         }
         .detail > div{
             display: flex;

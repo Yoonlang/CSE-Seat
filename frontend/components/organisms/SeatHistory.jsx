@@ -47,14 +47,20 @@ const SeatHistory = ({ date, part1, part2, part1End, state, detail, isCancel }) 
                 align-items: center;
                 width: 100%;
                 height: 120px;
-                border: solid #ddd;
+                border: solid;
                 border-width: 0 0 1px 0;
-                box-shadow: 0 -1px #ddd;
                 white-space: nowrap;
                 font-size: 16px;
+                margin-top: 7px;
                 ${isCancel ? `
-                    background: #eee;
-                ` : ``}
+                    background: #dedede;
+                    border-color: #ccc;
+                    box-shadow: 0 -1px #ddd;
+                ` : `
+                    background: #fff;
+                    border-color: #eee;
+                    box-shadow: 0 -1px #eee;
+                `}
             }
             .history > span{
                 align-self: start;
