@@ -35,6 +35,10 @@ const SeatHistory = ({ date, part1, part2, part1End, state, detail, isCancel }) 
             <DetailHistory
                 isOpenModal={isOpenModal}
                 detail={detail}
+                part1={part1}
+                part2={part2}
+                state={state}
+                part1End={part1End}
             />
             <style jsx>{`
             .history{

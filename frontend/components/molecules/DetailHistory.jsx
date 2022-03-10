@@ -1,18 +1,39 @@
 import { Fragment } from "react";
 
-const DetailHistory = ({ isOpenModal = false, detail: { applyTime, isCancel, want: { friends, seat_num: seatNum, seat_room: seatRoom } } }) => {
-    const splitApplyTime = applyTime.split(/:|-| |\n/);
-    const handledApplyTime = `${splitApplyTime[0]}년 ${splitApplyTime[1][0] === '0' ? splitApplyTime[1][1] : splitApplyTime[1]}월 ${splitApplyTime[2][0] === '0' ? splitApplyTime[2][1] : splitApplyTime[2]}일 ${splitApplyTime[3][0] === '0' ? splitApplyTime[3][1] : splitApplyTime[3]}시 ${splitApplyTime[4][0] === '0' ? splitApplyTime[4][1] : splitApplyTime[4]}분`;
+const DetailHistory = ({ isOpenModal = false, detail: { applyTime, isCancel, want: { friends, seat_num: seatNum, seat_room: seatRoom } }, part1, part2, state, part1End }) => {
+    const handleTime = (time, isPart1) => {
+        if (time == null) {
+            if (part1.isPart & part2.isPart) {
+                if (((state === 0 || state === 1) && part1End && isPart1) || state === 2) return 'X';
+                return '';
+            }
+            else {
+                if (state === 2) return 'X';
+                return '';
+            }
+        }
+        const splitTime = time.split(/:|-| |\n/);
+        return `${splitTime[0]}년 ${splitTime[1][0] === '0' ? splitTime[1][1] : splitTime[1]}월 ${splitTime[2][0] === '0' ? splitTime[2][1] : splitTime[2]}일 ${splitTime[3][0] === '0' ? splitTime[3][1] : splitTime[3]}시 ${splitTime[4][0] === '0' ? splitTime[4][1] : splitTime[4]}분`;
+    }
+
     return (
         <>
             <div className="detail">
                 <div>
-                    신청 날짜 및 시간 : <br className="br" /> {handledApplyTime} <br />
+                    신청 날짜 및 시간 : <br className="br" /> {handleTime(applyTime)} <br />
                     {isCancel ? <>취소된 신청입니다. < br /></> : ``}<br />
-                    1부 입실 :   22.01.19   10:02<br />
-                    1부 퇴실 :   22.01.19   18:00<br />
-                    2부 입실 :   22.01.19   18:00<br />
-                    2부 퇴실 :   22.01.19   21:09<br />
+                    {part1.isPart ?
+                        <>
+                            1부 입실 : {handleTime(part1.inTime, true)}< br />
+                            1부 퇴실 : {handleTime(part1.outTime, false)}< br />
+                        </>
+                        : ``}
+                    {part2.isPart ?
+                        <>
+                            2부 입실 : {handleTime(part2.inTime, true)}< br />
+                            2부 퇴실 : {handleTime(part2.outTime, false)}< br />
+                        </>
+                        : ``}
                 </div>
                 <div>
                     <span>

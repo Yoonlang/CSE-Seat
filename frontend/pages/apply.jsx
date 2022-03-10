@@ -98,6 +98,7 @@ const Apply = ({ data }) => {
             newFriendHope.push('');
         }
         setFriendHope(newFriendHope);
+        setWrongData([0, 0, 0, 0]);
         try {
             const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/application", {
                 method: "POST",

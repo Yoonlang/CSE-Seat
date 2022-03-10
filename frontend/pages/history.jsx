@@ -19,7 +19,7 @@ const History = () => {
                 credentials: "include",
             });
             const data = await res.json();
-            // console.log(data);
+            console.log(data);
             if (data.result === true) {
                 setData(data);
                 setIsLoading(false);
