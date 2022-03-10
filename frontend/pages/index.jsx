@@ -28,6 +28,7 @@ const Index = ({ data }) => {
                 credentials: "include",
             })
             const fetchingData = await res.json();
+            console.log(fetchingData);
             setUpdateData(fetchingData);
         } catch (e) {
             console.log("error: ", e);
