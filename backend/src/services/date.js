@@ -33,8 +33,24 @@ const getNowTime = () => {
     return year + '-' + month + '-' + day + ' ' +  hours + ':' + minutes + ':' + seconds;
 }
 
+const getTomorrowDateOf = (date) => {
+    date = new Date(date);
+    date.setDate(date.getDate()+1)
+    year = date.getFullYear();
+    month = ('0'+(date.getMonth()+1)).slice(-2);
+    day = ('0'+(date.getDate())).slice(-2);
+    return year + '-' + month + '-' + day;
+}
+
+const convertToKoreanTime = (date) =>{
+    date.setHours(date.getHours()+9);
+    return date;
+}
+
 module.exports = {
     getTodayDate : getTodayDate,
     getTomorrowDate : getTomorrowDate,
-    getNowTime : getNowTime
+    getTomorrowDateOf : getTomorrowDateOf,
+    getNowTime : getNowTime,
+    convertToKoreanTime :convertToKoreanTime
 }
