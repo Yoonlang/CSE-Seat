@@ -22,13 +22,14 @@ const makeFriendsArr = async(apply_id)=>{
 const getEntryState = (history) => {
   //입실전 0 입실중 1 퇴실 2
   // if state = 0 and part1End = true, 1부퇴실, 2부 미입실 상황
+
   if (history.part1){
     if (!history.part1.inTime) history.state = 0;
     else if (history.part1.outTime){
+      history.part1End = true;
       if (history.part2.ispart)
         if(!history.part2.inTime) {
           history.state = 0;
-          history.part1End = true;
         }
         else if(!history.part2.outTime) history.state = 1;
         else history.state = 2
@@ -41,6 +42,23 @@ const getEntryState = (history) => {
     else if(!history.part2.outTime) history.state = 1;
     else history.state = 2;
   }
+  //시간 지남에 따른 비활성화
+  
+  let t = new Date(dateService.getTomorrowDateOf(history.date)+' 07:00:00');
+  let curT  = new Date(dateService.getNowTime());
+  
+  if (curT>t) history.state = 2;
+
+  if(history.part1){
+    t = new Date(history.date +' 18:30:00');
+    if (curT>t){
+      history.part1End = true;
+      if(!history.part2)
+        history.state = 2;
+    }
+  } 
+
+  if (history.part1End != true) history.part1End = false;
 }
 
 
@@ -100,7 +118,6 @@ const makeHistorys = async (historyDTO)=>{
           result[i].part2.outTime = result[i].out_time;
         }
         
-        delete result[i].apply_id;
         delete result[i].apply_time;
         delete result[i].apply_user_sid;
         delete result[i].in_time;
@@ -120,7 +137,7 @@ const makeHistorys = async (historyDTO)=>{
         dataSet.push(result[i]);
       }
       getEntryState(dataSet[dataSet.length-1]);
-      if (dataSet[dataSet.length-1].part1End != true) dataSet[dataSet.length-1].part1End = false;
+      
     }
     return dataSet;
   } catch (e) {
