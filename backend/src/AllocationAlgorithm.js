@@ -107,31 +107,31 @@ const requests = [
         building_id: "414",
         apply_time: "20220226170505",
         seat_room: ["101", "104", "108",],
-        seat_num: "",
+        seat_num: "20",
         isToday: false,
         part1: true,
         part2: true,
-        friends: [1, 2, 3,],
+        friends: [],
     },
     {
         building_id: "414",
         apply_time: "20220226170506",
         seat_room: ["101", "104"],
-        seat_num: "",
+        seat_num: "18",
         isToday: false,
         part1: true,
         part2: false,
-        friends: [1, 2, ],
+        friends: [],
     },
     {
         building_id: "414",
         apply_time: "20220226170506",
         seat_room: ["101", "104"],
-        seat_num: "",
+        seat_num: "19",
         isToday: false,
         part1: true,
         part2: false,
-        friends: [1, 2, 3, ],
+        friends: [],
     },
 ]
 
@@ -591,7 +591,6 @@ const makePosition = (num, part, roomNum, seatNum) => {
             data.max = max;
         }
     }
-
     return data;
 }
 
@@ -634,6 +633,16 @@ const solveReq = (seat_room, seat_num, part1, part2, num) => {
             }
         if(flag){
             data.sort((a, b) => {
+                const aPriority = a.pos.some((prop) => {
+                    return backToSeatNumber(a.roomNum, prop[0], prop[1]) == seat_num;
+                })
+                const bPriority = b.pos.some((prop) => {
+                    return backToSeatNumber(b.roomNum, prop[0], prop[1]) == seat_num;
+                })
+                if(aPriority & bPriority)
+                    return a.max > b.max;
+                else if(aPriority ^ bPriority)
+                    return aPriority ? 1 : -1;
                 if(emptySeat[part1 ? 0 : 1][a.roomNum] / hopeNumber[part1 ? 0 : 1][a.roomNum] === emptySeat[part1 ? 0 : 1][b.roomNum] / hopeNumber[part1 ? 0 : 1][b.roomNum])
                     return a.max > b.max;
                 return emptySeat[part1 ? 0 : 1][a.roomNum] / hopeNumber[part1 ? 0 : 1][a.roomNum] - emptySeat[part1 ? 0 : 1][b.roomNum] / hopeNumber[part1 ? 0 : 1][b.roomNum];
@@ -701,6 +710,16 @@ const solveReq = (seat_room, seat_num, part1, part2, num) => {
             }
         if(flag){
             data.sort((a, b) => {
+                const aPriority = a.pos.some((prop) => {
+                    return backToSeatNumber(a.roomNum, prop[0], prop[1]) == seat_num;
+                })
+                const bPriority = b.pos.some((prop) => {
+                    return backToSeatNumber(b.roomNum, prop[0], prop[1]) == seat_num;
+                })
+                if(aPriority & bPriority)
+                    return a.max > b.max;
+                else if(aPriority ^ bPriority)
+                    return aPriority ? 1 : -1;
                 const orderA = Math.min(emptySeat[0][a.roomNum] / hopeNumber[0][a.roomNum], emptySeat[1][a.roomNum] / hopeNumber[1][a.roomNum]),
                     orderB = Math.min(emptySeat[0][b.roomNum] / hopeNumber[0][b.roomNum], emptySeat[1][b.roomNum] / hopeNumber[1][b.roomNum]);
                 if(orderA === orderB) return a.max > b.max;
