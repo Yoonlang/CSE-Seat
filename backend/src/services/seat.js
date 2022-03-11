@@ -145,8 +145,11 @@ module.exports = {
         }
         else{
           seatDTO.apply_id = part1ApplyId;
+          seatDTO.part2 = false;
           await logModel.updateCancel(seatDTO);
           seatDTO.apply_id = part2ApplyId;
+          seatDTO.part1 = false;
+          seatDTO.part2 = true;
           await logModel.updateCancel(seatDTO);
         }
       }
