@@ -29,7 +29,6 @@ module.exports = {
             part2_seat_room : seatDTO.part2_seat_room,
             part2_seat_num : seatDTO.part2_seat_num,
             date : seatDTO.date,
-            cancel_marker : false
         }
         let result = await db.query(sql,set);
         if (result && result.affectedRows > 0)
@@ -39,9 +38,10 @@ module.exports = {
     }),
     updateCancel : async (seatDTO) => new Promise( async (resolve, reject) => {
         let sql = "UPDATE reservation_log SET ? WHERE apply_id = ? and reservation_sid = ?";
-        const set = {
-            cancel_marker : true
-        }
+        const set = {};
+        if (seatDTO.part1) set.part1_cancel_marker = true;
+        if (seatDTO.part2) set.part2_cancel_marker = true;
+        
         let result = await db.query(sql,[set,
             seatDTO.apply_id,
             seatDTO.user_sid
@@ -58,6 +58,9 @@ module.exports = {
             part1 : !seatDTO.part1,
             part2 : !seatDTO.part2
         }
+        if (seatDTO.part1) set.part1_cancel_marker = true;
+        if (seatDTO.part2) set.part2_cancel_marker = true;
+        
         let result = await db.query(sql,[set,
             seatDTO.apply_id,
             seatDTO.user_sid
