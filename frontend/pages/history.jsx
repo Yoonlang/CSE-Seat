@@ -2,7 +2,7 @@ import { BorderDiv, PageDiv } from "../components/atoms/Div";
 import HeadTitle from "../components/others/headTitle"
 import styled from "styled-components";
 import SeatHistory from "../components/organisms/SeatHistory";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment } from "react";
 import { completeHistoryAtom } from "../components/others/state";
 import { useRecoilValue } from "recoil";
 
@@ -21,11 +21,12 @@ const History = () => {
                 <div className="seatHistorys">
                     {
                         completeHistoryData?.data.map((prop, index) => {
-                            const { apply: { time: applyTime }, part1_cancel_marker, part2_cancel_marker, date, part1, part1End, part2, state, want } = prop;
+                            const { apply: { time: applyTime }, apply_id: id, part1_cancel_marker, part2_cancel_marker, date, part1, part1End, part2, state, want } = prop;
                             const splitDate = date.split('-');
                             const handledDate = `${splitDate[0]}년 ${splitDate[1][0] === '0' ? splitDate[1][1] : splitDate[1]}월 ${splitDate[2][0] === '0' ? splitDate[2][1] : splitDate[2]}일`
                             return <Fragment key={prop, index}>
                                 <SeatHistory
+                                    id={id}
                                     date={handledDate}
                                     part1={part1}
                                     part1End={part1End}
