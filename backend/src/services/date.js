@@ -1,3 +1,4 @@
+const { now } = require("moment");
 
 const getTodayDate = () => {
     today = new Date();
@@ -47,10 +48,17 @@ const convertToKoreanTime = (date) =>{
     return date;
 }
 
+const getMillisecDiffFromNow = (time)=>{
+    time = (new Date(time)).getTime();
+    let now = (new Date()).getTime();
+    return (time-now);    
+}
+
 module.exports = {
     getTodayDate : getTodayDate,
     getTomorrowDate : getTomorrowDate,
     getTomorrowDateOf : getTomorrowDateOf,
     getNowTime : getNowTime,
-    convertToKoreanTime :convertToKoreanTime
+    convertToKoreanTime :convertToKoreanTime,
+    getMillisecDiffFromNow : getMillisecDiffFromNow
 }
