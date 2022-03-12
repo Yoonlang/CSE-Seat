@@ -210,12 +210,8 @@ const SeatModal = () => {
                     {isMySeat[0] | isMySeat[1] ?
                         <>
                             <div className="check">
-                                <div>
-                                    <button onClick={() => test(true)}>입실</button><span>22.01.19<span className="space" />06 : 24</span>
-                                </div>
-                                <div>
-                                    <button onClick={() => test(false)}>퇴실</button><span>22.01.19<span className="space" />06 : 24</span>
-                                </div>
+                                <button onClick={() => test(true)}>입실</button>
+                                <button onClick={() => test(false)}>퇴실</button>
                             </div>
                             <button className="submit" onClick={clickBtn}>자리 수정</button>
                         </>
@@ -321,12 +317,10 @@ const SeatModal = () => {
             }
             .check{
                 display: flex;
-                flex-direction: column;
+                justify-content: center;
                 width: 100%;
-                gap: 10px;
-            }
-            .space{
-                margin: 0 10px;
+                gap: 20px;
+                margin: 10px 0;
             }
             .check button{
                 width: 80px;
@@ -334,10 +328,8 @@ const SeatModal = () => {
                 outline: none;
                 border: solid;
                 border-width: 1px;
-                border-color: #ddd;
+                border-color: #999;
                 background: #fff;
-                margin-left: 50px;
-                margin-right: 25px;
             }
             .check span{
                 width: 200px !important;
