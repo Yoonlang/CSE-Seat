@@ -27,12 +27,14 @@ const getEntryState = (history) => {
     if (!history.part1.inTime) history.state = 0;
     else if (history.part1.outTime){
       history.part1End = true;
-      if (history.part2.isPart)
+      if (history.part2.isPart){
+        history.part1End = false;
         if(!history.part2.inTime) {
           history.state = 0;
         }
         else if(!history.part2.outTime) history.state = 1;
         else history.state = 2
+      }
       else history.state = 2; 
     }
     else history.state = 1;
@@ -76,7 +78,6 @@ const getEntryState = (history) => {
       history.state = 2;
     }
   }
-
 
   if (history.part1End != true) history.part1End = false;
 }
