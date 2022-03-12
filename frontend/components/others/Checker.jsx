@@ -25,7 +25,7 @@ const Checker = () => {
         // 1,2부면 part1End 확인
         // 아니면 state만으로 조져
 
-        console.log(res);
+        // console.log(res);
     }
 
     useEffect(async () => {
@@ -45,7 +45,6 @@ const Checker = () => {
         } catch (e) {
             console.log("Error: ", e);
         }
-
     }, [pathname]);
 
     useEffect(async () => {
@@ -56,6 +55,7 @@ const Checker = () => {
                     credentials: "include",
                 })
                 const data = await res.json();
+                console.log(data);
                 setCompleteHistoryData(data);
 
                 test(data);
