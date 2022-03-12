@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DetailHistory from "../molecules/DetailHistory";
 
-const SeatHistory = ({ date, part1, part2, part1End, state, detail, isCancel }) => {
+const SeatHistory = ({ date, part1, part2, part1End, state, detail, cancel }) => {
     const [isOpenModal, setIsOpenModal] = useState(false);
 
     const handleModal = () => {
@@ -9,6 +9,11 @@ const SeatHistory = ({ date, part1, part2, part1End, state, detail, isCancel }) 
     }
 
     // 여기서 part1End, state, part1,2 유무를 통해 입퇴실 버튼 보이게하는거 조절
+    // 입퇴실 버튼부터 처리하자
+
+
+
+
 
     return (
         <>
@@ -28,7 +33,8 @@ const SeatHistory = ({ date, part1, part2, part1End, state, detail, isCancel }) 
                             <span>2부 : {part2.seat_room}호 {part2.seat_num}번 좌석</span>
                             <button>입실</button>
                             <button>퇴실</button>
-                        </div> : ``
+                        </div> :
+                        cancel[1] ? <div><span>2부 : {part2.seat_room}호 {part2.seat_num}번 좌석</span></div> : ``
                 }
                 <button onClick={handleModal}>자세히 보기</button>
             </div>
@@ -39,7 +45,17 @@ const SeatHistory = ({ date, part1, part2, part1End, state, detail, isCancel }) 
                 part2={part2}
                 state={state}
                 part1End={part1End}
+                cancel={cancel}
             />
+            {/* ${isCancel ? `
+                    background: #dedede;
+                    border-color: #ccc;
+                    box-shadow: 0 -1px #ddd;
+                ` : `
+                    background: #fff;
+                    border-color: #eee;
+                    box-shadow: 0 -1px #eee;
+                `} */}
             <style jsx>{`
             .history{
                 display: grid;
@@ -52,15 +68,8 @@ const SeatHistory = ({ date, part1, part2, part1End, state, detail, isCancel }) 
                 white-space: nowrap;
                 font-size: 16px;
                 margin-top: 7px;
-                ${isCancel ? `
-                    background: #dedede;
-                    border-color: #ccc;
-                    box-shadow: 0 -1px #ddd;
-                ` : `
-                    background: #fff;
-                    border-color: #eee;
-                    box-shadow: 0 -1px #eee;
-                `}
+                background: #fff;
+
             }
             .history > span{
                 align-self: start;
