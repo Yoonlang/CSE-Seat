@@ -56,6 +56,7 @@ const getEntryState = (history) => {
     if (curT>t){
       history.part1End = true;
       if(!history.part2.isPart)
+        history.part1End = false;
         history.state = 2;
     }
   } 
@@ -70,7 +71,7 @@ const getEntryState = (history) => {
   else if(history.part1.isPart){
     if(history.part1.cancel_marker){
       history.state = 2;
-      history.part1End = true;
+      history.part1End = false;
     }
   }
   else if(history.part2.isPart){
