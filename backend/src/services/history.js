@@ -23,11 +23,11 @@ const getEntryState = (history) => {
   //입실전 0 입실중 1 퇴실 2
   // if state = 0 and part1End = true, 1부퇴실, 2부 미입실 상황
 
-  if (history.part1){
+  if (history.part1.isPart){
     if (!history.part1.inTime) history.state = 0;
     else if (history.part1.outTime){
       history.part1End = true;
-      if (history.part2.ispart)
+      if (history.part2.isPart)
         if(!history.part2.inTime) {
           history.state = 0;
         }
@@ -37,7 +37,7 @@ const getEntryState = (history) => {
     }
     else history.state = 1;
   }
-  else if (history.part2.ispart){
+  else if (history.part2.isPart){
     if(!history.part2.inTime) history.state = 0;
     else if(!history.part2.outTime) history.state = 1;
     else history.state = 2;
@@ -49,14 +49,34 @@ const getEntryState = (history) => {
   
   if (curT>t) history.state = 2;
 
-  if(history.part1){
+  if(history.part1.isPart){
     t = new Date(history.date +' 18:30:00');
     if (curT>t){
       history.part1End = true;
-      if(!history.part2)
+      if(!history.part2.isPart)
         history.state = 2;
     }
   } 
+  //취소에 따른 비활성화
+
+  if(history.part1.isPart && history.part2.isPart){
+    if(history.part1.cancel_marker && history.part2.cancel_marker){
+      history.state = 2;
+      history.part1End = true;
+    }
+  }
+  else if(history.part1.isPart){
+    if(history.part1.cancel_marker){
+      history.state = 2;
+      history.part1End = true;
+    }
+  }
+  else if(history.part2.isPart){
+    if(history.part2.cancel_marker){
+      history.state = 2;
+    }
+  }
+
 
   if (history.part1End != true) history.part1End = false;
 }
@@ -88,7 +108,8 @@ const makeHistorys = async (historyDTO)=>{
         result[i].want.friends = await makeFriendsArr(result[i].apply_id);
         result[i].part1 == 1 ? result[i].part1Temp = true : result[i].part1Temp = false;
         result[i].part2 == 1 ? result[i].part2Temp = true : result[i].part2Temp = false; 
-        result[i].cancel_marker == 1 ? result[i].cancel_marker = true : result[i].cancel_marker = false;
+        result[i].part1_cancel_marker == 1 ? result[i].part1_cancel_marker = true : result[i].part1_cancel_marker = false;
+        result[i].part2_cancel_marker == 1 ? result[i].part2_cancel_marker = true : result[i].part2_cancel_marker = false;
         prev_id = result[i].apply_id;
         
         result[i].part1 = {
@@ -96,12 +117,14 @@ const makeHistorys = async (historyDTO)=>{
           building_id : result[i].part1_building_id,
           seat_room : result[i].part1_seat_room,
           seat_num : result[i].part1_seat_num,
+          cancel_marker : result[i].part1_cancel_marker == 1 ? true : false
         };
         result[i].part2 = {
           isPart: result[i].part2Temp,
           building_id : result[i].part2_building_id,
           seat_room : result[i].part2_seat_room,
           seat_num : result[i].part2_seat_num,
+          cancel_marker : result[i].part2_cancel_marker == 1 ? true : false
         }
         
         result[i].part1.inTime = null;
@@ -133,6 +156,8 @@ const makeHistorys = async (historyDTO)=>{
         delete result[i].want_seat_num,
         delete result[i].part1Temp,
         delete result[i].part2Temp,
+        delete result[i].part1_cancel_marker,
+        delete result[i].part2_cancel_marker,
 
         dataSet.push(result[i]);
       }
