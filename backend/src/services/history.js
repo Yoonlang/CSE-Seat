@@ -36,7 +36,7 @@ const getEntryState = (history) => {
       }
       else{
         history.state = 2;
-        history.part1End = true;
+        history.part1End = false;
       }  
     }
     else history.state = 1;
