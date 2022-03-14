@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState, memo } from "react";
 import { useRecoilState } from "recoil";
 import RoomSeats from "../molecules/RoomSeats";
 import { seatingChartModalAtom } from "../others/state";
@@ -157,4 +157,8 @@ const SeatingChartModal = ({ data }) => {
     );
 }
 
-export default SeatingChartModal;
+const handleMemo = (prevData, nextData) => {
+    return prevData.result === nextData.result;
+}
+
+export default React.memo(SeatingChartModal, handleMemo);
