@@ -28,7 +28,6 @@ const getEntryState = (history) => {
     else if (history.part1.outTime){
       history.part1End = true;
       if (history.part2.isPart){
-        history.part1End = false;
         if(!history.part2.inTime) {
           history.state = 0;
         }
