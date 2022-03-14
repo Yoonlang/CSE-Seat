@@ -20,8 +20,46 @@ const makeFriendsArr = async(apply_id)=>{
 }
 
 const getEntryState = (history) => {
-  //입실전 0 입실중 1 퇴실 2
+  //입실전 0 입실중 1 퇴실 2 미래 3
   // if state = 0 and part1End = true, 1부퇴실, 2부 미입실 상황
+
+  history.part1End = false;
+
+    //시간 지남/안됨에 따른 state 처리 
+  
+  let late1_t = new Date(history.date + ' 18:30:00');
+  let late2_t = new Date(dateService.getTomorrowDateOf(history.date) + ' 07:00:00');
+  let ealry1_t = new Date(history.date + ' 06:00:00');
+  let ealry2_t = new Date(history.date + ' 18:00:00');
+  let curT  = new Date(dateService.getNowTime());
+
+  if(history.part1.isPart){
+    if(curT<ealry1_t){
+      history.state = 3;
+      return;
+    }
+    if(history.part2.isPart){
+      if(curT>late2_t){
+        history.state = 2;
+        history.part1End = true;
+        return;
+      }
+    }else{
+      if(curT>late1_t){
+        history.state = 2;
+        return;
+      }
+    }
+  }else if(history.part2.isPart){
+    if(curT<ealry2_t){
+      history.state = 3;
+      return;
+    }
+    if(curT>late2_t){
+      history.state = 2;
+      return;
+    }
+  }
 
   if (history.part1.isPart){
     if (!history.part1.inTime) history.state = 0;
@@ -46,23 +84,7 @@ const getEntryState = (history) => {
     else if(!history.part2.outTime) history.state = 1;
     else history.state = 2;
   }
-  //시간 지남에 따른 비활성화
-  
-  let t = new Date(dateService.getTomorrowDateOf(history.date)+' 07:00:00');
-  let curT  = new Date(dateService.getNowTime());
-  
-  if (curT>t) history.state = 2;
 
-  if(history.part1.isPart){
-    t = new Date(history.date +' 18:30:00');
-    if (curT>t){
-      history.part1End = true;
-      if(!history.part2.isPart){
-        history.part1End = false;
-        history.state = 2;
-      }
-    }
-  } 
   //취소에 따른 비활성화
 
   if(history.part1.isPart && history.part2.isPart){
@@ -83,7 +105,6 @@ const getEntryState = (history) => {
     }
   }
 
-  if (history.part1End != true) history.part1End = false;
 }
 
 
@@ -106,7 +127,6 @@ const makeHistorys = async (historyDTO)=>{
         result[i].want = {
           building_id : result[i].want_building_id,
           seat_num : result[i].want_seat_num,
-          
         };
         
         result[i].want.seat_room = await makeRoomsArr(result[i].apply_id);
