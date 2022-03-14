@@ -25,13 +25,13 @@ const DetailHistory = ({ isOpenModal = false, detail: { applyTime, want: { frien
             <div className="detail">
                 <div>
                     신청 날짜 및 시간 : <br className="br" /> {handleTime(applyTime)} <br />
-                    {part1.isPart ?
+                    {part1.isPart && !cancel[0] ?
                         <>
                             1부 입실 : {handleTime(part1.inTime, true)}< br />
                             1부 퇴실 : {handleTime(part1.outTime, false)}< br />
                         </>
                         : ``}
-                    {part2.isPart ?
+                    {part2.isPart && !cancel[1] ?
                         <>
                             2부 입실 : {handleTime(part2.inTime, true)}< br />
                             2부 퇴실 : {handleTime(part2.outTime, false)}< br />

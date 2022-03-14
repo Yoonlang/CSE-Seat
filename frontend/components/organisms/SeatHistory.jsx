@@ -3,12 +3,13 @@ import { useRecoilState } from "recoil";
 import DetailHistory from "../molecules/DetailHistory";
 import { refreshIndexAtom } from "../others/state";
 
-const SeatHistory = ({ id, date, part1, part2, part1End, state, detail, cancel }) => {
+const SeatHistory = ({ id, date, part1, part2, part1End, state, detail }) => {
+    const cancel = [part1.cancel_marker, part2.cancel_marker];
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     let isCancel = false;
     if (cancel[0] & cancel[1]) isCancel = true;
-    if (part1.isPart ^ part2.isPart) {
+    else if (part1.isPart ^ part2.isPart) {
         if (part1.isPart & part1.cancel_marker) isCancel = true;
         if (part2.isPart & part2.cancel_marker) isCancel = true;
     }
@@ -19,8 +20,7 @@ const SeatHistory = ({ id, date, part1, part2, part1End, state, detail, cancel }
 
     const test = async (isCheckIn) => {
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
-        // 1부에 대한건지 알아야해
-        let isPart1;
+        let isPart1 = false;
         if (part1.isPart ^ part2.isPart) isPart1 = part1.isPart ? true : false;
         else if (part1.isPart & part2.isPart) isPart1 = part1End ? false : true;
 
@@ -43,12 +43,10 @@ const SeatHistory = ({ id, date, part1, part2, part1End, state, detail, cancel }
             if (data.result === false) {
                 throw ("Can't check");
             }
-            console.log(data);
             setRefreshData(!refreshData);
         } catch (e) {
             console.log("Error: ", e);
         }
-
 
     }
 
@@ -58,46 +56,49 @@ const SeatHistory = ({ id, date, part1, part2, part1End, state, detail, cancel }
                 <span>{date}</span>
                 {
                     part1.isPart ?
-                        <div>
-                            <span>1부 : {part1.seat_room}호 {part1.seat_num}번 좌석</span>
-                            {
-                                state === 2 ? `` :
-                                    !part1End ?
-                                        (
-                                            state === 0 ?
-                                                <>
-                                                    <button className="on" onClick={() => test(true)}>입실</button>
-                                                    <button className="off">퇴실</button>
-                                                </> :
-                                                <>
-                                                    <button className="off">입실</button>
-                                                    <button className="on" onClick={() => test(false)}>퇴실</button>
-                                                </>
-                                        ) : ``
-                            }
-                        </div> : ``
+                        part1.cancel_marker ? (<div><span className="line">1부 : {part1.seat_room}호 {part1.seat_num}번 좌석</span></div>) :
+                            <div>
+                                <span>1부 : {part1.seat_room}호 {part1.seat_num}번 좌석</span>
+                                {
+                                    state === 2 ? `` :
+                                        !part1End ?
+                                            (
+                                                state === 0 ?
+                                                    <>
+                                                        <button className="on" onClick={() => test(true)}>입실</button>
+                                                        <button className="off">퇴실</button>
+                                                    </> :
+                                                    <>
+                                                        <button className="off">입실</button>
+                                                        <button className="on" onClick={() => test(false)}>퇴실</button>
+                                                    </>
+                                            ) : ``
+                                }
+                            </div> :
+                        part1.cancel_marker ? (<div><span className="line">1부 : {part1.seat_room}호 {part1.seat_num}번 좌석</span></div>) : ``
                 }
                 {
                     part2.isPart ?
-                        <div>
-                            <span>2부 : {part2.seat_room}호 {part2.seat_num}번 좌석</span>
-                            {
-                                state === 2 ? `` :
-                                    part1End || !(part1.isPart) ?
-                                        (
-                                            state === 0 ?
-                                                <>
-                                                    <button className="on" onClick={() => test(true)}>입실</button>
-                                                    <button className="off">퇴실</button>
-                                                </> :
-                                                <>
-                                                    <button className="off">입실</button>
-                                                    <button className="on" onClick={() => test(false)}>퇴실</button>
-                                                </>
-                                        ) : ``
-                            }
-                        </div> :
-                        cancel[1] ? <div><span>2부 : {part2.seat_room}호 {part2.seat_num}번 좌석</span></div> : ``
+                        part2.cancel_marker ? (<div><span className="line">2부 : {part2.seat_room}호 {part2.seat_num}번 좌석</span></div>) :
+                            <div>
+                                <span>2부 : {part2.seat_room}호 {part2.seat_num}번 좌석</span>
+                                {
+                                    state === 2 ? `` :
+                                        part1End || !(part1.isPart) ?
+                                            (
+                                                state === 0 ?
+                                                    <>
+                                                        <button className="on" onClick={() => test(true)}>입실</button>
+                                                        <button className="off">퇴실</button>
+                                                    </> :
+                                                    <>
+                                                        <button className="off">입실</button>
+                                                        <button className="on" onClick={() => test(false)}>퇴실</button>
+                                                    </>
+                                            ) : ``
+                                }
+                            </div> :
+                        part2.cancel_marker ? (<div><span className="line">2부 : {part2.seat_room}호 {part2.seat_num}번 좌석</span></div>) : ``
                 }
                 <button onClick={handleModal}>자세히 보기</button>
             </div>
@@ -137,6 +138,9 @@ const SeatHistory = ({ id, date, part1, part2, part1End, state, detail, cancel }
             }
             .history > span{
                 align-self: start;
+            }
+            .line{
+                text-decoration: line-through;
             }
             .history > button{
                 grid-column: 2/2;

@@ -21,7 +21,7 @@ const History = () => {
                 <div className="seatHistorys">
                     {
                         completeHistoryData?.data.map((prop, index) => {
-                            const { apply: { time: applyTime }, apply_id: id, part1_cancel_marker, part2_cancel_marker, date, part1, part1End, part2, state, want } = prop;
+                            const { apply: { time: applyTime }, apply_id: id, date, part1, part1End, part2, state, want } = prop;
                             const splitDate = date.split('-');
                             const handledDate = `${splitDate[0]}년 ${splitDate[1][0] === '0' ? splitDate[1][1] : splitDate[1]}월 ${splitDate[2][0] === '0' ? splitDate[2][1] : splitDate[2]}일`
                             return <Fragment key={prop, index}>
@@ -31,7 +31,6 @@ const History = () => {
                                     part1={part1}
                                     part1End={part1End}
                                     part2={part2}
-                                    cancel={[part1_cancel_marker, part2_cancel_marker]}
                                     state={state}
                                     detail={{ applyTime, want }}
                                 />

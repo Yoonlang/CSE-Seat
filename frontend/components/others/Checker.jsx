@@ -18,14 +18,13 @@ const Checker = () => {
         const res = data.data.filter((prop) => {
             return prop.state === 2 ? 0 : 1;
         })
-
         setHistoryToOther(res);
 
         // part 먼저 확인
         // 1,2부면 part1End 확인
         // 아니면 state만으로 조져
 
-        // console.log(res);
+        console.log(res);
     }
 
     useEffect(async () => {
