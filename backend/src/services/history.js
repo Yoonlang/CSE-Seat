@@ -26,15 +26,18 @@ const getEntryState = (history) => {
   if (history.part1.isPart){
     if (!history.part1.inTime) history.state = 0;
     else if (history.part1.outTime){
-      history.part1End = true;
       if (history.part2.isPart){
+        history.part1End = true;
         if(!history.part2.inTime) {
           history.state = 0;
         }
         else if(!history.part2.outTime) history.state = 1;
         else history.state = 2
       }
-      else history.state = 2; 
+      else{
+        history.state = 2;
+        history.part1End = true;
+      }  
     }
     else history.state = 1;
   }
@@ -54,9 +57,10 @@ const getEntryState = (history) => {
     t = new Date(history.date +' 18:30:00');
     if (curT>t){
       history.part1End = true;
-      if(!history.part2.isPart)
+      if(!history.part2.isPart){
         history.part1End = false;
         history.state = 2;
+      }
     }
   } 
   //취소에 따른 비활성화
