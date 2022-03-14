@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 
-const DetailHistory = ({ isOpenModal = false, detail: { applyTime, want: { friends, seat_num: seatNum, seat_room: seatRoom } }, part1, part2, state, part1End, cancel }) => {
+const DetailHistory = ({ isOpenModal = false, detail: { applyTime, want: { friends, seat_num: seatNum, seat_room: seatRoom } }, part1, part2, state, part1End, cancel, isCancel }) => {
+
     const handleTime = (time, isPart1 = null) => {
         if (isPart1 !== null && cancel[isPart1 ? 0 : 1]) {
             return 'X';
@@ -24,14 +25,13 @@ const DetailHistory = ({ isOpenModal = false, detail: { applyTime, want: { frien
             <div className="detail">
                 <div>
                     신청 날짜 및 시간 : <br className="br" /> {handleTime(applyTime)} <br />
-                    {/* {isCancel ? <>취소된 신청입니다. < br /></> : ``}<br /> */}
-                    {part1.isPart ?
+                    {part1.isPart && !cancel[0] ?
                         <>
                             1부 입실 : {handleTime(part1.inTime, true)}< br />
                             1부 퇴실 : {handleTime(part1.outTime, false)}< br />
                         </>
                         : ``}
-                    {part2.isPart ?
+                    {part2.isPart && !cancel[1] ?
                         <>
                             2부 입실 : {handleTime(part2.inTime, true)}< br />
                             2부 퇴실 : {handleTime(part2.outTime, false)}< br />
@@ -68,13 +68,7 @@ const DetailHistory = ({ isOpenModal = false, detail: { applyTime, want: { frien
                     }
                 </div>
             </div>
-            {/* ${isCancel ? `
-            background: #dedede;
-            border-color: #ddd;
-            ` : `
-            background: #fff;
-            border-color: #eee;
-            `} */}
+
             <style jsx>{`
         .detail{
             display: ${(isOpenModal ? 'flex' : 'none')};
@@ -82,7 +76,13 @@ const DetailHistory = ({ isOpenModal = false, detail: { applyTime, want: { frien
             flex-wrap: wrap;
             border:solid;
             border-width: 0 0 1px 0;
-            
+            ${isCancel ? `
+            background: #dedede;
+            border-color: #ddd;
+            ` : `
+            background: #fff;
+            border-color: #eee;
+            `}
         }
         .detail > div{
             display: flex;

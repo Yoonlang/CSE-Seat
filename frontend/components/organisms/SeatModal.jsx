@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { Seat, seatColor } from "../atoms/Seat";
-import { loginAtom, refreshIndexAtom, seatModalAtom } from "../others/state";
+import { historyToIndexAndInfoAtom, loginAtom, refreshIndexAtom, seatModalAtom } from "../others/state";
 
 const SeatModal = () => {
     const loginData = useRecoilValue(loginAtom);
@@ -13,9 +13,11 @@ const SeatModal = () => {
     const [twoColor, setTwoColor] = useState('');
     const [isMySeat, setIsMySeat] = useState([false, false]);
     const [isReadyToRequest, setIsReadyToRequest] = useState([false, false]);
+    const checkInOutData = useRecoilValue(historyToIndexAndInfoAtom);
     const modalOutside = useRef();
     const cancelBtn = useRef();
     const router = useRouter();
+    let myState = 2;
 
     const changeColor = (color) => {
         if (color === seatColor[0]) return seatColor[4];
@@ -161,8 +163,8 @@ const SeatModal = () => {
             const data = await res.json();
             if (data.result === false)
                 throw ("Can't check");
+            setRefreshData(!refreshData);
             if (!isCheckIn) {
-                setRefreshData(!refreshData);
                 closeModal();
             }
         } catch (e) {
@@ -181,6 +183,7 @@ const SeatModal = () => {
             two === 2 ? tempSeat[1] = true : false;
             setIsMySeat(tempSeat);
         }
+        console.log(checkInOutData);
     }, [isModalOpen]);
 
     return (
@@ -210,8 +213,33 @@ const SeatModal = () => {
                     {isMySeat[0] | isMySeat[1] ?
                         <>
                             <div className="check">
-                                <button onClick={() => test(true)}>입실</button>
-                                <button onClick={() => test(false)}>퇴실</button>
+                                {
+                                    checkInOutData?.some((prop) => {
+                                        const { part1, part2, state } = prop;
+                                        if (part1.isPart & isMySeat[0])
+                                            if (Number(part1.seat_num) === seatNumber && Number(part1.seat_room) === roomNumber) {
+                                                myState = state;
+                                                return true;
+                                            };
+                                        if (part2.isPart & isMySeat[1])
+                                            if (Number(part2.seat_num) === seatNumber && Number(part2.seat_room) === roomNumber) {
+                                                myState = state;
+                                                return true;
+                                            }
+                                        return false;
+                                    }) ?
+                                        myState === 0 ?
+                                            <>
+                                                <button className="on" onClick={() => test(true)}>입실</button>
+                                                <button className="off">퇴실</button>
+                                            </> :
+                                            <>
+                                                <button className="off">입실</button>
+                                                <button className="on" onClick={() => test(false)}>퇴실</button>
+                                            </>
+
+                                        : ``
+                                }
                             </div>
                             <button className="submit" onClick={clickBtn}>자리 수정</button>
                         </>
@@ -226,6 +254,7 @@ const SeatModal = () => {
                     />
                 </div>
             </div>
+
             <style jsx>{`
             .modal{
                 display: none;
@@ -325,15 +354,24 @@ const SeatModal = () => {
             .check button{
                 width: 80px;
                 height: 35px;
-                outline: none;
-                border: solid;
-                border-width: 1px;
-                border-color: #999;
-                background: #fff;
             }
             .check span{
                 width: 200px !important;
                 height: 100%;
+            }
+            .off{
+                background: #fff;
+                outline: none;
+                border: 1px solid #ddd;
+                color: #ddd;
+                cursor: default;
+            }
+            .on{
+                background: #fff;
+                outline: none;
+                border: 1px solid #999;
+                color: #000;
+                cursor: pointer;
             }
             .submit{
                 position: absolute;
