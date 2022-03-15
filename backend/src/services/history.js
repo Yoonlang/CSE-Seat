@@ -111,6 +111,7 @@ const getEntryState = (history) => {
 const makeHistorys = async (historyDTO)=>{
   try {
     let result = await historyModel.getHistorys(historyDTO);
+    
     const dataSet = new Array();
     let prev_id = -1;
     for (let i=0; i<result.length; i++){
@@ -129,8 +130,10 @@ const makeHistorys = async (historyDTO)=>{
           seat_num : result[i].want_seat_num,
         };
         
-        result[i].want.seat_room = await makeRoomsArr(result[i].apply_id);
-        result[i].want.friends = await makeFriendsArr(result[i].apply_id);
+        //result[i].want.seat_room = await makeRoomsArr(result[i].apply_id);
+        //result[i].want.friends = await makeFriendsArr(result[i].apply_id);
+        result[i].want.seat_room = []
+        result[i].want.friends = []
         result[i].part1 == 1 ? result[i].part1Temp = true : result[i].part1Temp = false;
         result[i].part2 == 1 ? result[i].part2Temp = true : result[i].part2Temp = false; 
         result[i].part1_cancel_marker == 1 ? result[i].part1_cancel_marker = true : result[i].part1_cancel_marker = false;
