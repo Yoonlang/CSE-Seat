@@ -14,17 +14,11 @@ const Checker = () => {
     const { isLogin } = loginData;
 
 
-    const test = (data) => {
+    const handleHistoryData = (data) => {
         const res = data.data.filter((prop) => {
             return prop.state === 2 ? 0 : 1;
         })
         setHistoryToOther(res);
-
-        // part 먼저 확인
-        // 1,2부면 part1End 확인
-        // 아니면 state만으로 조져
-
-        console.log(res);
     }
 
     useEffect(async () => {
@@ -56,9 +50,7 @@ const Checker = () => {
                 const data = await res.json();
                 console.log(data);
                 setCompleteHistoryData(data);
-
-                test(data);
-
+                handleHistoryData(data);
             } catch (e) {
                 console.log("Error: ", e);
             }

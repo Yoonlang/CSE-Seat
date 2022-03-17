@@ -143,7 +143,7 @@ const SeatModal = () => {
         if (isReadyToRequest[0] | isReadyToRequest[1]) submitReq();
     }
 
-    const test = async (isCheckIn) => {
+    const handleCheck = async (isCheckIn) => {
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
         try {
             const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
@@ -183,7 +183,6 @@ const SeatModal = () => {
             two === 2 ? tempSeat[1] = true : false;
             setIsMySeat(tempSeat);
         }
-        console.log(checkInOutData);
     }, [isModalOpen]);
 
     return (
@@ -230,12 +229,12 @@ const SeatModal = () => {
                                     }) ?
                                         myState === 0 ?
                                             <>
-                                                <button className="on" onClick={() => test(true)}>입실</button>
+                                                <button className="on" onClick={() => handleCheck(true)}>입실</button>
                                                 <button className="off">퇴실</button>
                                             </> :
                                             <>
                                                 <button className="off">입실</button>
-                                                <button className="on" onClick={() => test(false)}>퇴실</button>
+                                                <button className="on" onClick={() => handleCheck(false)}>퇴실</button>
                                             </>
 
                                         : ``

@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import DetailHistory from "../molecules/DetailHistory";
 import { refreshIndexAtom } from "../others/state";
 
-const SeatHistory = ({ id, date, part1, part2, part1End, state, detail }) => {
+const SeatHistory = ({ date, part1, part2, part1End, state, detail }) => {
     const cancel = [part1.cancel_marker, part2.cancel_marker];
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
@@ -18,7 +18,7 @@ const SeatHistory = ({ id, date, part1, part2, part1End, state, detail }) => {
         setIsOpenModal(!isOpenModal);
     }
 
-    const test = async (isCheckIn) => {
+    const handleCheck = async (isCheckIn) => {
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
         let isPart1 = false;
         if (part1.isPart ^ part2.isPart) isPart1 = part1.isPart ? true : false;
@@ -88,12 +88,12 @@ const SeatHistory = ({ id, date, part1, part2, part1End, state, detail }) => {
                                             (
                                                 state === 0 ?
                                                     <>
-                                                        <button className="on" onClick={() => test(true)}>입실</button>
+                                                        <button className="on" onClick={() => handleCheck(true)}>입실</button>
                                                         <button className="off">퇴실</button>
                                                     </> :
                                                     <>
                                                         <button className="off">입실</button>
-                                                        <button className="on" onClick={() => test(false)}>퇴실</button>
+                                                        <button className="on" onClick={() => handleCheck(false)}>퇴실</button>
                                                     </>
                                             ) : ``
                                 }
