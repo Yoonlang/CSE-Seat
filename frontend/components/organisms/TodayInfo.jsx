@@ -6,7 +6,7 @@ import { historyToIndexAndInfoAtom } from "../others/state";
 
 const TodayInfo = () => {
     const [isSelectCancel, setIsSelectCancel] = useState(false);
-    const [handledInfoData, setHandledInfoData] = useState([]);
+    const [handledInfoData, setHandledInfoData] = useState();
     const [checkboxState, setCheckboxState] = useState([2, 2, 2, 2]);
     const checkData = useRecoilValue(historyToIndexAndInfoAtom);
 
@@ -16,7 +16,6 @@ const TodayInfo = () => {
                 return prop === 1;
             })) {
                 alert("신청");
-                setCheckboxState([0, 0, 0, 0]);
             }
             setIsSelectCancel(false);
         }
@@ -32,50 +31,88 @@ const TodayInfo = () => {
     }
 
     const handleCheckData = (req) => {
-        console.log(req);
-        // 뽑아내야할 정보들
-        // 오늘/내일, 1/2부에 대해서
-        // 보이는 정보
-        // isPart => 정보 보이게 하기 + checkBox 비활성화
-        // part1End, state => 그 자리에 대해서 입/퇴실 버튼 활성화 여부
-        // 자리 번호 + 방 번호 => 보여주는 용도
-        // isToday => 오늘인지 내일인지 알기 위해서
-
-        // 요청할 때 필요한 정보
-        // 1. 입/퇴실 버튼 누르는거 관련
-        // buildingId, seatRoom, seatNum, part1, part2
-        // 여기서 part1, part2는 그냥 자리 있으면 다 true가 맞음
-        // 단일로 true / false 따지는게 아님
-        // 2. 자리 취소 관련
-        // buildingId, seatRoom, seatNum, isToday, part1, part2
-        // cancel에서 part1, part2는 내가 취소하고싶은 것만이었나?
-
-        // 뽑아내야할 정보는 완료했고, 이제 저걸 토대로 handledInfoData 만들기
-        // 각 오늘/1부 에 대해서 들어가야할 정보들
-        // 1. isPart로 이 자리가 내 자리로 예약되어있는지 확인한다
-        // 1-1. 내 자리가 아니다 ? span 뺴고, 입퇴실 버튼 빼고, checkBox 2
-        // 2. 내자리다 => 보여줘야할 정보와 fetch할때 필요한걸로 나눠
-        // 2-1. 보여줘야할 정보들
-        // 
-
-        const myReq = { // 4개 각각에 대한 완성된 객체
-            isPart: true,
+        const tempInfoData = [{
+            isPart: false,
             showingData: {
-                checkState: 1, // 입퇴실 버튼용
-                // 0, 1, 2, 3에 대해 앞에서 미리 처리해서 넣어두자
-                seatRoom: 101,
-                seatNum: 12,
+                checkState: undefined,
+                seatRoom: undefined,
+                seatNum: undefined,
             },
             fetchingData: {
-                buildingId: 404,
-                seatRoom: 101,
-                seatNum: 12,
-                isToday: true,
-                // part1 part2에 대해서 여기서 처리해주는게 맞을까?
+                buildingId: undefined,
+                seatRoom: undefined,
+                seatNum: undefined,
+                isToday: undefined,
             },
-        }
+        }, {
+            isPart: false,
+            showingData: {
+                checkState: undefined,
+                seatRoom: undefined,
+                seatNum: undefined,
+            },
+            fetchingData: {
+                buildingId: undefined,
+                seatRoom: undefined,
+                seatNum: undefined,
+                isToday: undefined,
+            },
+        }, {
+            isPart: false,
+            showingData: {
+                checkState: undefined,
+                seatRoom: undefined,
+                seatNum: undefined,
+            },
+            fetchingData: {
+                buildingId: undefined,
+                seatRoom: undefined,
+                seatNum: undefined,
+                isToday: undefined,
+            },
+        }, {
+            isPart: false,
+            showingData: {
+                checkState: undefined,
+                seatRoom: undefined,
+                seatNum: undefined,
+            },
+            fetchingData: {
+                buildingId: undefined,
+                seatRoom: undefined,
+                seatNum: undefined,
+                isToday: undefined,
+            },
+        }];
 
-
+        req?.forEach(({ apply_id, /* apply_id 필요없음 */ isToday = true, /*바꿔줘야함*/ part1, part2, part1End, state }) => {
+            if (apply_id === 102) isToday = false; // 나중에 바꿔줘야함
+            const dayIndex = isToday ? 0 : 2;
+            if (part1.isPart && !part1.cancel_marker && ((part2.isPart & !part1End) | (!part2.isPart))) {
+                tempInfoData[dayIndex].isPart = true;
+                tempInfoData[dayIndex].showingData.checkState = state;
+                tempInfoData[dayIndex].showingData.seatNum = part1.seat_num;
+                tempInfoData[dayIndex].showingData.seatRoom = part1.seat_room;
+                tempInfoData[dayIndex].fetchingData.buildingId = part1.building_id;
+                tempInfoData[dayIndex].fetchingData.isToday = isToday;
+                tempInfoData[dayIndex].fetchingData.seatNum = part1.seat_num;
+                tempInfoData[dayIndex].fetchingData.seatRoom = part1.seat_room;
+            }
+            if (part2.isPart && !part2.cancel_marker) {
+                tempInfoData[dayIndex + 1].isPart = true;
+                if (isToday && part1.isPart && !part1.cancel_marker && !part1End)
+                    tempInfoData[dayIndex + 1].showingData.checkState = 3;
+                else
+                    tempInfoData[dayIndex + 1].showingData.checkState = state;
+                tempInfoData[dayIndex + 1].showingData.seatNum = part2.seat_num;
+                tempInfoData[dayIndex + 1].showingData.seatRoom = part2.seat_room;
+                tempInfoData[dayIndex + 1].fetchingData.buildingId = part2.building_id;
+                tempInfoData[dayIndex + 1].fetchingData.isToday = isToday;
+                tempInfoData[dayIndex + 1].fetchingData.seatNum = part2.seat_num;
+                tempInfoData[dayIndex + 1].fetchingData.seatRoom = part2.seat_room;
+            }
+        });
+        setHandledInfoData(tempInfoData);
     }
 
     useEffect(() => {
@@ -83,8 +120,12 @@ const TodayInfo = () => {
     }, [checkData])
 
     useEffect(() => {
-        // infoData가 완성되면 checkbox 상태 그에 맞게 고쳐줘야함.
-        if (handledInfoData) setCheckboxState([0, 0, 0, 0]);
+        const tempCheckbox = [];
+        if (handledInfoData) handledInfoData?.forEach(({ isPart }, index) => {
+            tempCheckbox[index] = isPart ? 0 : 2;
+        })
+        setCheckboxState(tempCheckbox);
+        console.log(handledInfoData);
     }, [handledInfoData])
 
     return (

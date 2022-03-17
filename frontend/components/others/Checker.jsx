@@ -16,6 +16,7 @@ const Checker = () => {
 
     const handleHistoryData = (data) => {
         const res = data.data.filter((prop) => {
+            if (prop.apply_id === 96) return 0; /* 예외처리라 없애야함 나중에. */
             return prop.state === 2 ? 0 : 1;
         })
         setHistoryToOther(res);
