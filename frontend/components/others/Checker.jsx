@@ -18,6 +18,7 @@ const Checker = () => {
         const res = data.data.filter((prop) => {
             return prop.state === 2 ? 0 : 1;
         })
+        console.log(res);
         setHistoryToOther(res);
     }
 

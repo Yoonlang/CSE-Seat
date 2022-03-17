@@ -65,12 +65,12 @@ const SeatHistory = ({ date, part1, part2, part1End, state, detail }) => {
                                             (
                                                 state === 0 ?
                                                     <>
-                                                        <button className="on" onClick={() => test(true)}>입실</button>
+                                                        <button className="on" onClick={() => handleCheck(true)}>입실</button>
                                                         <button className="off">퇴실</button>
                                                     </> :
                                                     <>
                                                         <button className="off">입실</button>
-                                                        <button className="on" onClick={() => test(false)}>퇴실</button>
+                                                        <button className="on" onClick={() => handleCheck(false)}>퇴실</button>
                                                     </>
                                             ) : ``
                                 }

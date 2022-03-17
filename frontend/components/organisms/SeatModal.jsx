@@ -216,12 +216,12 @@ const SeatModal = () => {
                                     checkInOutData?.some((prop) => {
                                         const { part1, part2, state } = prop;
                                         if (part1.isPart & isMySeat[0])
-                                            if (Number(part1.seat_num) === seatNumber && Number(part1.seat_room) === roomNumber) {
+                                            if (Number(part1.seat_num) === seatNumber && Number(part1.seat_room) === roomNumber && state !== 3) {
                                                 myState = state;
                                                 return true;
                                             };
                                         if (part2.isPart & isMySeat[1])
-                                            if (Number(part2.seat_num) === seatNumber && Number(part2.seat_room) === roomNumber) {
+                                            if (Number(part2.seat_num) === seatNumber && Number(part2.seat_room) === roomNumber && state !== 3) {
                                                 myState = state;
                                                 return true;
                                             }
