@@ -1,14 +1,22 @@
-import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { Fragment, useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import Checkbox from "../atoms/Checkbox";
 import { MyLink } from "../atoms/Div";
-import { historyToIndexAndInfoAtom } from "../others/state";
+import { historyToIndexAndInfoAtom, refreshIndexAtom } from "../others/state";
+
+const todayIntro = [
+    <><span>오늘</span><span>1부</span></>,
+    <><span></span><span>2부</span></>,
+    <><span>내일</span><span>1부</span></>,
+    <><span></span><span>2부</span></>,
+]
 
 const TodayInfo = () => {
     const [isSelectCancel, setIsSelectCancel] = useState(false);
     const [handledInfoData, setHandledInfoData] = useState();
     const [checkboxState, setCheckboxState] = useState([2, 2, 2, 2]);
     const checkData = useRecoilValue(historyToIndexAndInfoAtom);
+    const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
 
     const handleCancel = () => {
         if (isSelectCancel) {
@@ -115,27 +123,59 @@ const TodayInfo = () => {
         setHandledInfoData(tempInfoData);
     }
 
+    const submitCheck = async (isCheckIn, { buildingId, seatNum, seatRoom }) => {
+        const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    building_id: buildingId,
+                    seat_room: seatRoom,
+                    seat_num: seatNum,
+                    part1: handledInfoData[0].isPart,
+                    part2: handledInfoData[1].isPart,
+                })
+            })
+            const data = await res.json();
+            if (data.result === false)
+                throw ("Can't check");
+            setRefreshData(!refreshData);
+        } catch (e) {
+            console.log("Error: ", e);
+        }
+    }
+
     useEffect(() => {
         if (checkData) handleCheckData(checkData);
     }, [checkData])
 
     useEffect(() => {
         const tempCheckbox = [];
-        if (handledInfoData) handledInfoData?.forEach(({ isPart }, index) => {
-            tempCheckbox[index] = isPart ? 0 : 2;
-        })
-        setCheckboxState(tempCheckbox);
-        console.log(handledInfoData);
+        if (handledInfoData) {
+            handledInfoData?.forEach(({ isPart }, index) => {
+                tempCheckbox[index] = isPart ? 0 : 2;
+            });
+            setCheckboxState(tempCheckbox);
+        }
     }, [handledInfoData])
 
     return (
         <>
             <div className="today">
                 <div className="todayInfo">
-                    <span>오늘</span><span>1부</span><span>101호 47번 좌석</span>
-                    <span></span><span>2부</span><span>101호 47번 좌석</span>
-                    <span>내일</span><span>1부</span><span>101호 47번 좌석</span>
-                    <span></span><span>2부</span><span>101호 47번 좌석</span>
+                    {
+                        handledInfoData?.map((prop, index) => {
+                            const { isPart, showingData: { seatNum, seatRoom } } = prop;
+                            return (<Fragment key={prop, index}>
+                                {todayIntro[index]}
+                                {isPart ? <span>{seatRoom}호 {seatNum}번 좌석</span> : <span></span>}
+                            </Fragment>)
+                        })
+                    }
                 </div>
                 <div className="infoOption">
                     {isSelectCancel ?
@@ -152,10 +192,22 @@ const TodayInfo = () => {
                         </>
                         :
                         <>
-                            <div><button>입실</button><button>퇴실</button></div>
-                            <div><button>입실</button><button>퇴실</button></div>
-                            <div><button>입실</button><button>퇴실</button></div>
-                            <div><button>입실</button><button>퇴실</button></div>
+                            {
+                                handledInfoData?.map((prop, index) => {
+                                    const { isPart, showingData: { checkState }, fetchingData } = prop;
+                                    return (<div key={prop, index}>
+                                        {isPart ?
+                                            (checkState === 0 ?
+                                                <><button className="on" onClick={() => submitCheck(true, fetchingData)}>입실</button>
+                                                    <button className="off">퇴실</button></> :
+                                                checkState === 1 ?
+                                                    <><button className="off">입실</button>
+                                                        <button className="on" onClick={() => submitCheck(false, fetchingData)}>퇴실</button></> :
+                                                    <><button className="off">입실</button><button className="off">퇴실</button></>) :
+                                            <><button className="hide">입실</button><button className="hide">퇴실</button></>}
+                                    </div>)
+                                })
+                            }
                         </>
                     }
                 </div>
@@ -218,6 +270,23 @@ const TodayInfo = () => {
             border: 1px solid #ddd;
             font-size: 13px;
             justify-self: center;
+        }
+        .hide{
+            visibility: hidden;
+        }
+        .off{
+            background: #fff;
+            outline: none;
+            border: 1px solid #ddd;
+            color: #ddd;
+            cursor: default;
+        }
+        .on{
+            background: #fff;
+            outline: none;
+            border: 1px solid #999;
+            color: #000;
+            cursor: pointer;
         }
         @media(min-width: 480px){
             .todayInfo{
