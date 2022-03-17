@@ -18,7 +18,6 @@ const Checker = () => {
         const res = data.data.filter((prop) => {
             return prop.state === 2 ? 0 : 1;
         })
-        console.log(res);
         setHistoryToOther(res);
     }
 
@@ -42,14 +41,13 @@ const Checker = () => {
     }, [pathname]);
 
     useEffect(async () => {
-        if (pathname === '/' || pathname === 'info' || pathname === '/history') {
+        if (pathname === '/' || pathname === '/info' || pathname === '/history') {
             try {
                 const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `/history`, {
                     method: "GET",
                     credentials: "include",
                 })
                 const data = await res.json();
-                console.log(data);
                 setCompleteHistoryData(data);
                 handleHistoryData(data);
             } catch (e) {

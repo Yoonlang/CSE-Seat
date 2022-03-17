@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import Checkbox from "../atoms/Checkbox";
 import { MyLink } from "../atoms/Div";
+import { historyToIndexAndInfoAtom } from "../others/state";
 
 const TodayInfo = () => {
     const [isSelectCancel, setIsSelectCancel] = useState(false);
-    const [checkboxState, setCheckboxState] = useState([0, 0, 0, 0]);
+    const [handledInfoData, setHandledInfoData] = useState([]);
+    const [checkboxState, setCheckboxState] = useState([2, 2, 2, 2]);
+    const checkData = useRecoilValue(historyToIndexAndInfoAtom);
 
     const handleCancel = () => {
         if (isSelectCancel) {
@@ -26,6 +30,62 @@ const TodayInfo = () => {
             setCheckboxState(tempCheckboxState);
         }
     }
+
+    const handleCheckData = (req) => {
+        console.log(req);
+        // 뽑아내야할 정보들
+        // 오늘/내일, 1/2부에 대해서
+        // 보이는 정보
+        // isPart => 정보 보이게 하기 + checkBox 비활성화
+        // part1End, state => 그 자리에 대해서 입/퇴실 버튼 활성화 여부
+        // 자리 번호 + 방 번호 => 보여주는 용도
+        // isToday => 오늘인지 내일인지 알기 위해서
+
+        // 요청할 때 필요한 정보
+        // 1. 입/퇴실 버튼 누르는거 관련
+        // buildingId, seatRoom, seatNum, part1, part2
+        // 여기서 part1, part2는 그냥 자리 있으면 다 true가 맞음
+        // 단일로 true / false 따지는게 아님
+        // 2. 자리 취소 관련
+        // buildingId, seatRoom, seatNum, isToday, part1, part2
+        // cancel에서 part1, part2는 내가 취소하고싶은 것만이었나?
+
+        // 뽑아내야할 정보는 완료했고, 이제 저걸 토대로 handledInfoData 만들기
+        // 각 오늘/1부 에 대해서 들어가야할 정보들
+        // 1. isPart로 이 자리가 내 자리로 예약되어있는지 확인한다
+        // 1-1. 내 자리가 아니다 ? span 뺴고, 입퇴실 버튼 빼고, checkBox 2
+        // 2. 내자리다 => 보여줘야할 정보와 fetch할때 필요한걸로 나눠
+        // 2-1. 보여줘야할 정보들
+        // 
+
+        const myReq = { // 4개 각각에 대한 완성된 객체
+            isPart: true,
+            showingData: {
+                checkState: 1, // 입퇴실 버튼용
+                // 0, 1, 2, 3에 대해 앞에서 미리 처리해서 넣어두자
+                seatRoom: 101,
+                seatNum: 12,
+            },
+            fetchingData: {
+                buildingId: 404,
+                seatRoom: 101,
+                seatNum: 12,
+                isToday: true,
+                // part1 part2에 대해서 여기서 처리해주는게 맞을까?
+            },
+        }
+
+
+    }
+
+    useEffect(() => {
+        if (checkData) handleCheckData(checkData);
+    }, [checkData])
+
+    useEffect(() => {
+        // infoData가 완성되면 checkbox 상태 그에 맞게 고쳐줘야함.
+        if (handledInfoData) setCheckboxState([0, 0, 0, 0]);
+    }, [handledInfoData])
 
     return (
         <>
