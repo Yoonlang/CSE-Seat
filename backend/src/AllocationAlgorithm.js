@@ -111,6 +111,7 @@ const requests = [
         isToday: false,
         part1: true,
         part2: true,
+        apply_user_sid: 123,
         friends: [],
     },
     {
@@ -121,6 +122,7 @@ const requests = [
         isToday: false,
         part1: true,
         part2: false,
+        apply_user_sid: 456,
         friends: [],
     },
     {
@@ -131,6 +133,7 @@ const requests = [
         isToday: false,
         part1: true,
         part2: false,
+        apply_user_sid: "789",
         friends: [],
     },
 ]
@@ -798,10 +801,10 @@ const Allocation = () => {
         settingHopeNumber(e.seat_room, e.part1, e.part2, e.friends.length + 1);
     })
     const res = [];
-    sortedRequests.forEach(({apply_time, seat_room, seat_num, part1, part2, friends}, index) => {
+    sortedRequests.forEach(({apply_time, seat_room, seat_num, part1, part2, friends, apply_user_sid}, index) => {
         const data = (solveReq(seat_room, seat_num, part1, part2, friends.length + 1)),
             realNumberOfRoom = ["101", "104", "108"],
-            applySid = [0, ...friends],
+            applySid = [apply_user_sid, ...friends],
             allocation = [
             [false, false],
             [false, false],
