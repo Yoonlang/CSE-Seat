@@ -19,8 +19,6 @@ const Checker = () => {
             return prop.state === 2 ? 0 : 1;
         })
         setHistoryToOther(res);
-
-        console.log(res);
     }
 
     useEffect(async () => {
