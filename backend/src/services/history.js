@@ -25,6 +25,29 @@ const getEntryState = (history) => {
 
   history.part1End = false;
 
+
+  //취소에 따른 비활성화
+
+  if(history.part1.isPart && history.part2.isPart){
+    if(history.part1.cancel_marker && history.part2.cancel_marker){
+      history.state = 2;
+      history.part1End = true;
+      return
+    }
+  }
+  else if(history.part1.isPart){
+    if(history.part1.cancel_marker){
+      history.state = 2;
+      return
+    }
+  }
+  else if(history.part2.isPart){
+    if(history.part2.cancel_marker){
+      history.state = 2;
+      return
+    }
+  }
+
     //시간 지남/안됨에 따른 state 처리 
   
   let late1_t = new Date(history.date + ' 18:30:00');
@@ -33,7 +56,7 @@ const getEntryState = (history) => {
   let ealry2_t = new Date(history.date + ' 18:00:00');
   let curT  = new Date(dateService.getNowTime());
 
-  if(history.part1.isPart){
+  if(history.part1.isPart && history.part1.outTime != null){
     if(curT<ealry1_t){
       history.state = 3;
       return;
@@ -85,25 +108,7 @@ const getEntryState = (history) => {
     else history.state = 2;
   }
 
-  //취소에 따른 비활성화
 
-  if(history.part1.isPart && history.part2.isPart){
-    if(history.part1.cancel_marker && history.part2.cancel_marker){
-      history.state = 2;
-      history.part1End = true;
-    }
-  }
-  else if(history.part1.isPart){
-    if(history.part1.cancel_marker){
-      history.state = 2;
-      history.part1End = false;
-    }
-  }
-  else if(history.part2.isPart){
-    if(history.part2.cancel_marker){
-      history.state = 2;
-    }
-  }
 
 }
 
