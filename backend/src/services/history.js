@@ -25,7 +25,6 @@ const getEntryState = (history) => {
 
   history.part1End = false;
 
-
   //취소에 따른 비활성화
 
   if(history.part1.isPart && history.part2.isPart){
@@ -56,14 +55,21 @@ const getEntryState = (history) => {
   let ealry2_t = new Date(history.date + ' 18:00:00');
   let curT  = new Date(dateService.getNowTime());
 
-  if(history.part1.isPart && history.part1.outTime != null){
+  
+  if(history.part1.isPart){
     if(curT<ealry1_t){
       history.state = 3;
       return;
     }
     if(history.part2.isPart){
+      
       if(curT>late2_t){
         history.state = 2;
+        history.part1End = true;
+        return;
+      }
+      else if(history.part1.outTime != null){
+        history.state = 3;
         history.part1End = true;
         return;
       }
