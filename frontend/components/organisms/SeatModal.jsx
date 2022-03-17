@@ -17,7 +17,7 @@ const SeatModal = () => {
     const modalOutside = useRef();
     const cancelBtn = useRef();
     const router = useRouter();
-    let myState = 2;
+    let myState = 3;
 
     const changeColor = (color) => {
         if (color === seatColor[0]) return seatColor[4];
@@ -227,15 +227,19 @@ const SeatModal = () => {
                                             }
                                         return false;
                                     }) ?
-                                        myState === 0 ?
-                                            <>
-                                                <button className="on" onClick={() => handleCheck(true)}>입실</button>
-                                                <button className="off">퇴실</button>
-                                            </> :
-                                            <>
-                                                <button className="off">입실</button>
-                                                <button className="on" onClick={() => handleCheck(false)}>퇴실</button>
-                                            </>
+                                        myState === 3 ? <>
+                                            <button className="off">입실</button>
+                                            <button className="off">퇴실</button>
+                                        </> :
+                                            myState === 0 ?
+                                                <>
+                                                    <button className="on" onClick={() => handleCheck(true)}>입실</button>
+                                                    <button className="off">퇴실</button>
+                                                </> :
+                                                <>
+                                                    <button className="off">입실</button>
+                                                    <button className="on" onClick={() => handleCheck(false)}>퇴실</button>
+                                                </>
 
                                         : ``
                                 }
