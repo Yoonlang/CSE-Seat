@@ -17,7 +17,7 @@ const SeatModal = () => {
     const modalOutside = useRef();
     const cancelBtn = useRef();
     const router = useRouter();
-    let myState = 2;
+    let myState = 3;
 
     const changeColor = (color) => {
         if (color === seatColor[0]) return seatColor[4];
@@ -216,26 +216,30 @@ const SeatModal = () => {
                                     checkInOutData?.some((prop) => {
                                         const { part1, part2, state } = prop;
                                         if (part1.isPart & isMySeat[0])
-                                            if (Number(part1.seat_num) === seatNumber && Number(part1.seat_room) === roomNumber) {
+                                            if (Number(part1.seat_num) === seatNumber && Number(part1.seat_room) === roomNumber && state !== 3) {
                                                 myState = state;
                                                 return true;
                                             };
                                         if (part2.isPart & isMySeat[1])
-                                            if (Number(part2.seat_num) === seatNumber && Number(part2.seat_room) === roomNumber) {
+                                            if (Number(part2.seat_num) === seatNumber && Number(part2.seat_room) === roomNumber && state !== 3) {
                                                 myState = state;
                                                 return true;
                                             }
                                         return false;
                                     }) ?
-                                        myState === 0 ?
-                                            <>
-                                                <button className="on" onClick={() => handleCheck(true)}>입실</button>
-                                                <button className="off">퇴실</button>
-                                            </> :
-                                            <>
-                                                <button className="off">입실</button>
-                                                <button className="on" onClick={() => handleCheck(false)}>퇴실</button>
-                                            </>
+                                        myState === 3 ? <>
+                                            <button className="off">입실</button>
+                                            <button className="off">퇴실</button>
+                                        </> :
+                                            myState === 0 ?
+                                                <>
+                                                    <button className="on" onClick={() => handleCheck(true)}>입실</button>
+                                                    <button className="off">퇴실</button>
+                                                </> :
+                                                <>
+                                                    <button className="off">입실</button>
+                                                    <button className="on" onClick={() => handleCheck(false)}>퇴실</button>
+                                                </>
 
                                         : ``
                                 }

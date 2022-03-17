@@ -3,9 +3,6 @@ import { Fragment } from "react";
 const DetailHistory = ({ isOpenModal = false, detail: { applyTime, want: { friends, seat_num: seatNum, seat_room: seatRoom } }, part1, part2, state, part1End, cancel, isCancel }) => {
 
     const handleTime = (time, isPart1 = null) => {
-        if (isPart1 !== null && cancel[isPart1 ? 0 : 1]) {
-            return 'X';
-        }
         if (time == null) {
             if (part1.isPart & part2.isPart) {
                 if (((state === 0 || state === 1) && part1End && isPart1) || state === 2) return 'X';
@@ -28,12 +25,12 @@ const DetailHistory = ({ isOpenModal = false, detail: { applyTime, want: { frien
                     {part1.isPart && !cancel[0] ?
                         <>
                             1부 입실 : {handleTime(part1.inTime, true)}< br />
-                            1부 퇴실 : {handleTime(part1.outTime, false)}< br />
+                            1부 퇴실 : {handleTime(part1.outTime, true)}< br />
                         </>
                         : ``}
                     {part2.isPart && !cancel[1] ?
                         <>
-                            2부 입실 : {handleTime(part2.inTime, true)}< br />
+                            2부 입실 : {handleTime(part2.inTime, false)}< br />
                             2부 퇴실 : {handleTime(part2.outTime, false)}< br />
                         </>
                         : ``}
