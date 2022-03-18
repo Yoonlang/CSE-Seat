@@ -25,6 +25,6 @@ export const isInLocation = async () => {
             console.log("Error: ", e);
         }
     }
-    
+    if(isCheck === false) alert("입실을 위해 건물 주변에 있어야 합니다.");
     return isCheck;
 }

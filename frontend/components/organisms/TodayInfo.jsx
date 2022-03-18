@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import Checkbox from "../atoms/Checkbox";
 import { MyLink } from "../atoms/Div";
+import { isInLocation } from "../others/checkPos";
 import { historyToIndexAndInfoAtom, refreshIndexAtom } from "../others/state";
 
 const todayIntro = [
@@ -124,6 +125,7 @@ const TodayInfo = () => {
     }
 
     const submitCheck = async (isCheckIn, { buildingId, seatNum, seatRoom }) => {
+        if (isCheckIn & !await isInLocation()) return;
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
         try {
             const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
@@ -217,7 +219,7 @@ const TodayInfo = () => {
             <style jsx>{`
         .today{
             display: grid;
-            grid-template-columns: auto 1fr;
+            grid-template-columns: 230px 1fr;
             grid-template-rows: 140px 50px;
             justify-items: flex-end;
             align-items: flex-end;
@@ -239,6 +241,9 @@ const TodayInfo = () => {
             justify-content: space-around;
             justify-self: center;
             height: 100%;
+        }
+        span{
+            white-space: nowrap;
         }
         ${(isSelectCancel ? `
         .infoOption div{

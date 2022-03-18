@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { Seat, seatColor } from "../atoms/Seat";
+import { isInLocation } from "../others/checkPos";
 import { historyToIndexAndInfoAtom, loginAtom, refreshIndexAtom, seatModalAtom } from "../others/state";
 
 const SeatModal = () => {
@@ -142,6 +143,7 @@ const SeatModal = () => {
     }
 
     const handleCheck = async (isCheckIn) => {
+        if (isCheckIn & !await isInLocation()) return;
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
         try {
             const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {

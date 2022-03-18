@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import DetailHistory from "../molecules/DetailHistory";
+import { isInLocation } from "../others/checkPos";
 import { refreshIndexAtom } from "../others/state";
 
 const SeatHistory = ({ date, part1, part2, part1End, state, detail }) => {
@@ -19,6 +20,7 @@ const SeatHistory = ({ date, part1, part2, part1End, state, detail }) => {
     }
 
     const handleCheck = async (isCheckIn) => {
+        if (isCheckIn & !await isInLocation()) return;
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
         let isPart1 = false;
         if (part1.isPart ^ part2.isPart) isPart1 = part1.isPart ? true : false;
