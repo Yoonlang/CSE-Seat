@@ -1,19 +1,30 @@
-const it4Pos = [35.8882729, 128.6109236];
+const it4Pos = {
+    latitude: 35.8882729,
+    longitude: 128.6109236,
+}
 
-export const isInLocation = () => {
-    const success = (position) => {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        const dist = Math.pow(Math.pow(latitude - it4Pos[0], 2) + Math.pow(longitude - it4Pos[1], 2), 0.5);
-        alert(dist);
-        alert(latitude, longitude)
+export const isInLocation = async () => {
+    let isCheck = undefined;
+    const options = {
+        enableHighAccuracy: true,
     }
 
-    const error = () => {
-        console.log("error!");
+    const getPosition = (options) => {
+        return new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, options))
     }
 
-    if (!navigator.geolocation) alert("not supported"); // 여기서 throw 던지고
-    else navigator.geolocation.getCurrentPosition(success, error);
-    // success 하면 거리 재서 맞으면 true, 아니면 false, error 뜨면 throw
+    if (!navigator.geolocation) console.log("Not support in browser");
+    else {
+        try{
+            const position = await getPosition(options);
+            const {latitude, longitude} = position.coords;
+            const dist = Math.pow(Math.pow(latitude - it4Pos.latitude, 2) + Math.pow(longitude - it4Pos.longitude, 2), 0.5);
+            isCheck = dist < 0.001 ? true : false;
+        } catch (e) {
+            if(e.code === 1) alert("입실을 위해 위치 엑세스를 허용하세요.");
+            console.log("Error: ", e);
+        }
+    }
+    
+    return isCheck;
 }
