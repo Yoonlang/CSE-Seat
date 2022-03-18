@@ -1,9 +1,15 @@
+import { useSetRecoilState } from "recoil";
+import { loadingCheckInAtom } from "./state";
+
 const it4Pos = {
     latitude: 35.8882729,
     longitude: 128.6109236,
 }
 
+
 export const isInLocation = async () => {
+    const setIsLoading = useSetRecoilState(loadingCheckInAtom);
+    setIsLoading(true);
     let isCheck = undefined;
     const options = {
         enableHighAccuracy: true,
@@ -25,6 +31,7 @@ export const isInLocation = async () => {
             console.log("Error: ", e);
         }
     }
+    if(!isCheck) setIsLoading(false);
     if(isCheck === false) alert("입실을 위해 건물 주변에 있어야 합니다.");
     return isCheck;
 }

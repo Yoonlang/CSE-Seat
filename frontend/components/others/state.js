@@ -15,7 +15,12 @@ const indexLoadingAtom = atom({
 
 const refreshIndexAtom = atom({
     key: 'refreshIndex',
-    default: false
+    default: false,
+})
+
+const loadingCheckInAtom = atom({
+    key: 'loadingCheckIn',
+    default: false,
 })
 
 const completeHistoryAtom = atom({
@@ -70,4 +75,4 @@ const enrollFriendAtom = atom({
     }
 })
 
-export { loginAtom, indexLoadingAtom, refreshIndexAtom, completeHistoryAtom, historyToIndexAndInfoAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };
+export { loginAtom, indexLoadingAtom, refreshIndexAtom, loadingCheckInAtom, completeHistoryAtom, historyToIndexAndInfoAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };
