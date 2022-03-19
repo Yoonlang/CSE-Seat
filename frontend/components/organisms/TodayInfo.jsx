@@ -25,7 +25,33 @@ const TodayInfo = () => {
             if (checkboxState.some((prop) => {
                 return prop === 1;
             })) {
-                alert("신청");
+                checkboxState.forEach(async (prop, index) => {
+                    if (prop === 1) {
+                        try {
+                            const { seatNum, seatRoom, isToday, buildingId } = handledInfoData[index].fetchingData;
+                            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation-cancel", {
+                                method: "POST",
+                                credentials: "include",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    building_id: buildingId,
+                                    seat_room: seatRoom,
+                                    seat_num: seatNum,
+                                    isToday: isToday,
+                                    part1: index % 2 === 0 ? true : false,
+                                    part2: index % 2 === 1 ? true : false,
+                                })
+                            })
+                            const data = await res.json();
+                            if (data.result === true) setRefreshData(!refreshData);
+                            else throw ("Error!");
+                        } catch (e) {
+                            console.log("Error: ", e);
+                        }
+                    }
+                })
             }
             setIsSelectCancel(false);
         }
