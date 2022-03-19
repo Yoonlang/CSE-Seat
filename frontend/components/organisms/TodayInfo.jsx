@@ -1,9 +1,9 @@
 import { Fragment, useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import Checkbox from "../atoms/Checkbox";
 import { MyLink } from "../atoms/Div";
 import { isInLocation } from "../others/checkPos";
-import { historyToIndexAndInfoAtom, refreshIndexAtom } from "../others/state";
+import { historyToIndexAndInfoAtom, loadingCheckInAtom, refreshIndexAtom } from "../others/state";
 
 const todayIntro = [
     <><span>오늘</span><span>1부</span></>,
@@ -18,6 +18,7 @@ const TodayInfo = () => {
     const [checkboxState, setCheckboxState] = useState([2, 2, 2, 2]);
     const checkData = useRecoilValue(historyToIndexAndInfoAtom);
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
+    const setIsCheckInLoading = useSetRecoilState(loadingCheckInAtom);
 
     const handleCancel = () => {
         if (isSelectCancel) {
@@ -125,7 +126,11 @@ const TodayInfo = () => {
     }
 
     const submitCheck = async (isCheckIn, { buildingId, seatNum, seatRoom }) => {
-        if (isCheckIn & !await isInLocation()) return;
+        if (isCheckIn) setIsCheckInLoading(true);
+        if (isCheckIn && !await isInLocation()) {
+            setIsCheckInLoading(false);
+            return;
+        }
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
         try {
             const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
@@ -148,6 +153,8 @@ const TodayInfo = () => {
             setRefreshData(!refreshData);
         } catch (e) {
             console.log("Error: ", e);
+        } finally {
+            if (isCheckIn) setIsCheckInLoading(false);
         }
     }
 
