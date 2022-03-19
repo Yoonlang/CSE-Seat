@@ -4,7 +4,6 @@ const Checkbox = ({ state = 0, length = "25px", border = true }) => {
     const canvasRef = useRef();
 
     useEffect(() => {
-        console.log("checkbox");
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         canvas.width = 50;

@@ -1,37 +1,85 @@
+import { Fragment } from "react";
 
-const DetailHistory = ({ isOpenModal = false }) => {
+const DetailHistory = ({ isOpenModal = false, detail: { applyTime, want: { friends, seat_num: seatNum, seat_room: seatRoom } }, part1, part2, state, part1End, cancel, isCancel }) => {
+
+    const handleTime = (time, isPart1 = null) => {
+        if (time == null) {
+            if (part1.isPart & part2.isPart) {
+                if (((state === 0 || state === 1) && part1End && isPart1) || state === 2) return 'X';
+                return '';
+            }
+            else {
+                if (state === 2) return 'X';
+                return '';
+            }
+        }
+        const splitTime = time.split(/:|-| |\n/);
+        return `${splitTime[0]}년 ${splitTime[1][0] === '0' ? splitTime[1][1] : splitTime[1]}월 ${splitTime[2][0] === '0' ? splitTime[2][1] : splitTime[2]}일 ${splitTime[3][0] === '0' ? splitTime[3][1] : splitTime[3]}시 ${splitTime[4][0] === '0' ? splitTime[4][1] : splitTime[4]}분`;
+    }
 
     return (
         <>
             <div className="detail">
                 <div>
-                    신청 날짜 및 시간 : 22.01.19   18:02<br />
-                    취소 날짜 및 시간 : (취소 했을 때만)<br /><br />
-                    1부 입실 :   22.01.19   10:02<br />
-                    1부 퇴실 :   22.01.19   18:00<br />
-                    2부 입실 :   22.01.19   18:00<br />
-                    2부 퇴실 :   22.01.19   21:09<br />
+                    신청 날짜 및 시간 : <br className="br" /> {handleTime(applyTime)} <br />
+                    {part1.isPart && !cancel[0] ?
+                        <>
+                            1부 입실 : {handleTime(part1.inTime, true)}< br />
+                            1부 퇴실 : {handleTime(part1.outTime, true)}< br />
+                        </>
+                        : ``}
+                    {part2.isPart && !cancel[1] ?
+                        <>
+                            2부 입실 : {handleTime(part2.inTime, false)}< br />
+                            2부 퇴실 : {handleTime(part2.outTime, false)}< br />
+                        </>
+                        : ``}
                 </div>
                 <div>
                     <span>
-                        원하는 강의실 : 101호, 104호, 108호<br />
-                        원하는 자리 : &nbsp;47
+                        원하는 강의실 :&nbsp;
+                        {
+                            seatRoom.join('호, ')
+                        }
+                        호<br />
+                        {
+                            seatNum === null ?
+                                `` : `
+                            원하는 자리 : ${seatNum}번
+                            `
+                        }
                     </span>
-                    입력한 친구 :<br />
-                    <div>
-                        2018115201<br />
-                        2018115202<br />
-                        2018115203<br />
-                    </div>
+                    {
+                        friends?.length === 0 ?
+                            `` : `
+                        입력한 친구 :<br />
+                        <div>
+                        ${friends.map((prop, index) => {
+                                return <Fragment key={prop, index}>
+                                    {prop}<br />
+                                </Fragment>
+                            })
+                            }
+                        </div>
+                        `
+                    }
                 </div>
             </div>
+
             <style jsx>{`
         .detail{
             display: ${(isOpenModal ? 'flex' : 'none')};
             height: 100%;
             flex-wrap: wrap;
+            border:solid;
             border-width: 0 0 1px 0;
-            box-shadow: 0 -1px #ddd;
+            ${isCancel ? `
+            background: #dedede;
+            border-color: #ddd;
+            ` : `
+            background: #fff;
+            border-color: #eee;
+            `}
         }
         .detail > div{
             display: flex;
@@ -60,6 +108,9 @@ const DetailHistory = ({ isOpenModal = false }) => {
             }
             .detail > div{
                 width: 100%;
+            }
+            .br{
+                display: none;
             }
         }
     `}</style>

@@ -18,11 +18,10 @@ module.exports = {
     getPool : ()=>{return pool},
 
     query : async (sql, set) => {
-        const connection = await pool.getConnection(async conn => conn);
-        
+        const connection = await pool.getConnection();
         try {
-            await connection.beginTransaction();
-            [result, fields] = await connection.query(sql,set);
+            const [result, fields] = await connection.query(sql,set);
+
             await connection.commit();
             connection.release();
             return result;
@@ -33,4 +32,20 @@ module.exports = {
             throw err;
         } 
     },
+    querys : async (f) => {
+
+        const connection = await pool.getConnection();
+        try {
+            const connection = await pool.getConnection();
+            const result = await f(connection);
+            connection.release();
+            return result;
+        } catch (err){
+            await connection.rollback();
+            connection.release();
+            console.log('mysql : ' , err)
+            throw err;
+        } 
+
+    }
 }

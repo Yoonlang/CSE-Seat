@@ -1,13 +1,25 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { loginAtom } from "./state";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { completeHistoryAtom, historyToIndexAndInfoAtom, loginAtom, refreshIndexAtom } from "./state";
 
 const Checker = () => {
     const router = useRouter();
     const { pathname } = router;
     const [isFetching, setIsFetching] = useState(true);
-    const [isLogin, setIsLogin] = useRecoilState(loginAtom);
+    const [loginData, setLoginData] = useRecoilState(loginAtom);
+    const setCompleteHistoryData = useSetRecoilState(completeHistoryAtom);
+    const setHistoryToOther = useSetRecoilState(historyToIndexAndInfoAtom);
+    const refreshData = useRecoilValue(refreshIndexAtom);
+    const { isLogin } = loginData;
+
+    const handleHistoryData = (data) => {
+        const res = data.data.filter((prop) => {
+            if (prop.apply_id === 96) return 0; /* 예외처리라 없애야함 나중에. */
+            return prop.state === 2 ? 0 : 1;
+        })
+        setHistoryToOther(res);
+    }
 
     useEffect(async () => {
         try {
@@ -16,13 +28,35 @@ const Checker = () => {
                 credentials: "include",
             })
             const data = await res.json();
-            data.result === true ? setIsLogin(true) : setIsLogin(false);
+            data.result === true ? setLoginData({
+                isLogin: true,
+                name: data.name,
+            }) : setLoginData({
+                isLogin: false,
+                name: undefined,
+            });
         } catch (e) {
-            console.log("error: ", e);
+            console.log("Error: ", e);
         }
     }, [pathname]);
 
-    useEffect(() => {
+    useEffect(async () => {
+        if (pathname === '/' || pathname === '/info' || pathname === '/history') {
+            try {
+                const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `/history`, {
+                    method: "GET",
+                    credentials: "include",
+                })
+                const data = await res.json();
+                setCompleteHistoryData(data);
+                handleHistoryData(data);
+            } catch (e) {
+                console.log("Error: ", e);
+            }
+        }
+    }, [pathname, refreshData]);
+
+    useEffect(async () => {
         if (isLogin !== undefined) setIsFetching(false);
     }, [isLogin])
 
@@ -36,10 +70,7 @@ const Checker = () => {
             }
         }
     }, [pathname, isFetching, isLogin]);
-
     return <></>
 }
-
-
 
 export default Checker;

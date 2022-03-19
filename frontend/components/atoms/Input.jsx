@@ -96,7 +96,7 @@ const SignInput = ({
     return (
         <SignInputDiv onClick={clickDiv} onBlur={blurDiv} ref={signInputDiv}>
             <SquareImg radius={radius} src={src} length={length} />
-            <StyledSignInput type={type} minLength={4} value={inputValue[num]} onChange={handleValue} placeholder={placeholder} ref={signInput} required />
+            <StyledSignInput onFocus={clickDiv} type={type} minLength={4} value={inputValue[num]} onChange={handleValue} placeholder={placeholder} ref={signInput} required />
         </SignInputDiv>
     );
 };

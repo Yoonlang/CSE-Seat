@@ -1,9 +1,12 @@
+import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Seat, seatColor } from "../atoms/Seat";
-import { refreshIndexAtom, seatModalAtom } from "../others/state";
+import { isInLocation } from "../others/checkPos";
+import { historyToIndexAndInfoAtom, loadingCheckInAtom, loginAtom, refreshIndexAtom, seatModalAtom } from "../others/state";
 
 const SeatModal = () => {
+    const loginData = useRecoilValue(loginAtom);
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     const [modalState, setModalState] = useRecoilState(seatModalAtom);
     const { isModalOpen, seatInfo: { one, two, roomNumber, isToday, seatNumber } } = modalState
@@ -11,8 +14,12 @@ const SeatModal = () => {
     const [twoColor, setTwoColor] = useState('');
     const [isMySeat, setIsMySeat] = useState([false, false]);
     const [isReadyToRequest, setIsReadyToRequest] = useState([false, false]);
+    const checkInOutData = useRecoilValue(historyToIndexAndInfoAtom);
+    const setIsCheckInLoading = useSetRecoilState(loadingCheckInAtom);
     const modalOutside = useRef();
     const cancelBtn = useRef();
+    const router = useRouter();
+    let myState = 3;
 
     const changeColor = (color) => {
         if (color === seatColor[0]) return seatColor[4];
@@ -52,52 +59,65 @@ const SeatModal = () => {
     };
 
     const fetchingCancel = async (one = isReadyToRequest[0], two = isReadyToRequest[1], isFinish = true) => {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation-cancel", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                building_id: "414",
-                seat_room: roomNumber.toString(),
-                seat_num: seatNumber.toString(),
-                isToday: isToday,
-                part1: one,
-                part2: two,
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation-cancel", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    building_id: "414",
+                    seat_room: roomNumber.toString(),
+                    seat_num: seatNumber.toString(),
+                    isToday: isToday,
+                    part1: one,
+                    part2: two,
+                })
             })
-        })
-        const data = await res.json();
-        if ((data.result === true) & isFinish) {
+            const data = await res.json();
+            if ((data.result === true) & isFinish)
+                closeModal();
+            else if (data.result === false)
+                throw ("Can't cancel!");
+        } catch (e) {
+            console.log("Error: ", e);
+        } finally {
             setRefreshData(!refreshData);
-            closeModal();
         }
     }
 
     const fetchingReservation = async (one = isReadyToRequest[0], two = isReadyToRequest[1]) => {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                building_id: "414",
-                seat_room: [roomNumber.toString()],
-                seat_num: seatNumber.toString(),
-                isToday: isToday,
-                part1: one,
-                part2: two,
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    building_id: "414",
+                    seat_room: [roomNumber.toString()],
+                    seat_num: seatNumber.toString(),
+                    isToday: isToday,
+                    part1: one,
+                    part2: two,
+                })
             })
-        })
-        const data = await res.json();
-        if (data.result === true) {
+            const data = await res.json();
+            if (data.result === true)
+                closeModal();
+            else
+                throw ("Can't reserve");
+        } catch (e) {
+            console.log("Error: ", e);
+        } finally {
             setRefreshData(!refreshData);
-            closeModal();
         }
     }
 
     const submitReq = async () => {
+        if (loginData.isLogin === false) router.push('/sign')
         if (isReadyToRequest[0] ^ isReadyToRequest[1]) {
             if (isReadyToRequest[0] & isMySeat[0]) fetchingCancel();
             else if (isReadyToRequest[0]) fetchingReservation();
@@ -106,17 +126,15 @@ const SeatModal = () => {
         }
         else {
             if (isMySeat[0] & isMySeat[1]) fetchingCancel();
-            else if (isMySeat[0] | isMySeat[1]) {
-                if (isMySeat[0]) {
-                    await fetchingCancel(true, false, false);
-                    fetchingReservation(false, true);
-                }
-                else {
-                    await fetchingCancel(false, true, false);
-                    fetchingReservation(true, false);
-                }
+            else if (isMySeat[0]) {
+                await fetchingCancel(true, false, false);
+                await fetchingReservation(false, true);
             }
-            else fetchingReservation();
+            else if (isMySeat[1]) {
+                await fetchingCancel(false, true, false);
+                await fetchingReservation(true, false);
+            }
+            else await fetchingReservation();
         }
     }
 
@@ -125,24 +143,40 @@ const SeatModal = () => {
         if (isReadyToRequest[0] | isReadyToRequest[1]) submitReq();
     }
 
-    const test = async (isCheckIn) => {
+    const handleCheck = async (isCheckIn) => {
+        if (isCheckIn) setIsCheckInLoading(true);
+        if (isCheckIn && !await isInLocation()) {
+            setIsCheckInLoading(false);
+            return;
+        }
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                building_id: "414",
-                seat_room: roomNumber.toString(),
-                seat_num: seatNumber.toString(),
-                part1: isMySeat[0],
-                part2: isMySeat[1],
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    building_id: "414",
+                    seat_room: roomNumber.toString(),
+                    seat_num: seatNumber.toString(),
+                    part1: isMySeat[0],
+                    part2: isMySeat[1],
+                })
             })
-        })
-        const data = await res.json();
-        console.log(data);
+            const data = await res.json();
+            if (data.result === false)
+                throw ("Can't check");
+            setRefreshData(!refreshData);
+            if (!isCheckIn) {
+                closeModal();
+            }
+        } catch (e) {
+            console.log("Error: ", e);
+        } finally {
+            if (isCheckIn) setIsCheckInLoading(false);
+        }
     }
 
     useEffect(() => {
@@ -185,12 +219,37 @@ const SeatModal = () => {
                     {isMySeat[0] | isMySeat[1] ?
                         <>
                             <div className="check">
-                                <div>
-                                    <button onClick={() => test(true)}>입실</button><span>22.01.19<span className="space" />06 : 24</span>
-                                </div>
-                                <div>
-                                    <button onClick={() => test(false)}>퇴실</button><span>22.01.19<span className="space" />06 : 24</span>
-                                </div>
+                                {
+                                    checkInOutData?.some((prop) => {
+                                        const { part1, part2, state } = prop;
+                                        if (part1.isPart & isMySeat[0])
+                                            if (Number(part1.seat_num) === seatNumber && Number(part1.seat_room) === roomNumber && state !== 3) {
+                                                myState = state;
+                                                return true;
+                                            };
+                                        if (part2.isPart & isMySeat[1])
+                                            if (Number(part2.seat_num) === seatNumber && Number(part2.seat_room) === roomNumber && state !== 3) {
+                                                myState = state;
+                                                return true;
+                                            }
+                                        return false;
+                                    }) ?
+                                        myState === 3 ? <>
+                                            <button className="off">입실</button>
+                                            <button className="off">퇴실</button>
+                                        </> :
+                                            myState === 0 ?
+                                                <>
+                                                    <button className="on" onClick={() => handleCheck(true)}>입실</button>
+                                                    <button className="off">퇴실</button>
+                                                </> :
+                                                <>
+                                                    <button className="off">입실</button>
+                                                    <button className="on" onClick={() => handleCheck(false)}>퇴실</button>
+                                                </>
+
+                                        : ``
+                                }
                             </div>
                             <button className="submit" onClick={clickBtn}>자리 수정</button>
                         </>
@@ -205,6 +264,7 @@ const SeatModal = () => {
                     />
                 </div>
             </div>
+
             <style jsx>{`
             .modal{
                 display: none;
@@ -296,27 +356,32 @@ const SeatModal = () => {
             }
             .check{
                 display: flex;
-                flex-direction: column;
+                justify-content: center;
                 width: 100%;
-                gap: 10px;
-            }
-            .space{
-                margin: 0 10px;
+                gap: 20px;
+                margin: 10px 0;
             }
             .check button{
                 width: 80px;
                 height: 35px;
-                outline: none;
-                border: solid;
-                border-width: 1px;
-                border-color: #ddd;
-                background: #fff;
-                margin-left: 50px;
-                margin-right: 25px;
             }
             .check span{
                 width: 200px !important;
                 height: 100%;
+            }
+            .off{
+                background: #fff;
+                outline: none;
+                border: 1px solid #ddd;
+                color: #ddd;
+                cursor: default;
+            }
+            .on{
+                background: #fff;
+                outline: none;
+                border: 1px solid #999;
+                color: #000;
+                cursor: pointer;
             }
             .submit{
                 position: absolute;

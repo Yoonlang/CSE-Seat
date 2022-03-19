@@ -1,44 +1,61 @@
 const seatModel = require("$/models/seat");
 const logModel = require("$/models/log");
 const dateService = require("../services/date");
+const entryModel = require("../models/entry");
+const userModel = require("../models/user");
+const { json } = require("express");
+const user = require("../models/user");
 
 const initProperty = (seatDTO) => {
-  if (seatDTO.isToday == "true") seatDTO.isToday = true;
-  if (seatDTO.isToday == "false") seatDTO.isToday = false;
-  if (seatDTO.part1 == "true") seatDTO.part1 = true;
-  if (seatDTO.part1 == "false") seatDTO.part1 = false;
-  if (seatDTO.part2 == "true") seatDTO.part2 = true;
-  if (seatDTO.part2 == "false") seatDTO.part2 = false;
-  seatDTO.building_id *= 1;
-  seatDTO.seat_room = seatDTO.seat_room[0] * 1; // 임시
-  seatDTO.seat_num *= 1;
   seatDTO.date = seatDTO.isToday
     ? dateService.getTodayDate()
     : dateService.getTomorrowDate();
   seatDTO.apply_time = dateService.getNowTime();
 };
 
-const getRandomInt = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
-};
 
+const checkRightSeat = (rooms, seat)=>{
+  if (seat === '') return true;
+  for (const i in rooms){
+    if (rooms[i] === "101"){
+      if (2<= seat*1 && seat*1 <= 15) return true;
+    }
+    else if(rooms[i] === "104"){
+      if (16<= seat*1 && seat*1 <= 47) return true;
+    }
+    else if(rooms[i] === "108"){
+      if (48<= seat*1 && seat*1 <= 71) return true;
+    }
+  }  
+  return false;
+}
 module.exports = {
-  reserve: async (seatDTO) => {
-    //실시간 방식
-    try {
-      //랜덤 생성 임시
-      if (!seatDTO.seat_num) {
-        if (seatDTO.seat_room[0] == "101") {
-          seatDTO.seat_num = getRandomInt(2, 15);
-        } else if (seatDTO.seat_room[0] == "104") {
-          seatDTO.seat_num = getRandomInt(16, 47);
-        } else if (seatDTO.seat_room[0] == "108") {
-          seatDTO.seat_num = getRandomInt(48, 71);
+  apply: async (seatDTO) => {
+    try{
+      const json = {result :true, data:{seat: true, friends : [true, true, true]}};
+      if (checkRightSeat(seatDTO.seat_room, seatDTO.seat_num) == false){
+        json.result = false;
+        json.data.seat = false;
+      }
+      for (const i in seatDTO.friends){
+        if (!await userModel.findById(seatDTO.friends[i]) || seatDTO.friends[i] === seatDTO.user_sid){
+          json.result = false;
+          json.data.friends[i] = false;
         }
       }
-
+      if(json.result == false) return json;
+      
+      seatDTO.date = dateService.getTomorrowDate();
+      seatDTO.apply_time = dateService.getNowTime();
+      let insertId = await seatModel.apply(seatDTO);
+      return json;
+    }catch(e){
+      console.log(e);
+      return e;
+    }
+  },
+  reserve: async (seatDTO) => {
+    try{
       initProperty(seatDTO);
     
       if (seatDTO.part1) {
@@ -56,30 +73,37 @@ module.exports = {
         if (result) throw Error("이미 예약된 좌석입니다.");
       }
 
+      seatDTO.seat_room = [seatDTO.seat_room];
       let insertId = await seatModel.apply(seatDTO);
+      seatDTO.seat_room = seatDTO.seat_room[0];
 
       if (seatDTO.part1) {
         seatDTO.part = 1;
         seatDTO.apply_id = insertId;
         await seatModel.reserve(seatDTO);
+
+        seatDTO.part1_building_id = seatDTO.building_id;
+        seatDTO.part1_seat_room = seatDTO.seat_room;
+        seatDTO.part1_seat_num = seatDTO.seat_num;
       }
       if (seatDTO.part2) {
         seatDTO.part = 2;
         seatDTO.apply_id = insertId;
         await seatModel.reserve(seatDTO); //여기 오류시 롤백
+
+        seatDTO.part2_building_id = seatDTO.building_id;
+        seatDTO.part2_seat_room = seatDTO.seat_room;
+        seatDTO.part2_seat_num = seatDTO.seat_num;
       }
 
       await logModel.reservation(seatDTO);
-      return true;
+      return true
     } catch (e) {
       return e;
     }
   },
-  cancelReservation: async (seatDTO) => {
+  cancelReservation : async (seatDTO) => {
     try {
-      seatDTO.building_id *= 1;
-      seatDTO.seat_room *= 1;
-      seatDTO.seat_num *= 1;
       seatDTO.date = seatDTO.isToday
         ? dateService.getTodayDate()
         : dateService.getTomorrowDate();
@@ -104,10 +128,14 @@ module.exports = {
       }
       if (seatDTO.part1) {
         seatDTO.part = 1;
+        seatDTO.apply_id = part1ApplyId;
+        if (await entryModel.getCheckInData(seatDTO)) throw new Error('이미 입실하셔서 취소가 불가능합니다.');
         await seatModel.deleteReservation(seatDTO);
       }
       if (seatDTO.part2) {
         seatDTO.part = 2;
+        seatDTO.apply_id = part1ApplyId;
+        if (await entryModel.getCheckInData(seatDTO)) throw new Error('이미 입실하셔서 취소가 불가능합니다.');
         await seatModel.deleteReservation(seatDTO);
       }
       if(seatDTO.part1 && seatDTO.part2){
@@ -117,8 +145,11 @@ module.exports = {
         }
         else{
           seatDTO.apply_id = part1ApplyId;
+          seatDTO.part2 = false;
           await logModel.updateCancel(seatDTO);
           seatDTO.apply_id = part2ApplyId;
+          seatDTO.part1 = false;
+          seatDTO.part2 = true;
           await logModel.updateCancel(seatDTO);
         }
       }
