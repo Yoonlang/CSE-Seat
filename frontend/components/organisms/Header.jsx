@@ -86,7 +86,7 @@ const Header = () => {
             </div>
             <div className="mobileModalContainer" onClick={closeModal} ref={modalOutside}>
                 <div className="mobileModal">
-                    <div onClick={closeModal2}><MyLink href="/info">내 정보</MyLink></div>
+                    <div onClick={closeModal2}><MyLink href="/info" width="100%">내 정보</MyLink></div>
                     <div className="signOut" onClick={signOut}>로그아웃</div>
                 </div>
             </div>
@@ -193,6 +193,9 @@ const Header = () => {
                     width: 250px;
                     height: 100%;
                     background: #fff;
+                }
+                .mobileModal > div{
+                    width: 100%;
                 }
             }
         `}</style>
