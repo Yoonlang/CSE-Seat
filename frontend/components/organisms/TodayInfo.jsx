@@ -1,8 +1,9 @@
 import { Fragment, useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import Checkbox from "../atoms/Checkbox";
 import { MyLink } from "../atoms/Div";
-import { historyToIndexAndInfoAtom, refreshIndexAtom } from "../others/state";
+import { isInLocation } from "../others/checkPos";
+import { historyToIndexAndInfoAtom, loadingCheckInAtom, refreshIndexAtom } from "../others/state";
 
 const todayIntro = [
     <><span>오늘</span><span>1부</span></>,
@@ -17,13 +18,40 @@ const TodayInfo = () => {
     const [checkboxState, setCheckboxState] = useState([2, 2, 2, 2]);
     const checkData = useRecoilValue(historyToIndexAndInfoAtom);
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
+    const setIsCheckInLoading = useSetRecoilState(loadingCheckInAtom);
 
     const handleCancel = () => {
         if (isSelectCancel) {
             if (checkboxState.some((prop) => {
                 return prop === 1;
             })) {
-                alert("신청");
+                checkboxState.forEach(async (prop, index) => {
+                    if (prop === 1) {
+                        try {
+                            const { seatNum, seatRoom, isToday, buildingId } = handledInfoData[index].fetchingData;
+                            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation-cancel", {
+                                method: "POST",
+                                credentials: "include",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    building_id: buildingId,
+                                    seat_room: seatRoom,
+                                    seat_num: seatNum,
+                                    isToday: isToday,
+                                    part1: index % 2 === 0 ? true : false,
+                                    part2: index % 2 === 1 ? true : false,
+                                })
+                            })
+                            const data = await res.json();
+                            if (data.result === true) setRefreshData(!refreshData);
+                            else throw ("Error!");
+                        } catch (e) {
+                            console.log("Error: ", e);
+                        }
+                    }
+                })
             }
             setIsSelectCancel(false);
         }
@@ -124,6 +152,11 @@ const TodayInfo = () => {
     }
 
     const submitCheck = async (isCheckIn, { buildingId, seatNum, seatRoom }) => {
+        if (isCheckIn) setIsCheckInLoading(true);
+        if (isCheckIn && !await isInLocation()) {
+            setIsCheckInLoading(false);
+            return;
+        }
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
         try {
             const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
@@ -146,6 +179,8 @@ const TodayInfo = () => {
             setRefreshData(!refreshData);
         } catch (e) {
             console.log("Error: ", e);
+        } finally {
+            if (isCheckIn) setIsCheckInLoading(false);
         }
     }
 
@@ -217,7 +252,7 @@ const TodayInfo = () => {
             <style jsx>{`
         .today{
             display: grid;
-            grid-template-columns: auto 1fr;
+            grid-template-columns: 230px 1fr;
             grid-template-rows: 140px 50px;
             justify-items: flex-end;
             align-items: flex-end;
@@ -239,6 +274,9 @@ const TodayInfo = () => {
             justify-content: space-around;
             justify-self: center;
             height: 100%;
+        }
+        span{
+            white-space: nowrap;
         }
         ${(isSelectCancel ? `
         .infoOption div{

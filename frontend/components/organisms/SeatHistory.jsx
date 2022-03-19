@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import DetailHistory from "../molecules/DetailHistory";
-import { refreshIndexAtom } from "../others/state";
+import { isInLocation } from "../others/checkPos";
+import { loadingCheckInAtom, refreshIndexAtom } from "../others/state";
 
 const SeatHistory = ({ date, part1, part2, part1End, state, detail }) => {
     const cancel = [part1.cancel_marker, part2.cancel_marker];
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
+    const setIsCheckInLoading = useSetRecoilState(loadingCheckInAtom);
     let isCancel = false;
     if (cancel[0] & cancel[1]) isCancel = true;
     else if (part1.isPart ^ part2.isPart) {
@@ -19,6 +21,11 @@ const SeatHistory = ({ date, part1, part2, part1End, state, detail }) => {
     }
 
     const handleCheck = async (isCheckIn) => {
+        if (isCheckIn) setIsCheckInLoading(true);
+        if (isCheckIn && !await isInLocation()) {
+            setIsCheckInLoading(false);
+            return;
+        }
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
         let isPart1 = false;
         if (part1.isPart ^ part2.isPart) isPart1 = part1.isPart ? true : false;
@@ -46,6 +53,8 @@ const SeatHistory = ({ date, part1, part2, part1End, state, detail }) => {
             setRefreshData(!refreshData);
         } catch (e) {
             console.log("Error: ", e);
+        } finally {
+            if (isCheckIn) setIsCheckInLoading(false);
         }
 
     }

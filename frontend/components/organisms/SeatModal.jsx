@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Seat, seatColor } from "../atoms/Seat";
-import { historyToIndexAndInfoAtom, loginAtom, refreshIndexAtom, seatModalAtom } from "../others/state";
+import { isInLocation } from "../others/checkPos";
+import { historyToIndexAndInfoAtom, loadingCheckInAtom, loginAtom, refreshIndexAtom, seatModalAtom } from "../others/state";
 
 const SeatModal = () => {
     const loginData = useRecoilValue(loginAtom);
@@ -14,6 +15,7 @@ const SeatModal = () => {
     const [isMySeat, setIsMySeat] = useState([false, false]);
     const [isReadyToRequest, setIsReadyToRequest] = useState([false, false]);
     const checkInOutData = useRecoilValue(historyToIndexAndInfoAtom);
+    const setIsCheckInLoading = useSetRecoilState(loadingCheckInAtom);
     const modalOutside = useRef();
     const cancelBtn = useRef();
     const router = useRouter();
@@ -142,6 +144,11 @@ const SeatModal = () => {
     }
 
     const handleCheck = async (isCheckIn) => {
+        if (isCheckIn) setIsCheckInLoading(true);
+        if (isCheckIn && !await isInLocation()) {
+            setIsCheckInLoading(false);
+            return;
+        }
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
         try {
             const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
@@ -167,6 +174,8 @@ const SeatModal = () => {
             }
         } catch (e) {
             console.log("Error: ", e);
+        } finally {
+            if (isCheckIn) setIsCheckInLoading(false);
         }
     }
 
