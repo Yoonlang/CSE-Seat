@@ -49,8 +49,8 @@ const SignInputDiv = styled.div`
     border: solid;
     border-color: #ddd;
     border-width: 1px;
-    padding-left: 12px;
-    gap: 14px;
+    padding-left: ${(props) => 12 + (20 - props.handledLength) / 2}px;
+    gap: ${(props) => 14 + (20 - props.handledLength) / 2}px;
 `;
 
 const StyledSignInput = styled.input`
@@ -77,6 +77,7 @@ const SignInput = ({
 }) => {
     const signInputDiv = useRef();
     const signInput = useRef();
+    const handledLength = length.substr(0, length.indexOf('p'));
     const [inputValue, setInputValue] = useRecoilState(inputValueAtom);
     const clickDiv = () => {
         signInput.current.focus();
@@ -93,8 +94,10 @@ const SignInput = ({
         setInputValue(values);
     }
 
+    const props = { handledLength };
+
     return (
-        <SignInputDiv onClick={clickDiv} onBlur={blurDiv} ref={signInputDiv}>
+        <SignInputDiv onClick={clickDiv} onBlur={blurDiv} ref={signInputDiv} {...props}>
             <SquareImg radius={radius} src={src} length={length} />
             <StyledSignInput onFocus={clickDiv} type={type} minLength={4} value={inputValue[num]} onChange={handleValue} placeholder={placeholder} ref={signInput} required />
         </SignInputDiv>

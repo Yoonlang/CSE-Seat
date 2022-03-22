@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { SignInput } from "../atoms/Input";
 import SquareImg from "../atoms/Img";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -8,18 +8,12 @@ import Checkbox from "../atoms/Checkbox";
 const SignForm = () => {
     const [isLoginForm, setIsLoginForm] = useState(true);
     const [isFailed, setIsFailed] = useState(false);
-    const [isFileUpload, setIsFileUpload] = useState(false);
     const [isSamePassword, setIsSamePassword] = useState(false);
-    const fileInput = useRef();
     const [inputValue, setInputValue] = useRecoilState(inputValueAtom);
     const setLoginData = useSetRecoilState(loginAtom);
 
     const changeFormState = () => {
         setIsLoginForm(!isLoginForm);
-    }
-
-    const clickFileDiv = () => {
-        fileInput.current.click();
     }
 
     const handleSignIn = async (e) => {
@@ -57,10 +51,7 @@ const SignForm = () => {
     }
 
     const handleSignUp = (e) => {
-        if (!isFileUpload) {
-            alert("모바일 학생증 사진을 업로드하세요.");
-        }
-        if (inputValue[2].length >= 4 && inputValue[3].length >= 4 && isFileUpload) {
+        if (inputValue[2].length >= 4 && inputValue[3].length >= 4) {
             e.preventDefault();
         }
     }
@@ -93,19 +84,18 @@ const SignForm = () => {
                     </form>
                     :
                     <form className="signForm">
-                        <div className="fileDiv" onClick={clickFileDiv}>
-                            <SquareImg src="/images/user.png"
-                                radius="5px" length="20px" />
-                            <label htmlFor="inputFile">모바일 학생증 업로드</label>
-                            <span className="fileUpload"><Checkbox state={1} length={"20px"} border={false} /></span>
-                        </div>
-                        <input type="file" id="inputFile"
-                            accept="image/*"
-                            ref={fileInput}
-                            onChange={() => {
-                                setIsFileUpload(true);
-                            }}
-                            required />
+                        <SignInput src="/images/user.png"
+                            radius="5px" />
+                        <SignInput src="/images/user.png"
+                            radius="5px"
+                            placeholder="이름" />
+                        <SignInput src="/images/mail.png"
+                            length="28px"
+                            placeholder="이메일" />
+                        <SignInput src="/images/check.png"
+                            radius="5px"
+                            length="23px"
+                            placeholder="인증번호 확인" />
                         <SignInput src="/images/lock.png"
                             type="password"
                             placeholder="비밀번호" num={2} />
@@ -124,7 +114,7 @@ const SignForm = () => {
                     align-items:center;
                     flex-direction:column;
                     width:400px;
-                    height:${(isLoginForm ? "250px" : "300px")};
+                    height:${(isLoginForm ? "250px" : "480px")};
                     border:solid;
                     border-color:#ddd;
                     border-width:1px;
@@ -145,14 +135,6 @@ const SignForm = () => {
                     border-width:1px;
                     padding-left: 12px;
                     gap: 14px;
-                }
-                .fileDiv label{
-                    font-size: 14px;
-                }
-                .fileUpload{
-                    ${(isFileUpload ? "display: flex;" : "display: none;")}
-                    position: absolute;
-                    right: 25px;
                 }
                 .formBtn{
                     width: 300px;
