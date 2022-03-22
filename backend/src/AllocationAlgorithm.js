@@ -804,7 +804,7 @@ const Allocation = () => {
         settingHopeNumber(e.seat_room, e.part1, e.part2, e.friends.length + 1);
     })
     const res = [];
-    sortedRequests.forEach(({apply_time, seat_room, seat_num, part1, part2, friends, apply_id, apply_user_sid}, index) => {
+    sortedRequests.forEach(({apply_time, seat_room, seat_num, part1, part2, friends, apply_id, apply_user_sid}) => {
         const data = (solveReq(seat_room, seat_num, part1, part2, friends.length + 1)),
             realNumberOfRoom = ["101", "104", "108"],
             applySid = [apply_user_sid, ...friends],
@@ -851,6 +851,7 @@ const Allocation = () => {
                         const part = isOnly ? (tempPart === 0 ? [true, false] : [false, true]) : props.part;
                         res.push({
                             apply_id: apply_id,
+                            apply_user_sid: apply_user_sid,
                             building_id: "414",
                             apply_time: apply_time,
                             seat_room: realNumberOfRoom[props.roomNum],
@@ -867,6 +868,7 @@ const Allocation = () => {
                                 part = t === 0 ? [false, true] : [true, false];
                             res.push({
                                 apply_id: apply_id,
+                                apply_user_sid: apply_user_sid,
                                 building_id: "414",
                                 apply_time: apply_time,
                                 seat_room: realNumberOfRoom[props.roomNum],
@@ -881,6 +883,7 @@ const Allocation = () => {
                             const [i, j] = props.pos?.pop();
                             res.push({
                                 apply_id: apply_id,
+                                apply_user_sid: apply_user_sid,
                                 building_id: "414",
                                 apply_time: apply_time,
                                 seat_room: realNumberOfRoom[props.roomNum],
