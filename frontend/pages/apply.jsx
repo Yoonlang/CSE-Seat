@@ -35,10 +35,20 @@ const Apply = ({ data }) => {
     const router = useRouter();
 
     const handleWrong = ({ seat, friends }) => {
+        // 만약 다 true면 이미 신청했다하고 메인으로 보내
+
+
         const BoolToNum = friends.map((prop) => {
             return prop ? 0 : 1;
         })
-        setWrongData([...BoolToNum, seat === true ? 0 : 1]);
+        const tempWrongData = [...BoolToNum, seat === true ? 0 : 1];
+        setWrongData(tempWrongData);
+        if (!tempWrongData.some((prop) => {
+            return prop === 1 ? true : false;
+        })) {
+            alert("이미 신청처리가 되었습니다.");
+            router.replace('/');
+        }
     }
 
     const refreshWrong = (num) => {
