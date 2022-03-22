@@ -1,7 +1,7 @@
 import SquareImg from "../atoms/Img";
 import Logo from "../molecules/Logo";
 import Navigation from "../molecules/Navigation";
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Div, MyLink } from "../atoms/Div";
 import { useRecoilState, } from "recoil";
 import { loginAtom, refreshIndexAtom } from "../others/state";
@@ -48,6 +48,10 @@ const Header = () => {
 
     const closeModal2 = () => setIsMenuClick(false);
 
+    useEffect(() => {
+
+    }, [])
+
     return (
         <>
             <div className="block"></div>
@@ -90,7 +94,7 @@ const Header = () => {
                     <div className="signOut" onClick={signOut}>로그아웃</div>
                 </div>
             </div>
-            <style>{`
+            <style jsx>{`
             .signOut{
                 width: 100px;
                 height: 49px;
