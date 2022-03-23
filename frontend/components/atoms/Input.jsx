@@ -15,6 +15,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 // interface ApplyInputProps{
 //     placeholder?: string;
 // }
+
 const StyledApplyInput = styled.input`
     width: 160px;
     height: 40px;
@@ -73,7 +74,10 @@ const SignInput = ({
     radius = "0",
     length = "20px",
     type = "text",
-    num = false
+    minLength = 4,
+    maxLength,
+    num = false,
+    isOnlyNum = false,
 }) => {
     const signInputDiv = useRef();
     const signInput = useRef();
@@ -90,6 +94,7 @@ const SignInput = ({
 
     const handleValue = (e) => {
         const values = { ...inputValue };
+        if(isOnlyNum && (e.target.value === '' ? false : e.target.value[e.target.value.length - 1] < '0' || e.target.value[e.target.value.length - 1] > '9')) return;
         values[num] = e.target.value;
         setInputValue(values);
     }
@@ -99,7 +104,7 @@ const SignInput = ({
     return (
         <SignInputDiv onClick={clickDiv} onBlur={blurDiv} ref={signInputDiv} {...props}>
             <SquareImg radius={radius} src={src} length={length} />
-            <StyledSignInput onFocus={clickDiv} type={type} minLength={4} value={inputValue[num]} onChange={handleValue} placeholder={placeholder} ref={signInput} required />
+            <StyledSignInput onFocus={clickDiv} type={type} minLength={minLength} maxLength={maxLength} value={inputValue[num]} onChange={handleValue} placeholder={placeholder} ref={signInput} required />
         </SignInputDiv>
     );
 };

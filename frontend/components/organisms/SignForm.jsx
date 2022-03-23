@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { SignInput } from "../atoms/Input";
-import SquareImg from "../atoms/Img";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { inputValueAtom, loginAtom } from "../others/state";
 import Checkbox from "../atoms/Checkbox";
@@ -8,6 +7,11 @@ import Checkbox from "../atoms/Checkbox";
 const SignForm = () => {
     const [isLoginForm, setIsLoginForm] = useState(true);
     const [isFailed, setIsFailed] = useState(false);
+    const [handleEmail, setHandleEmail] = useState({
+        isHoldEmail : false,
+        isHoldAuth : true,
+        isEmailButton : false,
+    });
     const [isSamePassword, setIsSamePassword] = useState(false);
     const [inputValue, setInputValue] = useRecoilState(inputValueAtom);
     const setLoginData = useSetRecoilState(loginAtom);
@@ -51,16 +55,25 @@ const SignForm = () => {
     }
 
     const handleSignUp = (e) => {
-        if (inputValue[2].length >= 4 && inputValue[3].length >= 4) {
-            e.preventDefault();
-        }
+        if(inputValue[2].length >= 4 && inputValue[3].length >= 2)
+            if(inputValue[4].length >= 10 && inputValue[5].length === 6)
+                if (inputValue[6].length >= 4 && inputValue[7].length >= 4) {
+                    e.preventDefault();
+
+
+                }
     }
 
     useEffect(() => {
-        if (inputValue[2] === inputValue[3] && inputValue[2].length >= 4) setIsSamePassword(true);
-        else setIsSamePassword(false);
+        // 1. @knu.ac.kr이면 옆에 메일 보내기 뜨게. 다시 지우면 사라짐
+        // 2. 메일 보내기를 눌러서 result 성공이 뜨면 이메일은 잠구고 (메일 보내기를 눌렀으면 일단 email 수정 금지)
+        // 3. 메일 보내기 없애주고, 인증번호 확인은 적을 수 있게 되어야함.
+    }, [inputValue[4], inputValue[5]])
 
-    }, [inputValue[2], inputValue[3]])
+    useEffect(() => {
+        if (inputValue[6] === inputValue[7] && inputValue[6].length >= 4) setIsSamePassword(true);
+        else setIsSamePassword(false);
+    }, [inputValue[6], inputValue[7]])
 
     useEffect(() => {
         if (isFailed)
@@ -85,23 +98,37 @@ const SignForm = () => {
                     :
                     <form className="signForm">
                         <SignInput src="/images/user.png"
-                            radius="5px" />
+                            radius="5px" num={2} />
                         <SignInput src="/images/user.png"
                             radius="5px"
-                            placeholder="이름" />
+                            placeholder="이름" 
+                            minLength={2}
+                            num={3} />
                         <SignInput src="/images/mail.png"
                             length="28px"
-                            placeholder="이메일" />
+                            placeholder="이메일" 
+                            minLength={10}
+                            num={4} />
                         <SignInput src="/images/check.png"
                             radius="5px"
                             length="23px"
-                            placeholder="인증번호 확인" />
+                            placeholder="인증번호 확인" 
+                            minLength={6}
+                            maxLength={6}
+                            isOnlyNum
+                            num={5} />
                         <SignInput src="/images/lock.png"
                             type="password"
-                            placeholder="비밀번호" num={2} />
+                            placeholder="비밀번호" 
+                            minLength={4}
+                            maxLength={10}
+                            num={6} />
                         <SignInput src="/images/lock.png"
                             type="password"
-                            placeholder="비밀번호 확인" num={3} />
+                            placeholder="비밀번호 확인" 
+                            minLength={4}
+                            maxLength={10}
+                            num={7} />
                         <span className="samePassword"><Checkbox state={1} length={"20px"} border={false} /></span>
                         <button className="formBtn" onClick={handleSignUp}>회원가입</button>
                         <div className="changeBtn" onClick={changeFormState}>로그인</div>
@@ -163,7 +190,7 @@ const SignForm = () => {
                 .samePassword{
                     display: ${(isSamePassword ? `flex` : `none`)};
                     position: absolute;
-                    top: 49%;
+                    top: 65%;
                     right: 25px;
                 }
             `}</style>
