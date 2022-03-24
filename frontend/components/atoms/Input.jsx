@@ -55,7 +55,7 @@ const SignInputDiv = styled.div`
 `;
 
 const StyledSignInput = styled.input`
-    color: #000;
+    color: ${(props) => props.isHold ? `#3d6eb8` : `#000`};
     font-size: 16px;
     text-align: left;
     outline: none;
@@ -74,6 +74,7 @@ const SignInput = ({
     radius = "0",
     length = "20px",
     type = "text",
+    isHold = false,
     minLength = 4,
     maxLength,
     num = false,
@@ -94,17 +95,18 @@ const SignInput = ({
 
     const handleValue = (e) => {
         const values = { ...inputValue };
-        if(isOnlyNum && (e.target.value === '' ? false : e.target.value[e.target.value.length - 1] < '0' || e.target.value[e.target.value.length - 1] > '9')) return;
+        if (isOnlyNum && (e.target.value === '' ? false : e.target.value[e.target.value.length - 1] < '0' || e.target.value[e.target.value.length - 1] > '9')) return;
         values[num] = e.target.value;
         setInputValue(values);
     }
 
-    const props = { handledLength };
+    const divProps = { handledLength };
+    const inputProps = { isHold };
 
     return (
-        <SignInputDiv onClick={clickDiv} onBlur={blurDiv} ref={signInputDiv} {...props}>
+        <SignInputDiv onClick={clickDiv} onBlur={blurDiv} ref={signInputDiv} {...divProps}>
             <SquareImg radius={radius} src={src} length={length} />
-            <StyledSignInput onFocus={clickDiv} type={type} minLength={minLength} maxLength={maxLength} value={inputValue[num]} onChange={handleValue} placeholder={placeholder} ref={signInput} required />
+            <StyledSignInput onFocus={clickDiv} type={type} minLength={minLength} maxLength={maxLength} value={inputValue[num]} onChange={handleValue} placeholder={placeholder} ref={signInput} required readOnly={isHold} {...inputProps} />
         </SignInputDiv>
     );
 };
