@@ -141,15 +141,20 @@ const SignForm = () => {
                             isHold={isHoldEmail}
                             minLength={10}
                             num={4} />
-                        <SignInput src="/images/check.png"
-                            radius="5px"
-                            length="23px"
-                            placeholder="인증번호 확인"
-                            isHold={isHoldAuth}
-                            minLength={6}
-                            maxLength={6}
-                            isOnlyNum
-                            num={5} />
+                        {
+                            isHoldAuth ?
+                                <button className="sendEmailBtn" onClick={test}>이메일 인증 받기 <SquareImg src="/images/send.png" length="20px" /></button>
+                                :
+                                <SignInput src="/images/check.png"
+                                    radius="5px"
+                                    length="23px"
+                                    placeholder="인증번호 확인"
+                                    isHold={isHoldAuth}
+                                    minLength={6}
+                                    maxLength={6}
+                                    isOnlyNum
+                                    num={5} />
+                        }
                         <SignInput src="/images/lock.png"
                             type="password"
                             placeholder="비밀번호"
@@ -163,9 +168,6 @@ const SignForm = () => {
                             maxLength={10}
                             num={7} />
                         <span className="samePassword"><Checkbox state={1} length={"20px"} border={false} /></span>
-                        {
-                            isEmailButton ? <button className="sendEmailBtn" onClick={test}><SquareImg src="/images/send.png" length="24px" /></button> : ``
-                        }
                         <button className="formBtn" onClick={handleSignUp}>회원가입</button>
                         <div className="changeBtn" onClick={changeFormState}>로그인</div>
                     </form>
@@ -224,13 +226,18 @@ const SignForm = () => {
                     cursor: pointer;
                 }
                 .sendEmailBtn{
-                    position: absolute;
-                    border: none;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 300px;
+                    height: 50px;
+                    border: solid 1px #ddd;
                     outline: none;
                     background: none;
-                    top: 30%;
-                    right: 60px;
                     cursor: pointer;
+                    font-size: 14px;
+                    gap: 15px;
+                    ${(isEmailButton ? `opacity: 1;` : `opacity: 0.5;`)}
                 }
                 .samePassword{
                     display: ${(isSamePassword ? `flex` : `none`)};
