@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SignInput } from "../atoms/Input";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { inputValueAtom, loginAtom } from "../others/state";
@@ -17,6 +17,7 @@ const SignForm = () => {
     const [isSamePassword, setIsSamePassword] = useState(false);
     const [inputValue, setInputValue] = useRecoilState(inputValueAtom);
     const setLoginData = useSetRecoilState(loginAtom);
+    const airplane = useRef();
 
     const changeFormState = () => {
         setIsLoginForm(!isLoginForm);
@@ -62,16 +63,29 @@ const SignForm = () => {
                 if (inputValue[6].length >= 4 && inputValue[7].length >= 4) {
                     e.preventDefault();
 
-
                 }
     }
 
     const test = () => {
         setHandleEmail({
             isHoldEmail: true,
-            isHoldAuth: false,
-            isEmailButton: false,
+            isHoldAuth: true,
+            isEmailButton: true,
         });
+        airplane.current.className += " active";
+        setTimeout(() => {
+            setHandleEmail({
+                isHoldEmail: true,
+                isHoldAuth: false,
+                isEmailButton: false,
+            });
+        }, 2000);
+
+        // 1. @knu.ac.kr이 입력 되면 버튼이 활성화된다.
+        // 2. 버튼을 클릭하면 이메일란은 고정되고, fetching하며 이메일에 성공적으로 보냈는지 검사한다.
+        // 3. 이메일에 성공적으로 보냈다면 비행기를 날려보내고 alert를 띄운다.
+        // 4. 이메일에 보내는 데 실패했다면, 잘못됐다는 걸 알려주고 이메일 고정을 해체하고, 비행기 보내기 X
+        // 5. 비행기 보내고나면 div를 input으로 바꿔
 
         // 원래는 이 버튼을 누르면 post로 fetch가 진행되어야함.
         // 혹시 이메일을 잘못 보내거나 서버측에서 에러가 생겨서 error가 발생하면
@@ -143,7 +157,10 @@ const SignForm = () => {
                             num={4} />
                         {
                             isHoldAuth ?
-                                <button className="sendEmailBtn" onClick={test}>이메일 인증 받기 <SquareImg src="/images/send.png" length="20px" /></button>
+                                isEmailButton ?
+                                    <div className="sendEmailBtn" onClick={test}>이메일 인증 받기 <div className="stay" ref={airplane}><SquareImg src="/images/send.png" length="20px" /></div></div>
+                                    :
+                                    <div className="sendEmailBtn">이메일 인증 받기 <SquareImg src="/images/send.png" length="20px" /></div>
                                 :
                                 <SignInput src="/images/check.png"
                                     radius="5px"
@@ -232,18 +249,33 @@ const SignForm = () => {
                     width: 300px;
                     height: 50px;
                     border: solid 1px #ddd;
-                    outline: none;
                     background: none;
                     cursor: pointer;
                     font-size: 14px;
                     gap: 15px;
                     ${(isEmailButton ? `opacity: 1;` : `opacity: 0.5;`)}
                 }
+                .stay{
+                    animation: stay 2s infinite;
+                }
+                .active{
+                    animation: fly 2s infinite !important;
+                }
                 .samePassword{
                     display: ${(isSamePassword ? `flex` : `none`)};
                     position: absolute;
                     top: 65%;
                     right: 25px;
+                }
+                @keyframes stay{
+                    0%{transform: translateX(0) translateY(0);}
+                    50%{transform: translateX(5px) translateY(-5px);}
+                    100%{transform: translateX(0) translateY(0);}
+                }
+                @keyframes fly{
+                    0%{transform: translateX(0) translateY(0);}
+                    10%{transform: translateX(-10px) translateY(10px);}
+                    100%{transform: translateX(500px) translateY(-500px);}
                 }
             `}</style>
         </>
