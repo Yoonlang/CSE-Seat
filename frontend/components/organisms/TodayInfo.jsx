@@ -120,9 +120,7 @@ const TodayInfo = () => {
                 isToday: undefined,
             },
         }];
-
-        req?.forEach(({ apply_id, /* apply_id 필요없음 */ isToday = true, /*바꿔줘야함*/ part1, part2, part1End, state }) => {
-            if (apply_id === 102) isToday = false; // 나중에 바꿔줘야함
+        req?.forEach(({ isToday, part1, part2, part1End, state }) => {
             const dayIndex = isToday ? 0 : 2;
             if (part1.isPart && !part1.cancel_marker && ((part2.isPart & !part1End) | (!part2.isPart))) {
                 tempInfoData[dayIndex].isPart = true;

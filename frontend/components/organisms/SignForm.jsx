@@ -48,7 +48,7 @@ const SignForm = () => {
                 });
                 setInputValue([
                     inputValue[0],
-                    '', '', ''
+                    '', '', '', '', '', '', '',
                 ])
             } catch (e) {
                 console.log("error: ", e);
@@ -91,7 +91,7 @@ const SignForm = () => {
         // 3. 메일 보내기 없애주고, 인증번호 확인은 적을 수 있게 되어야함.
         if (isHoldAuth) {
             const tempHandleData = { ...handleEmail }
-            const isQualify = inputValue[4].indexOf("@knu.ac.kr") === -1 ? false : inputValue[4].indexOf("@knu.ac.kr") + 10 === inputValue[4].length ? true : false;
+            const isQualify = inputValue[4]?.indexOf("@knu.ac.kr") === -1 ? false : inputValue[4].indexOf("@knu.ac.kr") + 10 === inputValue[4].length ? true : false;
             tempHandleData.isEmailButton = isQualify ? true : false;
             setHandleEmail(tempHandleData);
         }
