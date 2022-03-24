@@ -45,7 +45,7 @@ const showRoomAtom = atom({
 
 const inputValueAtom = atom({
     key : 'input',
-    default : ['', '', '', '']
+    default : ['', '', '', '', '', '', '', '']
 })
 
 const seatModalAtom = atom({
