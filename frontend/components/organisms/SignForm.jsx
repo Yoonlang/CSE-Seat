@@ -13,11 +13,13 @@ const SignForm = () => {
         isHoldAuth: true,
         isEmailButton: false,
     });
+    const [isShake, setIsShake] = useState([false, false, false, false, false, false, false, false,]);
     const { isHoldEmail, isHoldAuth, isEmailButton } = handleEmail;
     const [isSamePassword, setIsSamePassword] = useState(false);
     const [inputValue, setInputValue] = useRecoilState(inputValueAtom);
     const setLoginData = useSetRecoilState(loginAtom);
     const airplane = useRef();
+    const signInBtn = useRef();
 
     const changeFormState = () => {
         setIsLoginForm(!isLoginForm);
@@ -40,6 +42,14 @@ const SignForm = () => {
                 })
                 const data = await res.json();
                 if (data.result === false) {
+                    if (signInBtn.current.className.indexOf("wrong") === -1)
+                        signInBtn.current.className += " wrong";
+                    else {
+                        signInBtn.current.className = signInBtn.current.className.substr(0, signInBtn.current.className.length - 6);
+                        setTimeout(() => {
+                            signInBtn.current.className += " wrong";
+                        }, 1);
+                    }
                     setIsFailed(true);
                     throw ("Can't login");
                 }
@@ -55,15 +65,22 @@ const SignForm = () => {
                 console.log("error: ", e);
             }
         }
+        else {
+            e.preventDefault();
+            setIsFailed(false);
+            const tempIsShake = [...isShake];
+            if (inputValue[0].length < 4) tempIsShake[0] = true;
+            if (inputValue[1].length < 4) tempIsShake[1] = true;
+            setIsShake(tempIsShake);
+        }
     }
 
     const handleSignUp = (e) => {
-        if (inputValue[2].length >= 4 && inputValue[3].length >= 2)
-            if (inputValue[4].length >= 10 && inputValue[5].length === 6)
-                if (inputValue[6].length >= 4 && inputValue[7].length >= 4) {
-                    e.preventDefault();
+        if (inputValue[2].length >= 4 && inputValue[3].length >= 2 && inputValue[4].length >= 10)
+            if (inputValue[5].length === 6 && inputValue[6].length >= 4 && inputValue[7].length >= 4) {
+                e.preventDefault();
 
-                }
+            }
     }
 
     const test = () => {
@@ -94,7 +111,23 @@ const SignForm = () => {
     }
 
     useEffect(() => {
-        console.log(handleEmail);
+        if (isShake[0] && inputValue[0].length >= 4) {
+            const tempIsShake = [...isShake];
+            tempIsShake[0] = false;
+            setIsShake(tempIsShake);
+        }
+    }, [inputValue[0]])
+
+    useEffect(() => {
+        if (isShake[1] && inputValue[1].length >= 4) {
+            const tempIsShake = [...isShake];
+            tempIsShake[1] = false;
+            setIsShake(tempIsShake);
+        }
+    }, [inputValue[1]])
+
+    useEffect(() => {
+        // console.log(handleEmail);
         // if (!isHoldAuth) alert("이메일을 확인해주세요.");
         // 이것도 fetch 보내서 result가 true면 alert 떠야함.
     }, [handleEmail])
@@ -121,10 +154,9 @@ const SignForm = () => {
     }, [inputValue[6], inputValue[7]])
 
     useEffect(() => {
-        if (isFailed)
-            setTimeout(() => {
-                setIsFailed(false);
-            }, 300);
+        if (isFailed) {
+            // signInBtn.current.className += " wrong";
+        }
     }, [isFailed])
 
     return (
@@ -133,11 +165,27 @@ const SignForm = () => {
                 isLoginForm ?
                     <form className="signForm">
                         <SignInput src="/images/user.png"
-                            radius="5px" num={0} />
+                            radius="5px"
+                            isShake={isShake[0]}
+                            num={0} />
                         <SignInput src="/images/lock.png"
+                            maxLength={10}
                             type="password"
-                            placeholder="비밀번호" num={1} />
-                        <button className="formBtn" onClick={handleSignIn}>로그인</button>
+                            placeholder="비밀번호"
+                            isShake={isShake[1]}
+                            num={1} />
+                        <span className="signInError">
+                            {
+                                isShake[0] & isShake[1] ?
+                                    `학번과 비밀번호를 4자리 이상 입력해주세요.` :
+                                    isShake[0] ? `학번을 4자리 이상 입력해주세요.` :
+                                        isShake[1] ? `비밀번호를 4자리 이상 입력해주세요.` :
+                                            isFailed ?
+                                                `학번 또는 비밀번호를 잘못 입력했습니다.` :
+                                                ``
+                            }
+                        </span>
+                        <button className="formBtn" ref={signInBtn} onClick={handleSignIn}>로그인</button>
                         <div className="changeBtn" onClick={changeFormState}>회원가입</div>
                     </form>
                     :
@@ -196,13 +244,21 @@ const SignForm = () => {
                     align-items:center;
                     flex-direction:column;
                     width:400px;
-                    height:${(isLoginForm ? "250px" : "480px")};
+                    height:${(isLoginForm ? "270px" : "480px")};
                     border:solid;
                     border-color:#ddd;
                     border-width:1px;
                     gap: 5px;
                     padding: 20px;
                     background: #fff;
+                }
+                .signInError{
+                    display: flex;
+                    align-items: center;
+                    width: 300px;
+                    height: 20px;
+                    font-size: 13px;
+                    color: #dc2b3c;
                 }
                 #inputFile{
                     display:none;
@@ -223,19 +279,15 @@ const SignForm = () => {
                     height: 40px;
                     border:none;
                     outline:none;
-                    ${(isFailed ? `
-                    background: #da2127;
-                    transition: 0.1s;
-                    ` : `
                     background: #5C9EFF;
-                    transition: 1s;
-                    `)}
                     color: #fff;
                     font-size: 14px;
                     font-weight: 550;
                     letter-spacing: 3px;
                     margin: 10px 0;
-                    transition-property: background;
+                }
+                .wrong{
+                    animation: wrong 1s;
                 }
                 .changeBtn{
                     position: absolute;
@@ -259,13 +311,24 @@ const SignForm = () => {
                     animation: stay 2s infinite;
                 }
                 .active{
-                    animation: fly 2s infinite !important;
+                    animation: fly 2s !important;
                 }
                 .samePassword{
                     display: ${(isSamePassword ? `flex` : `none`)};
                     position: absolute;
                     top: 65%;
                     right: 25px;
+                }
+                @keyframes wrong{
+                    0%{
+                        background: #5C9EFF;
+                    }
+                    10%{
+                        background: #da2127;
+                    }
+                    100%{
+                        background: #5C9EFF;
+                    }
                 }
                 @keyframes stay{
                     0%{transform: translateX(0) translateY(0);}
