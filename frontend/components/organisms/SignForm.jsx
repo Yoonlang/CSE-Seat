@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import React, { memo } from "react";
 import { SignInput } from "../atoms/Input";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { inputValueAtom, loginAtom } from "../others/state";
@@ -14,9 +15,14 @@ const SignForm = () => {
         isEmailButton: false,
     });
     const { isHoldEmail, isHoldAuth, isEmailButton } = handleEmail;
+    const [isShake, setIsShake] = useState([false, false, false, false, false, false, false, false,]);
     const [isSamePassword, setIsSamePassword] = useState(false);
     const [inputValue, setInputValue] = useRecoilState(inputValueAtom);
     const setLoginData = useSetRecoilState(loginAtom);
+    const airplane = useRef();
+    const signInBtn = useRef();
+    const signUpForm = useRef();
+    const emailBtn = useRef();
 
     const changeFormState = () => {
         setIsLoginForm(!isLoginForm);
@@ -39,6 +45,14 @@ const SignForm = () => {
                 })
                 const data = await res.json();
                 if (data.result === false) {
+                    if (signInBtn.current.className.indexOf("wrong") === -1)
+                        signInBtn.current.className += " wrong";
+                    else {
+                        signInBtn.current.className = signInBtn.current.className.substr(0, signInBtn.current.className.length - 6);
+                        setTimeout(() => {
+                            signInBtn.current.className += " wrong";
+                        }, 1);
+                    }
                     setIsFailed(true);
                     throw ("Can't login");
                 }
@@ -54,24 +68,63 @@ const SignForm = () => {
                 console.log("error: ", e);
             }
         }
+        else {
+            e.preventDefault();
+            setIsFailed(false);
+            const tempIsShake = [...isShake];
+            if (inputValue[0].length < 4) tempIsShake[0] = true;
+            if (inputValue[1].length < 4) tempIsShake[1] = true;
+            setIsShake(tempIsShake);
+        }
     }
 
     const handleSignUp = (e) => {
-        if (inputValue[2].length >= 4 && inputValue[3].length >= 2)
-            if (inputValue[4].length >= 10 && inputValue[5].length === 6)
-                if (inputValue[6].length >= 4 && inputValue[7].length >= 4) {
-                    e.preventDefault();
-
-
-                }
+        e.preventDefault();
+        if (inputValue[2].length >= 4 && inputValue[3].length >= 2 && inputValue[4].length >= 10 && inputValue[5].length === 6 && inputValue[6].length >= 4 && inputValue[7].length >= 4) {
+            signUpForm.current?.submit();
+        }
+        else {
+            const tempIsShake = [...isShake];
+            if (inputValue[2].length < 4) tempIsShake[2] = true;
+            if (inputValue[3].length < 2) tempIsShake[3] = true;
+            if (inputValue[4].length < 10 || inputValue[4].indexOf("@knu.ac.kr") === -1 || inputValue[4].indexOf("@knu.ac.kr") !== inputValue[4].length - 10) tempIsShake[4] = true;
+            else if (isEmailButton) {
+                if (emailBtn.current?.className.indexOf("shake") === -1) emailBtn.current.className += " shake";
+            }
+            else if (!isEmailButton & !isHoldAuth && inputValue[5].length !== 6) tempIsShake[5] = true;
+            if (inputValue[6].length < 4) tempIsShake[6] = true;
+            if (inputValue[7].length < 4) tempIsShake[7] = true;
+            if (!isSamePassword) {
+                tempIsShake[7] = true;
+            }
+            setIsShake(tempIsShake);
+            if (isEmailButton && emailBtn.current.className.indexOf("shake") === -1) emailBtn.current.className += " shake";
+        }
     }
 
     const test = () => {
+        if (emailBtn.current.className.indexOf("shake") !== -1)
+            emailBtn.current.className = emailBtn.current.className.substr(0, emailBtn.current.className.length - 6);
+
         setHandleEmail({
             isHoldEmail: true,
-            isHoldAuth: false,
-            isEmailButton: false,
+            isHoldAuth: true,
+            isEmailButton: true,
         });
+        airplane.current.className += " active";
+        setTimeout(() => {
+            setHandleEmail({
+                isHoldEmail: true,
+                isHoldAuth: false,
+                isEmailButton: false,
+            });
+        }, 2000);
+
+        // 1. @knu.ac.kr이 입력 되면 버튼이 활성화된다.
+        // 2. 버튼을 클릭하면 이메일란은 고정되고, fetching하며 이메일에 성공적으로 보냈는지 검사한다.
+        // 3. 이메일에 성공적으로 보냈다면 비행기를 날려보내고 alert를 띄운다.
+        // 4. 이메일에 보내는 데 실패했다면, 잘못됐다는 걸 알려주고 이메일 고정을 해체하고, 비행기 보내기 X
+        // 5. 비행기 보내고나면 div를 input으로 바꿔
 
         // 원래는 이 버튼을 누르면 post로 fetch가 진행되어야함.
         // 혹시 이메일을 잘못 보내거나 서버측에서 에러가 생겨서 error가 발생하면
@@ -80,7 +133,71 @@ const SignForm = () => {
     }
 
     useEffect(() => {
-        console.log(handleEmail);
+        if (isShake[0] && inputValue[0].length >= 4) {
+            const tempIsShake = [...isShake];
+            tempIsShake[0] = false;
+            setIsShake(tempIsShake);
+        }
+    }, [inputValue[0]])
+
+    useEffect(() => {
+        if (isShake[1] && inputValue[1].length >= 4) {
+            const tempIsShake = [...isShake];
+            tempIsShake[1] = false;
+            setIsShake(tempIsShake);
+        }
+    }, [inputValue[1]])
+
+    useEffect(() => {
+        if (isShake[2] && inputValue[2].length >= 4) {
+            const tempIsShake = [...isShake];
+            tempIsShake[2] = false;
+            setIsShake(tempIsShake);
+        }
+    }, [inputValue[2]])
+
+    useEffect(() => {
+        if (isShake[3] && inputValue[3].length >= 2) {
+            const tempIsShake = [...isShake];
+            tempIsShake[3] = false;
+            setIsShake(tempIsShake);
+        }
+    }, [inputValue[3]])
+
+    useEffect(() => {
+        if (isShake[4] && inputValue[4].length >= 10 && inputValue[4].indexOf("@knu.ac.kr") !== -1 && inputValue[4].length - inputValue[4].indexOf("@knu.ac.kr") === 10) {
+            const tempIsShake = [...isShake];
+            tempIsShake[4] = false;
+            setIsShake(tempIsShake);
+        }
+    }, [inputValue[4]])
+
+    useEffect(() => {
+        if (isShake[5] && inputValue[5].length === 6) {
+            const tempIsShake = [...isShake];
+            tempIsShake[5] = false;
+            setIsShake(tempIsShake);
+        }
+    }, [inputValue[5]])
+
+    useEffect(() => {
+        if (isShake[6] && inputValue[6].length >= 4) {
+            const tempIsShake = [...isShake];
+            tempIsShake[6] = false;
+            setIsShake(tempIsShake);
+        }
+    }, [inputValue[6]])
+
+    useEffect(() => {
+        if (isShake[7] && inputValue[7].length >= 4) {
+            const tempIsShake = [...isShake];
+            tempIsShake[7] = false;
+            setIsShake(tempIsShake);
+        }
+    }, [inputValue[7]])
+
+    useEffect(() => {
+        // console.log(handleEmail);
         // if (!isHoldAuth) alert("이메일을 확인해주세요.");
         // 이것도 fetch 보내서 result가 true면 alert 떠야함.
     }, [handleEmail])
@@ -107,10 +224,9 @@ const SignForm = () => {
     }, [inputValue[6], inputValue[7]])
 
     useEffect(() => {
-        if (isFailed)
-            setTimeout(() => {
-                setIsFailed(false);
-            }, 300);
+        if (isFailed) {
+            // signInBtn.current.className += " wrong";
+        }
     }, [isFailed])
 
     return (
@@ -119,31 +235,54 @@ const SignForm = () => {
                 isLoginForm ?
                     <form className="signForm">
                         <SignInput src="/images/user.png"
-                            radius="5px" num={0} />
+                            radius="5px"
+                            isShake={isShake[0]}
+                            num={0} />
                         <SignInput src="/images/lock.png"
+                            maxLength={10}
                             type="password"
-                            placeholder="비밀번호" num={1} />
-                        <button className="formBtn" onClick={handleSignIn}>로그인</button>
+                            placeholder="비밀번호"
+                            isShake={isShake[1]}
+                            num={1} />
+                        <span className="signInError">
+                            {
+                                isShake[0] & isShake[1] ?
+                                    `학번과 비밀번호를 4자리 이상 입력해주세요.` :
+                                    isShake[0] ? `학번을 4자리 이상 입력해주세요.` :
+                                        isShake[1] ? `비밀번호를 4자리 이상 입력해주세요.` :
+                                            isFailed ?
+                                                `학번 또는 비밀번호를 잘못 입력했습니다.` :
+                                                ``
+                            }
+                        </span>
+                        <button className="formBtn" ref={signInBtn} onClick={handleSignIn}>로그인</button>
                         <div className="changeBtn" onClick={changeFormState}>회원가입</div>
                     </form>
                     :
-                    <form className="signForm">
+                    <form className="signForm" ref={signUpForm}>
                         <SignInput src="/images/user.png"
-                            radius="5px" num={2} />
+                            radius="5px"
+                            isShake={isShake[2]}
+                            num={2} />
                         <SignInput src="/images/user.png"
                             radius="5px"
                             placeholder="이름"
                             minLength={2}
+                            isShake={isShake[3]}
                             num={3} />
                         <SignInput src="/images/mail.png"
                             length="28px"
                             placeholder="학교 이메일"
                             isHold={isHoldEmail}
                             minLength={10}
+                            isShake={isShake[4]}
                             num={4} />
                         {
                             isHoldAuth ?
-                                <button className="sendEmailBtn" onClick={test}>이메일 인증 받기 <SquareImg src="/images/send.png" length="20px" /></button>
+                                isEmailButton ?
+                                    <div className="sendEmailBtn" onClick={test} ref={emailBtn}>이메일 인증 받기 <div className="stay" ref={airplane}><SquareImg src="/images/send.png" length="20px" /></div></div>
+                                    :
+                                    <div className="sendEmailBtn">이메일 인증 받기 <SquareImg src="/images/send.png" length="20px" /></div>
                                 :
                                 <SignInput src="/images/check.png"
                                     radius="5px"
@@ -153,6 +292,7 @@ const SignForm = () => {
                                     minLength={6}
                                     maxLength={6}
                                     isOnlyNum
+                                    isShake={isShake[5]}
                                     num={5} />
                         }
                         <SignInput src="/images/lock.png"
@@ -160,12 +300,14 @@ const SignForm = () => {
                             placeholder="비밀번호"
                             minLength={4}
                             maxLength={10}
+                            isShake={isShake[6]}
                             num={6} />
                         <SignInput src="/images/lock.png"
                             type="password"
                             placeholder="비밀번호 확인"
                             minLength={4}
                             maxLength={10}
+                            isShake={isShake[7]}
                             num={7} />
                         <span className="samePassword"><Checkbox state={1} length={"20px"} border={false} /></span>
                         <button className="formBtn" onClick={handleSignUp}>회원가입</button>
@@ -179,13 +321,22 @@ const SignForm = () => {
                     align-items:center;
                     flex-direction:column;
                     width:400px;
-                    height:${(isLoginForm ? "250px" : "480px")};
+                    height:${(isLoginForm ? "270px" : "480px")};
                     border:solid;
                     border-color:#ddd;
                     border-width:1px;
                     gap: 5px;
                     padding: 20px;
                     background: #fff;
+                    margin: 30px 0;
+                }
+                .signInError{
+                    display: flex;
+                    align-items: center;
+                    width: 300px;
+                    height: 20px;
+                    font-size: 13px;
+                    color: #dc2b3c;
                 }
                 #inputFile{
                     display:none;
@@ -206,19 +357,15 @@ const SignForm = () => {
                     height: 40px;
                     border:none;
                     outline:none;
-                    ${(isFailed ? `
-                    background: #da2127;
-                    transition: 0.1s;
-                    ` : `
                     background: #5C9EFF;
-                    transition: 1s;
-                    `)}
                     color: #fff;
                     font-size: 14px;
                     font-weight: 550;
                     letter-spacing: 3px;
                     margin: 10px 0;
-                    transition-property: background;
+                }
+                .wrong{
+                    animation: wrong 1s;
                 }
                 .changeBtn{
                     position: absolute;
@@ -232,18 +379,66 @@ const SignForm = () => {
                     width: 300px;
                     height: 50px;
                     border: solid 1px #ddd;
-                    outline: none;
                     background: none;
                     cursor: pointer;
                     font-size: 14px;
                     gap: 15px;
                     ${(isEmailButton ? `opacity: 1;` : `opacity: 0.5;`)}
                 }
+                .stay{
+                    animation: stay 2s infinite;
+                }
+                .active{
+                    animation: fly 2s !important;
+                }
                 .samePassword{
                     display: ${(isSamePassword ? `flex` : `none`)};
                     position: absolute;
                     top: 65%;
                     right: 25px;
+                }
+                .shake{
+                    border-color: #da2127 !important;
+                    border-width: 1.5px;
+                    animation: shake 0.5s;
+                }
+                @keyframes shake{
+                    25%{
+                        transform: translate(20px);
+                    }
+                    50%{
+                        transform: translate(-10px);
+                    }
+                    70%{
+                        transform: translate(5px);
+                    }
+                    90%{
+                        transform: translate(-2px);
+                    }
+                    100%{
+                        transform: translate(0);
+                    }
+                }
+                @keyframes wrong{
+                    0%{
+                        background: #5C9EFF;
+                    }
+                    10%{
+                        background: #da2127;
+                    }
+                    100%{
+                        background: #5C9EFF;
+                    }
+                }
+                @keyframes stay{
+                    0%{transform: translateX(0) translateY(0);}
+                    50%{transform: translateX(5px) translateY(-5px);}
+                    100%{transform: translateX(0) translateY(0);}
+                }
+                @keyframes fly{
+                    0%{transform: translateX(0) translateY(0);}
+                    10%{transform: translateX(-10px) translateY(10px);}
+                    100%{transform: translateX(500px) translateY(-500px);}
                 }
             `}</style>
         </>
