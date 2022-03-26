@@ -130,6 +130,8 @@ const SignInput = ({
                     gap: ${14 + (20 - handledLength) / 2}px;
                 }
                 .shake{
+                    border-color: #da2127 !important;
+                    border-width: 1.5px;
                     animation: shake 0.5s;
                 }
                 @keyframes shake{
