@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import React, { memo } from "react";
 import { SignInput } from "../atoms/Input";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -94,9 +94,7 @@ const SignForm = () => {
             else if (!isEmailButton & !isHoldAuth && inputValue[5].length !== 6) tempIsShake[5] = true;
             if (inputValue[6].length < 4) tempIsShake[6] = true;
             if (inputValue[7].length < 4) tempIsShake[7] = true;
-            if (!isSamePassword) {
-                tempIsShake[7] = true;
-            }
+            if (!isSamePassword) tempIsShake[7] = true;
             setIsShake(tempIsShake);
             if (isEmailButton && emailBtn.current.className.indexOf("shake") === -1) emailBtn.current.className += " shake";
         }
@@ -363,6 +361,7 @@ const SignForm = () => {
                     font-weight: 550;
                     letter-spacing: 3px;
                     margin: 10px 0;
+                    cursor: pointer;
                 }
                 .wrong{
                     animation: wrong 1s;
