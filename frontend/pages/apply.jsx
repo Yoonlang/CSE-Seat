@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { PageDiv } from "../components/atoms/Div";
 import HeadTitle from "../components/others/headTitle"
@@ -35,9 +35,6 @@ const Apply = ({ data }) => {
     const router = useRouter();
 
     const handleWrong = ({ seat, friends }) => {
-        // 만약 다 true면 이미 신청했다하고 메인으로 보내
-
-
         const BoolToNum = friends.map((prop) => {
             return prop ? 0 : 1;
         })

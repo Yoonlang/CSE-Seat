@@ -116,6 +116,7 @@ const Index = ({ data }) => {
                     }
                     .rooms{
                         justify-content: space-between;
+                        overflow-x: clip;
                     }
                 }
                 @media(max-width: 767px){
@@ -132,7 +133,7 @@ const Index = ({ data }) => {
                     }
                     .rooms .room${(targetRoom)}{
                         display: flex !important;
-                        overflow-x: hidden;
+                        overflow-x: clip;
                     }
                     .refreshBtn{
                         display: flex;
