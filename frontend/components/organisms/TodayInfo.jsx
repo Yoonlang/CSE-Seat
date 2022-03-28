@@ -5,12 +5,7 @@ import { MyLink } from "../atoms/Div";
 import { isInLocation } from "../others/checkPos";
 import { historyToIndexAndInfoAtom, loadingCheckInAtom, refreshIndexAtom } from "../others/state";
 
-const todayIntro = [
-    <><span>오늘</span><span>1부</span></>,
-    <><span></span><span>2부</span></>,
-    <><span>내일</span><span>1부</span></>,
-    <><span></span><span>2부</span></>,
-]
+const todayIntro = [`오늘`, `1부`, ``, `2부`, `내일`, `1부`, ``, `2부`,]
 
 const TodayInfo = () => {
     const [isSelectCancel, setIsSelectCancel] = useState(false);
@@ -204,7 +199,8 @@ const TodayInfo = () => {
                         handledInfoData?.map((prop, index) => {
                             const { isPart, showingData: { seatNum, seatRoom } } = prop;
                             return (<Fragment key={prop, index}>
-                                {todayIntro[index]}
+                                <span>{todayIntro[index * 2]}</span>
+                                <span>{todayIntro[index * 2 + 1]}</span>
                                 {isPart ? <span>{seatRoom}호 {seatNum}번 좌석</span> : <span></span>}
                             </Fragment>)
                         })
@@ -258,6 +254,7 @@ const TodayInfo = () => {
             max-width: 400px;
             height: 100%;
             padding: 0 5px;
+            margin-bottom: 40px;
         }
         .todayInfo{
             display: grid;
@@ -265,6 +262,9 @@ const TodayInfo = () => {
             width: 100%;
             height: 100%;
             align-items: center;
+        }
+        .todayInfo > span{
+            text-align: center;
         }
         .infoOption{
             display:flex;
