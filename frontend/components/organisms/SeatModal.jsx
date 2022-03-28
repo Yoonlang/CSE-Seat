@@ -278,12 +278,12 @@ const SeatModal = () => {
             .modal{
                 display: none;
                 position: fixed;
-                top:-1vh;
-                left:-1%;
                 justify-content: center;
                 align-items: center;
-                width: 102%;
-                height: 102vh;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
                 background: rgba(0, 0, 0, 0.5);
                 z-index: 11;
                 cursor: auto;

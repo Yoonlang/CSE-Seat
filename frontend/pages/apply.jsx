@@ -194,7 +194,7 @@ const Apply = ({ data }) => {
                     <span>
                         친구<br />
                         <span>(최대 3명)</span><br /><br />
-                        <span>자리가 없을 시 따로 앉거나<br />일부 인원만 배정될 수 있음.</span>
+                        <span>자리가 없을 시 따로 앉거나<br />일부 인원만 배정될 수 있음</span>
                     </span>
                     {
                         friendHope.map((prop, index) => {
@@ -230,7 +230,7 @@ const Apply = ({ data }) => {
                     font-size: 12px;
                 }
                 .bar{
-                    width: 85%;
+                    width: 90%;
                     height: 1px;
                     border:solid;
                     border-width: 1px 0 0 0;
@@ -251,7 +251,7 @@ const Apply = ({ data }) => {
                     grid-template-columns: 200px 1fr;
                     justify-items: center;
                     align-items: center;
-                    width: 80%;
+                    width: min(90%, 400px);
                     height: 80px;
                     row-gap: 6px;  
                 }
@@ -321,7 +321,7 @@ const Apply = ({ data }) => {
                     grid-template-columns: 200px 1fr;
                     justify-items: center;
                     align-items: center;
-                    width: 80%;
+                    width: min(90%, 400px);
                     height: 120px;
                     row-gap: 6px;   
                 }
@@ -383,7 +383,7 @@ const Apply = ({ data }) => {
                     grid-template-columns: 200px 1fr;
                     justify-items: center;
                     align-items: center;
-                    width: 80%;
+                    width: min(90%, 400px);
                     height: 100px;
                     row-gap: 6px;
                 }

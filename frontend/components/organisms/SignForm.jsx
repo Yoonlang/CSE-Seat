@@ -394,7 +394,7 @@ const SignForm = () => {
                     display: ${(isSamePassword ? `flex` : `none`)};
                     position: absolute;
                     top: 65%;
-                    right: 25px;
+                    right: 55px;
                 }
                 .shake{
                     border-color: #da2127 !important;

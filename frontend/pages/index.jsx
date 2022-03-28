@@ -93,12 +93,12 @@ const Index = ({ data }) => {
                 }
                 .modal{
                     position: fixed;
-                    top:-1vh;
-                    left:-1%;
+                    top:0;
+                    left:0;
                     justify-content: center;
                     align-items: center;
-                    width: 102%;
-                    height: 102vh;
+                    width: 100%;
+                    height: 100vh;
                     background: rgba(0, 0, 0, 0.5);
                     z-index: 11;
                 }
@@ -132,6 +132,7 @@ const Index = ({ data }) => {
                     }
                     .rooms .room${(targetRoom)}{
                         display: flex !important;
+                        overflow-x: hidden;
                     }
                     .refreshBtn{
                         display: flex;
