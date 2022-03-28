@@ -122,29 +122,32 @@ const SignForm = () => {
                 })
             })
             console.log(res);
+            // fetch 자체 실패 시 잠시 후 다시 시도해주세요
+
+            // 실패시
+            // emailBtn.current.className += " shake";
+            // setHandleEmail({
+            //     isHoldEmail: false,
+            //     isHoldAuth: true,
+            //     isEmailButton: true,
+            // });
+
+            // 성공시
+            // 메일을 확인해주세요 alert
+            // airplane.current.className += " active";
+            // setTimeout(() => {
+            //     setHandleEmail({
+            //         isHoldEmail: true,
+            //         isHoldAuth: false,
+            //         isEmailButton: false,
+            //     });
+            // }, 2000);
+
 
         } catch (e) {
 
         }
-        // airplane.current.className += " active";
-        // setTimeout(() => {
-        //     setHandleEmail({
-        //         isHoldEmail: true,
-        //         isHoldAuth: false,
-        //         isEmailButton: false,
-        //     });
-        // }, 2000);
 
-        // 1. @knu.ac.kr이 입력 되면 버튼이 활성화된다.
-        // 2. 버튼을 클릭하면 이메일란은 고정되고, fetching하며 이메일에 성공적으로 보냈는지 검사한다.
-        // 3. 이메일에 성공적으로 보냈다면 비행기를 날려보내고 alert를 띄운다.
-        // 4. 이메일에 보내는 데 실패했다면, 잘못됐다는 걸 알려주고 이메일 고정을 해체하고, 비행기 보내기 X
-        // 5. 비행기 보내고나면 div를 input으로 바꿔
-
-        // 원래는 이 버튼을 누르면 post로 fetch가 진행되어야함.
-        // 혹시 이메일을 잘못 보내거나 서버측에서 에러가 생겨서 error가 발생하면
-        // 그 에러에 대해 alert로 알려주고
-        // isHoldEmail, isHoldAuth, isEmailButton 다시 풀어줘야함.
     }
 
     useEffect(() => {

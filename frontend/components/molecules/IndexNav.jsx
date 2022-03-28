@@ -42,6 +42,13 @@ const IndexNav = () => {
                     align-items:center;
                     width: 100%;
                     height: 50%;
+                }
+                .rooms{
+                    margin-bottom: -0.5px;
+                    box-shadow: 0 1px #ddd;
+                }
+                .todays{
+                    margin-top: -0.5px;
                     border-bottom: solid;
                     border-width: 1px;
                     border-color: #ddd;
@@ -56,12 +63,12 @@ const IndexNav = () => {
                     letter-spacing: 1.5px;
                 }
                 .room:nth-child(${targetRoom * 2 + 1}){
-                    background: #4d94fd;
-                    color: #fff;
+                    color: #0F5BCC;
+                    border: solid 1px #4b8df0;
                 }
                 .today:nth-child(${isToday ? 1 : 3}){
-                    background: #4d94fd;
-                    color: #fff;
+                    color: #0F5BCC;
+                    border: solid 1px #4b8df0;
                 }
                 .bar{
                     width: 0;
