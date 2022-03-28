@@ -1,5 +1,9 @@
 const userModel = require('../models/user')
 const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+const ejs = require('ejs');
+const path = require('path');
+var appDir = path.dirname(require.main.filename);
 
 const createSalt = () =>
             new Promise((resolve, reject) => {
@@ -66,6 +70,45 @@ module.exports = {
         }catch(e){
             console.log('userService Login error: ',e)
             return {result : false, message: e.message};
+        }     
+    },
+    mail : async (mail_address) => {
+        try{
+            let authNum = crypto.randomInt(100000, 999999);
+            let emailTemplete;
+            ejs.renderFile(appDir+'/template/mail.ejs', {authCode : authNum}, function (err, data) {
+              if(err){console.log(err)}
+              emailTemplete = data;
+            });
+        
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                host: 'smtp.gmail.com',
+                port: 587,
+                secure: false,
+                auth: {
+                    user: process.env.NODEMAILER_USER,
+                    pass: process.env.NODEMAILER_PASS,
+                },
+            });
+        
+            let mailOptions = await transporter.sendMail({
+                from: process.env.NODEMAILER_USER,
+                to: mail_address,
+                subject: '회원가입을 위한 인증번호를 입력해주세요.',
+                html: emailTemplete,
+            });
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    transporter.close();
+                    throw new Error('메일 전송 실패: ', mail_address);
+                }
+                transporter.close();
+            });
+            return authNum;
+        }catch(e){
+            console.log('emailService Login error: ',e)
+            return e;
         }     
     },
 }
