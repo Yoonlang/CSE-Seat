@@ -59,16 +59,17 @@ const IndexNav = () => {
                     align-items:center;
                     width: 100%;
                     height: 100%;
+                    color: #888;
                     cursor: pointer;
                     letter-spacing: 1.5px;
                 }
                 .room:nth-child(${targetRoom * 2 + 1}){
-                    color: #0F5BCC;
-                    border: solid 1px #4b8df0;
+                    color: #000;
+                    border: solid 1px #aaa;
                 }
                 .today:nth-child(${isToday ? 1 : 3}){
-                    color: #0F5BCC;
-                    border: solid 1px #4b8df0;
+                    color: #000;
+                    border: solid 1px #aaa;
                 }
                 .bar{
                     width: 0;

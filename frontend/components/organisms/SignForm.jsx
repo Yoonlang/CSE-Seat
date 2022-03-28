@@ -145,6 +145,7 @@ const SignForm = () => {
 
 
         } catch (e) {
+            console.log(e);
 
         }
 
