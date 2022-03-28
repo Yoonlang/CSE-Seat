@@ -14,12 +14,13 @@ const SeatModal = () => {
     const [twoColor, setTwoColor] = useState('');
     const [isMySeat, setIsMySeat] = useState([false, false]);
     const [isReadyToRequest, setIsReadyToRequest] = useState([false, false]);
+    const [myState, setMyState] = useState(3);
+    const [isReadyToDoOthers, setIsReadyToDoOthers] = useState(false);
     const checkInOutData = useRecoilValue(historyToIndexAndInfoAtom);
     const setIsCheckInLoading = useSetRecoilState(loadingCheckInAtom);
     const modalOutside = useRef();
     const cancelBtn = useRef();
     const router = useRouter();
-    let myState = 3;
 
     const changeColor = (color) => {
         if (color === seatColor[0]) return seatColor[4];
@@ -184,13 +185,37 @@ const SeatModal = () => {
         setOneColor(seatColor[one]);
         setTwoColor(seatColor[two]);
         setIsReadyToRequest([false, false]);
+        setMyState(3);
         if (isModalOpen) {
             let tempSeat = [false, false];
             one === 2 ? tempSeat[0] = true : false;
             two === 2 ? tempSeat[1] = true : false;
             setIsMySeat(tempSeat);
         }
+
+        if (isModalOpen) setIsReadyToDoOthers(true);
+        else setIsReadyToDoOthers(false);
     }, [isModalOpen]);
+
+    useEffect(() => {
+        if ((isMySeat[0] | isMySeat[1]) & isToday) {
+            let flag = true;
+            checkInOutData?.forEach((prop) => {
+                if (!flag) return;
+                const { part1, part2, state, isToday } = prop;
+                if (part1.isPart & isMySeat[0] & isToday)
+                    if (Number(part1.seat_num) === seatNumber && Number(part1.seat_room) === roomNumber) {
+                        setMyState(state);
+                        flag = false;
+                    }
+                if (part2.isPart & isMySeat[1] & isToday & flag)
+                    if (Number(part2.seat_num) === seatNumber && Number(part2.seat_room) === roomNumber) {
+                        setMyState(state);
+                        flag = false;
+                    }
+            })
+        }
+    }, [isReadyToDoOthers, checkInOutData])
 
     return (
         <>
@@ -220,35 +245,19 @@ const SeatModal = () => {
                         <>
                             <div className="check">
                                 {
-                                    checkInOutData?.some((prop) => {
-                                        const { part1, part2, state } = prop;
-                                        if (part1.isPart & isMySeat[0])
-                                            if (Number(part1.seat_num) === seatNumber && Number(part1.seat_room) === roomNumber && state !== 3) {
-                                                myState = state;
-                                                return true;
-                                            };
-                                        if (part2.isPart & isMySeat[1])
-                                            if (Number(part2.seat_num) === seatNumber && Number(part2.seat_room) === roomNumber && state !== 3) {
-                                                myState = state;
-                                                return true;
-                                            }
-                                        return false;
-                                    }) ?
-                                        myState === 3 ? <>
-                                            <button className="off">입실</button>
-                                            <button className="off">퇴실</button>
-                                        </> :
-                                            myState === 0 ?
-                                                <>
-                                                    <button className="on" onClick={() => handleCheck(true)}>입실</button>
-                                                    <button className="off">퇴실</button>
-                                                </> :
-                                                <>
-                                                    <button className="off">입실</button>
-                                                    <button className="on" onClick={() => handleCheck(false)}>퇴실</button>
-                                                </>
-
-                                        : ``
+                                    myState === 3 ? <>
+                                        <button className="off">입실</button>
+                                        <button className="off">퇴실</button>
+                                    </> :
+                                        myState === 0 ?
+                                            <>
+                                                <button className="on" onClick={() => handleCheck(true)}>입실</button>
+                                                <button className="off">퇴실</button>
+                                            </> :
+                                            <>
+                                                <button className="off">입실</button>
+                                                <button className="on" onClick={() => handleCheck(false)}>퇴실</button>
+                                            </>
                                 }
                             </div>
                             <button className="submit" onClick={clickBtn}>자리 수정</button>
@@ -269,12 +278,12 @@ const SeatModal = () => {
             .modal{
                 display: none;
                 position: fixed;
-                top:-1vh;
-                left:-1%;
                 justify-content: center;
                 align-items: center;
-                width: 102%;
-                height: 102vh;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
                 background: rgba(0, 0, 0, 0.5);
                 z-index: 11;
                 cursor: auto;
