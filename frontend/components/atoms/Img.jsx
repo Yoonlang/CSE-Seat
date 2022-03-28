@@ -22,7 +22,7 @@ const SquareImg = ({
     invert = false,
     objectFit = "fill",
     radius = "0",
-    opacity = 0,
+    opacity = 1,
     src
 }) => {
 
