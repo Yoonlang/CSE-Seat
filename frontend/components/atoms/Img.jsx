@@ -14,6 +14,7 @@ const StyledImg = styled.img`
     filter: invert(${(props) => props.invert ? 1 : 0});
     object-fit: ${(props) => props.objectFit};
     border-radius: ${(props) => props.radius};
+    opacity: ${(props) => props.opacity};
 `;
 
 const SquareImg = ({
@@ -21,11 +22,12 @@ const SquareImg = ({
     invert = false,
     objectFit = "fill",
     radius = "0",
+    opacity = 0,
     src
 }) => {
 
     const props = {
-        length, invert, objectFit, radius
+        length, invert, objectFit, radius, opacity
     }
 
     return (
