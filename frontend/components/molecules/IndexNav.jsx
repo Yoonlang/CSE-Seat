@@ -65,11 +65,11 @@ const IndexNav = () => {
                 }
                 .room:nth-child(${targetRoom * 2 + 1}){
                     color: #000;
-                    border: solid 1px #aaa;
+                    border: solid 1px #5C9EFF;
                 }
                 .today:nth-child(${isToday ? 1 : 3}){
                     color: #000;
-                    border: solid 1px #aaa;
+                    border: solid 1px #5C9EFF;
                 }
                 .bar{
                     width: 0;
