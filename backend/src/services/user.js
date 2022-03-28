@@ -92,12 +92,12 @@ module.exports = {
                 },
             });
         
-            let mailOptions = await transporter.sendMail({
+            let mailOptions = {
                 from: process.env.NODEMAILER_USER,
                 to: mail_address,
                 subject: '회원가입을 위한 인증번호를 입력해주세요.',
                 html: emailTemplete,
-            });
+            };
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
                     transporter.close();
