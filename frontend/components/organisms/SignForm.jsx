@@ -100,7 +100,7 @@ const SignForm = () => {
         }
     }
 
-    const test = () => {
+    const sendEmail = async () => {
         if (emailBtn.current.className.indexOf("shake") !== -1)
             emailBtn.current.className = emailBtn.current.className.substr(0, emailBtn.current.className.length - 6);
 
@@ -109,14 +109,31 @@ const SignForm = () => {
             isHoldAuth: true,
             isEmailButton: true,
         });
-        airplane.current.className += " active";
-        setTimeout(() => {
-            setHandleEmail({
-                isHoldEmail: true,
-                isHoldAuth: false,
-                isEmailButton: false,
-            });
-        }, 2000);
+
+        try {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/mail", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    mail: inputValue[4],
+                })
+            })
+            console.log(res);
+
+        } catch (e) {
+
+        }
+        // airplane.current.className += " active";
+        // setTimeout(() => {
+        //     setHandleEmail({
+        //         isHoldEmail: true,
+        //         isHoldAuth: false,
+        //         isEmailButton: false,
+        //     });
+        // }, 2000);
 
         // 1. @knu.ac.kr이 입력 되면 버튼이 활성화된다.
         // 2. 버튼을 클릭하면 이메일란은 고정되고, fetching하며 이메일에 성공적으로 보냈는지 검사한다.
@@ -278,7 +295,7 @@ const SignForm = () => {
                         {
                             isHoldAuth ?
                                 isEmailButton ?
-                                    <div className="sendEmailBtn" onClick={test} ref={emailBtn}>이메일 인증 받기 <div className="stay" ref={airplane}><SquareImg src="/images/send.png" length="20px" /></div></div>
+                                    <div className="sendEmailBtn" onClick={sendEmail} ref={emailBtn}>이메일 인증 받기 <div className="stay" ref={airplane}><SquareImg src="/images/send.png" length="20px" /></div></div>
                                     :
                                     <div className="sendEmailBtn">이메일 인증 받기 <SquareImg src="/images/send.png" length="20px" /></div>
                                 :
