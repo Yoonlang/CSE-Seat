@@ -24,6 +24,9 @@ const MyApp = ({ Component, pageProps }) => {
                     color:#000;
                     text-decoration:none;
                 }
+                html{
+                    overflow-x: hidden;
+                }
                 html, body{
                     height: 100%;
                 }

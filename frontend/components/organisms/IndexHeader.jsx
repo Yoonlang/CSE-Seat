@@ -19,8 +19,8 @@ const IndexHeader = ({ isNav = true }) => {
                     <div className="onlyPC">
                         <Refresh />
                         <TodayButton />
+                        <ColorTables />
                     </div>
-                    <ColorTables />
                 </div>
             </div>
             <style jsx>{`
