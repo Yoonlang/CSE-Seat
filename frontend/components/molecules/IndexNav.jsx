@@ -36,6 +36,7 @@ const IndexNav = () => {
                     width: 100%;
                     height: 100%;
                 }
+                
                 .rooms, .todays{
                     display: flex;
                     justify-content: space-around;
