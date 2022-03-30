@@ -100,6 +100,7 @@ module.exports = {
             };
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
+                    console.log('메일 error',error);
                     transporter.close();
                     throw new Error('메일 전송 실패: ', mail_address);
                 }
