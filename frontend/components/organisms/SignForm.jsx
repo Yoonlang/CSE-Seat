@@ -77,10 +77,33 @@ const SignForm = () => {
         }
     }
 
-    const handleSignUp = (e) => {
+    const handleSignUp = async (e) => {
         e.preventDefault();
         if (inputValue[2].length >= 4 && inputValue[3].length >= 2 && inputValue[4].length >= 10 && inputValue[5].length === 6 && inputValue[6].length >= 4 && inputValue[7].length >= 4) {
-            signUpForm.current?.submit();
+            try {
+                const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/join/process", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        sid: inputValue[2],
+                        password: inputValue[7],
+                        name: inputValue[3],
+                        email: inputValue[4],
+                        authNum: inputValue[5],
+                    })
+                })
+                const data = await res.json();
+                console.log(data);
+
+            } catch (e) {
+
+            }
+
+
+
         }
         else {
             const tempIsShake = [...isShake];
@@ -132,34 +155,18 @@ const SignForm = () => {
                     });
                 }, 1000);
             }
-
-            // fetch 자체 실패 시 잠시 후 다시 시도해주세요
-
-            // 실패시
-            // emailBtn.current.className += " shake";
-            // setHandleEmail({
-            //     isHoldEmail: false,
-            //     isHoldAuth: true,
-            //     isEmailButton: true,
-            // });
-
-            // 성공시
-            // 메일을 확인해주세요 alert
-            // airplane.current.className += " active";
-            // setTimeout(() => {
-            //     setHandleEmail({
-            //         isHoldEmail: true,
-            //         isHoldAuth: false,
-            //         isEmailButton: false,
-            //     });
-            // }, 2000);
-
-
+            else { // 아직 이건 테스트 안해봤음.
+                emailBtn.current.className += " shake";
+                setHandleEmail({
+                    isHoldEmail: false,
+                    isHoldAuth: true,
+                    isEmailButton: true,
+                });
+            }
         } catch (e) {
             console.log(e);
 
         }
-
     }
 
     const focusOnSendEmailBtn = () => {
