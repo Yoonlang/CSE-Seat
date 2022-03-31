@@ -189,7 +189,6 @@ export async function getStaticProps() {
     try {
         const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
             method: "GET",
-            credentials: "include",
         });
         const data = await res.json();
         return {

@@ -99,7 +99,8 @@ const SignForm = () => {
         }
     }
 
-    const sendEmail = async () => {
+    const sendEmail = async (e) => {
+        e.preventDefault();
         if (emailBtn.current.className.indexOf("shake") !== -1)
             emailBtn.current.className = emailBtn.current.className.substr(0, emailBtn.current.className.length - 6);
 
@@ -120,7 +121,18 @@ const SignForm = () => {
                     mail: inputValue[4],
                 })
             })
-            console.log(res);
+            const data = await res.json();
+            if (data.result === true) {
+                airplane.current.className += " active";
+                setTimeout(() => {
+                    setHandleEmail({
+                        isHoldEmail: true,
+                        isHoldAuth: false,
+                        isEmailButton: false,
+                    });
+                }, 1000);
+            }
+
             // fetch 자체 실패 시 잠시 후 다시 시도해주세요
 
             // 실패시
@@ -148,6 +160,14 @@ const SignForm = () => {
 
         }
 
+    }
+
+    const focusOnSendEmailBtn = () => {
+        emailBtn.current.style.borderColor = "#5C9EFF";
+    }
+
+    const blurOnSendEmailBtn = () => {
+        emailBtn.current.style.borderColor = "#ddd";
     }
 
     useEffect(() => {
@@ -298,7 +318,7 @@ const SignForm = () => {
                         {
                             isHoldAuth ?
                                 isEmailButton ?
-                                    <div className="sendEmailBtn" onClick={sendEmail} ref={emailBtn}>이메일 인증 받기 <div className="stay" ref={airplane}><SquareImg src="/images/send.png" length="20px" /></div></div>
+                                    <button className="sendEmailBtn" onFocus={focusOnSendEmailBtn} onBlur={blurOnSendEmailBtn} onClick={sendEmail} ref={emailBtn}>이메일 인증 받기 <div className="stay" ref={airplane}><SquareImg src="/images/send.png" length="20px" /></div></button>
                                     :
                                     <div className="sendEmailBtn">이메일 인증 받기 <SquareImg src="/images/send.png" length="20px" /></div>
                                 :
@@ -397,6 +417,7 @@ const SignForm = () => {
                     align-items: center;
                     width: 300px;
                     height: 50px;
+                    outline: none;
                     border: solid 1px #ddd;
                     background: none;
                     cursor: pointer;
