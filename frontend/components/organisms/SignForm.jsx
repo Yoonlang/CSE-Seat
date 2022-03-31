@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import React, { memo } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SignInput } from "../atoms/Input";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { inputValueAtom, loginAtom } from "../others/state";
