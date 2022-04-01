@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const path = require('path');
+const redis = require('../models/redis');
 var appDir = path.dirname(require.main.filename);
 
 const createSalt = () =>
@@ -106,7 +107,9 @@ module.exports = {
                 }
                 transporter.close();
             });
-            return authNum;
+            
+            redis.set(mail_address, authNum);
+            return true;
         }catch(e){
             console.log('emailService Login error: ',e)
             return e;
