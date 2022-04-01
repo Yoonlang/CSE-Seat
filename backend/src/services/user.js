@@ -122,8 +122,14 @@ module.exports = {
                 transporter.close();
             });
             
-            redis.set(mail_address, authNum);
-            return true;
+            
+            await redisClient.select(0);
+            await redisClient.set(mail_address, authNum);
+            await redisClient.expire(mail_address, 600);
+            await redisClient.select(1);
+            await redisClient.set(mail_address, authNum);
+            await redisClient.expire(mail_address, 60);
+            return {result: true};
         }catch(e){
             console.log('emailService Login error: ',e)
             return e;
