@@ -10,17 +10,23 @@ module.exports = {
             return resolve(false);
         return reject(new Error('database error.'));
     }),
+    findByEmail : async (sid) => new Promise( async (resolve, reject) => {
+        let sql = "select * from user where email = ?"
+        let result = await db.query(sql,[sid]);
+        if (result.length > 0)
+            return resolve(result[0]);
+        else if(result.length == 0)
+            return resolve(false);
+        return reject(new Error('database error.'));
+    }),
     insert : async(userDTO) => {
         try {
             let sql = "INSERT INTO user SET ?"
             set = {
                 sid : userDTO.sid,
                 name : userDTO.name,
-                birth : userDTO.birth,
                 password : userDTO.password,
                 password_salt : userDTO.password_salt,
-                only_friend : false,
-                major : userDTO.major,
                 email : userDTO.email
             }
             let result = await db.query(sql,set);

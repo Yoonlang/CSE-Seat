@@ -3,6 +3,8 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const path = require('path');
+const redis = require('../models/redis');
+const redisClient = redis.getClient();
 var appDir = path.dirname(require.main.filename);
 
 const createSalt = () =>
@@ -40,10 +42,17 @@ module.exports = {
             if (!userDTO.sid) throw Error('학번을 입력하세요.')
             if (!userDTO.password) throw Error('비밀번호를 입력하세요.')
             if (!userDTO.email) throw Error('이메일을 입력하세요.')
-            if (!userDTO.birth) throw Error('생일을 입력하세요.')
-            if (!userDTO.major) throw Error('학번을 입력하세요.')
+            if(!userDTO.authNum) throw Error('인증번호를 입력하세요');
+            
+            if((await redis.get(userDTO.email)) != userDTO.authNum){
+                throw Error('인증번호가 틀렸습니다');
+            } 
+            
             let result = await userModel.findById(userDTO.sid).catch((err)=>{throw err;});
             if(result) throw Error('이미 가입한 학번이 존재합니다.');
+            result = await userModel.findByEmail(userDTO.email).catch((err)=>{throw err;});
+            if(result) throw Error('이미 가입한 이메일이 존재합니다.');
+
             
             hashed = await createHashedPassword(userDTO.password);
             userDTO.password = hashed.password;
@@ -74,6 +83,12 @@ module.exports = {
     },
     mail : async (mail_address) => {
         try{
+            redisClient.select(1);
+            if(await redisClient.get(mail_address) != null)
+                return {result: false, cause: '1 minute'};
+            if(mail_address.split('@')[1] !='knu.ac.kr')
+                return {result: false, cuase: 'wrong email'};
+
             let authNum = crypto.randomInt(100000, 999999);
             let emailTemplete;
             ejs.renderFile(appDir+'/template/mail.ejs', {authCode : authNum}, function (err, data) {
@@ -106,7 +121,15 @@ module.exports = {
                 }
                 transporter.close();
             });
-            return authNum;
+            
+            
+            await redisClient.select(0);
+            await redisClient.set(mail_address, authNum);
+            await redisClient.expire(mail_address, 600);
+            await redisClient.select(1);
+            await redisClient.set(mail_address, authNum);
+            await redisClient.expire(mail_address, 60);
+            return {result: true};
         }catch(e){
             console.log('emailService Login error: ',e)
             return e;

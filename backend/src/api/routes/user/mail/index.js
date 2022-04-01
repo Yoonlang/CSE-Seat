@@ -7,10 +7,10 @@ router.get('/', (req, res)=>{
     res.send({result : 'hi', sid :  req.user, address: appDir});
 });
 
-router.post('/', async(req, res) => {
+router.post('/', async(req, res, next) => {
     result = await userService.mail(req.body.mail);
     if(result instanceof Error) return next(result);
-    res.status(200).json({result : true, num : result});
+    res.status(200).json(result);
 });
 
 router.use((err,req,res,next)=>{
