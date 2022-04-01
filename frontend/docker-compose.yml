@@ -5,6 +5,8 @@ services:
       - "3000:3000"
     volumes:
       - .:/usr/src/app
+    environment:
+      - TZ=Asian/Seoul
     build:
       context: .
       dockerfile: ./dockerfile
