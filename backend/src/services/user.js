@@ -41,10 +41,17 @@ module.exports = {
             if (!userDTO.sid) throw Error('학번을 입력하세요.')
             if (!userDTO.password) throw Error('비밀번호를 입력하세요.')
             if (!userDTO.email) throw Error('이메일을 입력하세요.')
-            if (!userDTO.birth) throw Error('생일을 입력하세요.')
-            if (!userDTO.major) throw Error('학번을 입력하세요.')
+            if(!userDTO.authNum) throw Error('인증번호를 입력하세요');
+            
+            if((await redis.get(userDTO.email)) != userDTO.authNum){
+                throw Error('인증번호가 틀렸습니다');
+            } 
+            
             let result = await userModel.findById(userDTO.sid).catch((err)=>{throw err;});
             if(result) throw Error('이미 가입한 학번이 존재합니다.');
+            result = await userModel.findByEmail(userDTO.email).catch((err)=>{throw err;});
+            if(result) throw Error('이미 가입한 이메일이 존재합니다.');
+
             
             hashed = await createHashedPassword(userDTO.password);
             userDTO.password = hashed.password;
