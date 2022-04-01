@@ -3,8 +3,6 @@ const redisClient = redis.createClient({
   url: 'redis://default:2018114383!!@3.37.225.217:6379'
 });
 
-console.log(process.env.REDIS_URL);
-
 (async ()=>{
   await redisClient.connect();
 })();
@@ -27,6 +25,16 @@ module.exports = {
       return false;
     }
   },
+  select : async (num)=>{
+    try {
+      await redisClient.select(num);
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  },
+  getClient : ()=>{return redisClient}
 
 }
 
