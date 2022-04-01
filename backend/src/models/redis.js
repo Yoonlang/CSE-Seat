@@ -1,6 +1,7 @@
+require('dotenv').config();
 const redis = require('redis');
 const redisClient = redis.createClient({
-  url: 'redis://default:2018114383!!@3.37.225.217:6379'
+  url: process.env.REDIS_URL
 });
 
 (async ()=>{
