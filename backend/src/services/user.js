@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const path = require('path');
 const redis = require('../models/redis');
+const redisClient = redis.getClient();
 var appDir = path.dirname(require.main.filename);
 
 const createSalt = () =>
@@ -82,6 +83,12 @@ module.exports = {
     },
     mail : async (mail_address) => {
         try{
+            redisClient.select(1);
+            if(await redisClient.get(mail_address) != null)
+                return {result: false, cause: '1 minute'};
+            if(mail_address.split('@')[1] !='knu.ac.kr')
+                return {result: false, cuase: 'wrong email'};
+
             let authNum = crypto.randomInt(100000, 999999);
             let emailTemplete;
             ejs.renderFile(appDir+'/template/mail.ejs', {authCode : authNum}, function (err, data) {
