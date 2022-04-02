@@ -77,10 +77,33 @@ const SignForm = () => {
         }
     }
 
-    const handleSignUp = (e) => {
+    const handleSignUp = async (e) => {
         e.preventDefault();
         if (inputValue[2].length >= 4 && inputValue[3].length >= 2 && inputValue[4].length >= 10 && inputValue[5].length === 6 && inputValue[6].length >= 4 && inputValue[7].length >= 4) {
-            signUpForm.current?.submit();
+            try {
+                const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/join/process", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        sid: inputValue[2],
+                        password: inputValue[7],
+                        name: inputValue[3],
+                        email: inputValue[4],
+                        authNum: inputValue[5],
+                    })
+                })
+                const data = await res.json();
+                console.log(data);
+
+            } catch (e) {
+
+            }
+
+
+
         }
         else {
             const tempIsShake = [...isShake];
@@ -99,7 +122,8 @@ const SignForm = () => {
         }
     }
 
-    const sendEmail = async () => {
+    const sendEmail = async (e) => {
+        e.preventDefault();
         if (emailBtn.current.className.indexOf("shake") !== -1)
             emailBtn.current.className = emailBtn.current.className.substr(0, emailBtn.current.className.length - 6);
 
@@ -120,34 +144,37 @@ const SignForm = () => {
                     mail: inputValue[4],
                 })
             })
-            console.log(res);
-            // fetch 자체 실패 시 잠시 후 다시 시도해주세요
-
-            // 실패시
-            // emailBtn.current.className += " shake";
-            // setHandleEmail({
-            //     isHoldEmail: false,
-            //     isHoldAuth: true,
-            //     isEmailButton: true,
-            // });
-
-            // 성공시
-            // 메일을 확인해주세요 alert
-            // airplane.current.className += " active";
-            // setTimeout(() => {
-            //     setHandleEmail({
-            //         isHoldEmail: true,
-            //         isHoldAuth: false,
-            //         isEmailButton: false,
-            //     });
-            // }, 2000);
-
-
+            const data = await res.json();
+            if (data.result === true) {
+                airplane.current.className += " active";
+                setTimeout(() => {
+                    setHandleEmail({
+                        isHoldEmail: true,
+                        isHoldAuth: false,
+                        isEmailButton: false,
+                    });
+                }, 1000);
+            }
+            else { // 아직 이건 테스트 안해봤음.
+                emailBtn.current.className += " shake";
+                setHandleEmail({
+                    isHoldEmail: false,
+                    isHoldAuth: true,
+                    isEmailButton: true,
+                });
+            }
         } catch (e) {
             console.log(e);
 
         }
+    }
 
+    const focusOnSendEmailBtn = () => {
+        emailBtn.current.style.borderColor = "#5C9EFF";
+    }
+
+    const blurOnSendEmailBtn = () => {
+        emailBtn.current.style.borderColor = "#ddd";
     }
 
     useEffect(() => {
@@ -298,7 +325,7 @@ const SignForm = () => {
                         {
                             isHoldAuth ?
                                 isEmailButton ?
-                                    <div className="sendEmailBtn" onClick={sendEmail} ref={emailBtn}>이메일 인증 받기 <div className="stay" ref={airplane}><SquareImg src="/images/send.png" length="20px" /></div></div>
+                                    <button className="sendEmailBtn" onFocus={focusOnSendEmailBtn} onBlur={blurOnSendEmailBtn} onClick={sendEmail} ref={emailBtn}>이메일 인증 받기 <div className="stay" ref={airplane}><SquareImg src="/images/send.png" length="20px" /></div></button>
                                     :
                                     <div className="sendEmailBtn">이메일 인증 받기 <SquareImg src="/images/send.png" length="20px" /></div>
                                 :
@@ -397,6 +424,7 @@ const SignForm = () => {
                     align-items: center;
                     width: 300px;
                     height: 50px;
+                    outline: none;
                     border: solid 1px #ddd;
                     background: none;
                     cursor: pointer;
