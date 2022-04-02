@@ -55,7 +55,7 @@ const RoomSeats = ({ roomNumber = 0, length = "50px", basic = false, m, seats })
                                             </div>
                                         }
                                         const { todayState, tomorrowState, num } = prop;
-                                        return <div className="seatDiv" key={prop + index} onClick={() => basic ? `` : openSeatModal(prop)}>
+                                        return <div className="seatDiv realSeat" key={prop + index} onClick={() => basic ? `` : openSeatModal(prop)}>
                                             {
                                                 basic ?
                                                     <Seat length={length} /> :
@@ -111,6 +111,12 @@ const RoomSeats = ({ roomNumber = 0, length = "50px", basic = false, m, seats })
                     width: ${(allotment)}%;
                     flex-direction: column;
                     align-items:center;
+                }
+                .realSeat{
+                    transition: 0.2s;
+                }
+                .realSeat:hover{
+                    transform: translateX(4px) translateY(-4px);
                 }
             `}</style>
         </>
