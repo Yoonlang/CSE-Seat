@@ -7,9 +7,10 @@ const Waiting = () => {
     return <>
         {
             isLoading ?
-                <div className="loading">
-                    <div className="loader"><div></div></div>
-                </div>
+                // <div className="loading">
+                //     <div className="loader"><div></div></div>
+                // </div>
+                ``
                 : ``
         }
         <style jsx>{`
