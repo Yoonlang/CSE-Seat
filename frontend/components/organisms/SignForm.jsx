@@ -96,7 +96,15 @@ const SignForm = () => {
                     })
                 })
                 const data = await res.json();
-                console.log(data);
+                if (data.result === true) {
+                    setLoginData({
+                        isLogin: true,
+                        sid: undefined,
+                    });
+                    setInputValue([
+                        '', '', '', '', '', '', '', '',
+                    ])
+                }
 
             } catch (e) {
 
