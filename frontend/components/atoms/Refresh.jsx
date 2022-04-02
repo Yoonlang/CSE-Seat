@@ -5,11 +5,17 @@ import SquareImg from "./Img";
 
 const Refresh = () => {
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
+    const [isReadyToRefresh, setIsReadyToRefresh] = useState(true);
     const [cycle, setCycle] = useState(0);
 
     const handleData = () => {
-        setRefreshData(!refreshData);
         setCycle(cycle + 1);
+        if (!isReadyToRefresh) return;
+        setIsReadyToRefresh(false);
+        setRefreshData(!refreshData);
+        setTimeout(() => {
+            setIsReadyToRefresh(true);
+        }, 1000);
     }
 
     return <>
