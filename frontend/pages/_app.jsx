@@ -4,6 +4,8 @@ import Footer from '../components/organisms/Footer';
 import Checker from '../components/others/Checker';
 import Waiting from '../components/others/Waiting';
 
+
+
 const MyApp = ({ Component, pageProps }) => {
     return (
         <RecoilRoot>
@@ -24,8 +26,14 @@ const MyApp = ({ Component, pageProps }) => {
                     color:#000;
                     text-decoration:none;
                 }
+                html{
+                    overflow-x: hidden;
+                }
                 html, body{
                     height: 100%;
+                }
+                div#__next{
+                    height: auto;
                 }
             `}
             </style>

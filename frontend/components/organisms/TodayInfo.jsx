@@ -5,12 +5,7 @@ import { MyLink } from "../atoms/Div";
 import { isInLocation } from "../others/checkPos";
 import { historyToIndexAndInfoAtom, loadingCheckInAtom, refreshIndexAtom } from "../others/state";
 
-const todayIntro = [
-    <><span>오늘</span><span>1부</span></>,
-    <><span></span><span>2부</span></>,
-    <><span>내일</span><span>1부</span></>,
-    <><span></span><span>2부</span></>,
-]
+const todayIntro = [`오늘`, `1부`, ``, `2부`, `내일`, `1부`, ``, `2부`,]
 
 const TodayInfo = () => {
     const [isSelectCancel, setIsSelectCancel] = useState(false);
@@ -45,10 +40,12 @@ const TodayInfo = () => {
                                 })
                             })
                             const data = await res.json();
+                            if (res.status === 400) throw "잠시 후 다시 시도해주세요";
                             if (data.result === true) setRefreshData(!refreshData);
-                            else throw ("Error!");
+                            else alert(data.message);
                         } catch (e) {
-                            console.log("Error: ", e);
+                            alert(e);
+                            router.replace(router.asPath);
                         }
                     }
                 })
@@ -120,9 +117,7 @@ const TodayInfo = () => {
                 isToday: undefined,
             },
         }];
-
-        req?.forEach(({ apply_id, /* apply_id 필요없음 */ isToday = true, /*바꿔줘야함*/ part1, part2, part1End, state }) => {
-            if (apply_id === 102) isToday = false; // 나중에 바꿔줘야함
+        req?.forEach(({ isToday, part1, part2, part1End, state }) => {
             const dayIndex = isToday ? 0 : 2;
             if (part1.isPart && !part1.cancel_marker && ((part2.isPart & !part1End) | (!part2.isPart))) {
                 tempInfoData[dayIndex].isPart = true;
@@ -206,7 +201,8 @@ const TodayInfo = () => {
                         handledInfoData?.map((prop, index) => {
                             const { isPart, showingData: { seatNum, seatRoom } } = prop;
                             return (<Fragment key={prop, index}>
-                                {todayIntro[index]}
+                                <span>{todayIntro[index * 2]}</span>
+                                <span>{todayIntro[index * 2 + 1]}</span>
                                 {isPart ? <span>{seatRoom}호 {seatNum}번 좌석</span> : <span></span>}
                             </Fragment>)
                         })
@@ -260,6 +256,7 @@ const TodayInfo = () => {
             max-width: 400px;
             height: 100%;
             padding: 0 5px;
+            margin-bottom: 40px;
         }
         .todayInfo{
             display: grid;
@@ -267,6 +264,9 @@ const TodayInfo = () => {
             width: 100%;
             height: 100%;
             align-items: center;
+        }
+        .todayInfo > span{
+            text-align: center;
         }
         .infoOption{
             display:flex;

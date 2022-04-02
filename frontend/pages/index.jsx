@@ -8,6 +8,7 @@ import { indexLoadingAtom, refreshIndexAtom, showRoomAtom } from '../components/
 import SquareImg from '../components/atoms/Img';
 import { StyledResDiv } from '../components/atoms/Div';
 import Refresh from '../components/atoms/Refresh';
+import { ColorTables } from '../components/molecules/ColorTables';
 
 const Index = ({ data }) => {
     const [updateData, setUpdateData] = useState();
@@ -46,10 +47,11 @@ const Index = ({ data }) => {
                 {
                     isLoading ?
                         data?.data.rooms.map((prop, index) => {
-                            const className = "room" + index;
+                            const className = "room" + index + " room";
                             const { num, m, seats } = prop;
                             return <Fragment key={prop + index}>
                                 <div className={className}>
+                                    <div className="color"><ColorTables /></div>
                                     <RoomSeats roomNumber={num} m={m} seats={seats} basic />
                                 </div>
                                 <div className="bar"></div>
@@ -57,10 +59,11 @@ const Index = ({ data }) => {
                         })
                         :
                         updateData?.data.rooms.map((prop, index) => {
-                            const className = "room" + index;
+                            const className = "room" + index + " room";
                             const { num, m, seats } = prop;
                             return <Fragment key={prop + index}>
                                 <div className={className}>
+                                    <div className="color"><ColorTables /></div>
                                     <RoomSeats roomNumber={num} m={m} seats={seats} />
                                 </div>
                                 <div className="bar"></div>
@@ -68,6 +71,8 @@ const Index = ({ data }) => {
                         })
                 }
             </div>
+
+
             <SeatModal />
             <div className="refreshBtn">
                 <Refresh />
@@ -83,6 +88,7 @@ const Index = ({ data }) => {
             <style jsx>{`
                 .rooms{
                     display: flex;
+                    position:relative;
                     height: 100%;
                 }
                 .rooms .bar{
@@ -91,16 +97,28 @@ const Index = ({ data }) => {
                     border: 1px solid #eee;
                     border-width: 0 1px 0 0;
                 }
+                .color{
+                    display: flex;
+                    position: absolute;
+                    top: 10px;
+                    right: 5px;
+                    width: auto;
+                    height: auto;
+                }
                 .modal{
                     position: fixed;
-                    top:-1vh;
-                    left:-1%;
+                    top:0;
+                    left:0;
                     justify-content: center;
                     align-items: center;
-                    width: 102%;
-                    height: 102vh;
+                    width: 100%;
+                    height: 100vh;
                     background: rgba(0, 0, 0, 0.5);
                     z-index: 11;
+                }
+                .room{
+                    position: relative;
+                    height: 100%;
                 }
                 .modal div{
                     width: 100px;
@@ -115,7 +133,12 @@ const Index = ({ data }) => {
                         display: none;
                     }
                     .rooms{
+                        height: 100%;
                         justify-content: space-between;
+                        overflow-x: hidden;
+                    }
+                    .color{
+                        display: none;
                     }
                 }
                 @media(max-width: 767px){
@@ -127,11 +150,12 @@ const Index = ({ data }) => {
                         `)}
                         transition: 0.5s;
                     }
-                    .rooms > div{
+                    .room, .bar{
                         display: none;
                     }
                     .rooms .room${(targetRoom)}{
                         display: flex !important;
+                        overflow-x: hidden;
                     }
                     .refreshBtn{
                         display: flex;

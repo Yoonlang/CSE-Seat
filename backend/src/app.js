@@ -8,7 +8,8 @@ const alias = require('better-module-alias')(path.join(__dirname,'/..'));  // $ 
 const express = require('express');
 const app = express();
 const loaders = require('./loaders');
-
+require('dotenv').config();
+  
 async function startServer() {
     loaders({expressApp:app});    
     app.listen(8080, function(){

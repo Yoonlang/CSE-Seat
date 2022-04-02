@@ -113,9 +113,6 @@ const getEntryState = (history) => {
     else if(!history.part2.outTime) history.state = 1;
     else history.state = 2;
   }
-
-
-
 }
 
 
@@ -151,6 +148,9 @@ const makeHistorys = async (historyDTO)=>{
         result[i].part2_cancel_marker == 1 ? result[i].part2_cancel_marker = true : result[i].part2_cancel_marker = false;
         prev_id = result[i].apply_id;
         
+        if(result[i].date === dateService.getTodayDate()) result[i].isToday = true;
+        else result[i].isToday = false;
+
         result[i].part1 = {
           isPart: result[i].part1Temp,
           building_id : result[i].part1_building_id,
@@ -179,7 +179,7 @@ const makeHistorys = async (historyDTO)=>{
           result[i].part2.inTime = result[i].in_time;
           result[i].part2.outTime = result[i].out_time;
         }
-        
+
         delete result[i].apply_time;
         delete result[i].apply_user_sid;
         delete result[i].in_time;

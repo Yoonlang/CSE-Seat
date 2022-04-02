@@ -4,7 +4,7 @@ const BasicInfo = (data) => {
     return (<>
         <div className="basic">
             <span>이름</span><span>{name}</span>
-            <span>학과</span><span>{major}</span>
+            <span>학과</span><span>컴퓨터학부</span>
             <span>학번</span><span>{sid}</span>
             <span className="last">이용 가능 여부</span>
             <span className="last">{banned ? `이용 불가능` : `이용 가능`}</span>

@@ -1,7 +1,7 @@
 import SquareImg from "../atoms/Img";
 import Logo from "../molecules/Logo";
 import Navigation from "../molecules/Navigation";
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Div, MyLink } from "../atoms/Div";
 import { useRecoilState, } from "recoil";
 import { loginAtom, refreshIndexAtom } from "../others/state";
@@ -90,7 +90,7 @@ const Header = () => {
                     <div className="signOut" onClick={signOut}>로그아웃</div>
                 </div>
             </div>
-            <style>{`
+            <style jsx>{`
             .signOut{
                 width: 100px;
                 height: 49px;
@@ -178,10 +178,10 @@ const Header = () => {
                 .mobileModalContainer{
                     display: ${(isMenuClick ? "flex" : "none")};
                     position: fixed;
-                    top: -1vh;
-                    left: -1%;
-                    width: 102%;
-                    height: 102vh;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100vh;
                     background: rgba(0, 0, 0, 0.5);
                     z-index: 20;
                 }

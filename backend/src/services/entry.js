@@ -17,28 +17,26 @@ module.exports ={
             initProperty(entryDTO);
             let part1ApplyId;
             let part2ApplyId;
-
+            
             if (entryDTO.part1) {
                 entryDTO.part = 1;
                 let result = await seatModel.exist(entryDTO);
-                if (!result) throw new Error("예약 좌석이 아닙니다");
-                if (result.user_sid != entryDTO.user_sid)
-                throw new Error("예약자가 본인이 아닙니다");
+                if (!result) return {result: false, message: "예약 좌석이 아닙니다."};
+                if (result.user_sid != entryDTO.user_sid) return {result: false, message: "예약자가 본인이 아닙니다."};
                 part1ApplyId = result.apply_id;
             }
             if (entryDTO.part2) {
                 entryDTO.part = 2;
                 let result = await seatModel.exist(entryDTO);
-                if (!result) throw new Error("예약 좌석이 아닙니다");
-                if (result.user_sid != entryDTO.user_sid)
-                throw new Error("예약자가 본인이 아닙니다");
+                if (!result) return {result: false, message: "예약 좌석이 아닙니다."};
+                if (result.user_sid != entryDTO.user_sid) return {result: false, message: "예약자가 본인이 아닙니다."};
                 part2ApplyId = result.apply_id;
             }
             if(entryDTO.part1){
                 entryDTO.part = 1;
                 entryDTO.apply_id = part1ApplyId;
                 if (await entryModel.getCheckInData(entryDTO)){
-                    throw new Error('이미 입실하셨습니다.')
+                    return {result: false, message: "이미 입실하셨습니다."};
                 }
                 await entryModel.checkIn(entryDTO);
                 
@@ -46,11 +44,11 @@ module.exports ={
                 entryDTO.part = 2;
                 entryDTO.apply_id = part2ApplyId;
                 if (await entryModel.getCheckInData(entryDTO)){
-                    throw new Error('이미 입실하셨습니다.')
+                    return {result: false, message: "이미 입실하셨습니다."};
                 }
                 await entryModel.checkIn(entryDTO);
             }
-            return {inTime: entryDTO.time}
+            return {result: true, inTime: entryDTO.time}
         }catch(e){
             console.log('entry error: ', e);
             return e;
@@ -66,26 +64,24 @@ module.exports ={
             if (entryDTO.part1) {
                 entryDTO.part = 1;
                 let result = await seatModel.exist(entryDTO);
-                if (!result) throw new Error("예약 좌석이 아닙니다");
-                if (result.user_sid != entryDTO.user_sid)
-                throw new Error("예약자가 본인이 아닙니다");
+                if (!result) return {result: false, message: "예약 좌석이 아닙니다."};
+                if (result.user_sid != entryDTO.user_sid) return {result: false, message: "예약자가 본인이 아닙니다."};
                 part1ApplyId = result.apply_id;
                 entryDTO.apply_id = result.apply_id;
                 if (!(await entryModel.getCheckInData(entryDTO))){
-                    throw new Error("아직 체크인하지 않았습니다.");
+                    return {result: false, message: "아직 체크인하지 않았습니다."};
                 } 
             }
             if (entryDTO.part2) {
                 entryDTO.part = 2;
                 let result = await seatModel.exist(entryDTO);
-                if (!result) throw new Error("예약 좌석이 아닙니다");
-                if (result.user_sid != entryDTO.user_sid)
-                throw new Error("예약자가 본인이 아닙니다");
+                if (!result) return {result: false, message: "예약 좌석이 아닙니다."};
+                if (result.user_sid != entryDTO.user_sid) return {result: false, message: "예약자가 본인이 아닙니다."};
                 part2ApplyId = result.apply_id;
                 entryDTO.apply_id = result.apply_id;
                 if(!entryDTO.part1)//part1이 off인상황에만 체크인 확인
                     if (!(await entryModel.getCheckInData(entryDTO))){
-                        throw new Error("아직 체크인하지 않았습니다.");
+                        return {result: false, message: "아직 체크인하지 않았습니다."};
                     } 
             }
             
@@ -119,7 +115,7 @@ module.exports ={
                 await entryModel.checkOut(entryDTO);
                 await seatModel.deleteReservation(entryDTO);
             }
-            return {inTime : inTime,outTime : entryDTO.time}
+            return {result: true,inTime : inTime,outTime : entryDTO.time}
         }catch(e){
             console.log('entry error: ', e);
             return e;

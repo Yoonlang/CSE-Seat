@@ -58,10 +58,10 @@ const SeatingChartModal = ({ data }) => {
                 justify-content: center;
                 align-items: center;
                 position: fixed;
-                top: -1vh;
-                left: -1vw;
-                width: 102vw;
-                height: 102vh;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
                 background: rgba(0, 0, 0, 0.5);
                 z-index: 11;
             }
@@ -136,7 +136,7 @@ const SeatingChartModal = ({ data }) => {
             }
             @media(max-width: 1023px){
                 .modal{
-                    width: 400px;
+                    width: min(100%, 400px);
                     padding-top: 40px;
                 }
                 .header{
@@ -147,6 +147,7 @@ const SeatingChartModal = ({ data }) => {
                 }
                 .room${(targetRoom)}{
                     display: flex !important;
+                    overflow-x: hidden;
                 }
                 .bar{
                     display: none;

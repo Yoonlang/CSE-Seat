@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import SquareImg from './Img';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { inputValueAtom } from '../others/state';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
@@ -15,6 +15,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 // interface ApplyInputProps{
 //     placeholder?: string;
 // }
+
 const StyledApplyInput = styled.input`
     width: 160px;
     height: 40px;
@@ -49,12 +50,12 @@ const SignInputDiv = styled.div`
     border: solid;
     border-color: #ddd;
     border-width: 1px;
-    padding-left: 12px;
-    gap: 14px;
+    padding-left: ${(props) => 12 + (20 - props.handledLength) / 2}px;
+    gap: ${(props) => 14 + (20 - props.handledLength) / 2}px;
 `;
 
 const StyledSignInput = styled.input`
-    color: #000;
+    color: ${(props) => props.isHold ? `#3d6eb8` : `#000`};
     font-size: 16px;
     text-align: left;
     outline: none;
@@ -73,11 +74,18 @@ const SignInput = ({
     radius = "0",
     length = "20px",
     type = "text",
-    num = false
+    isHold = false,
+    minLength = 4,
+    maxLength,
+    num = false,
+    isOnlyNum = false,
+    isShake = false,
 }) => {
     const signInputDiv = useRef();
     const signInput = useRef();
+    const handledLength = length.substr(0, length.indexOf('p'));
     const [inputValue, setInputValue] = useRecoilState(inputValueAtom);
+
     const clickDiv = () => {
         signInput.current.focus();
         signInputDiv.current.style.borderColor = "#5C9EFF";
@@ -89,15 +97,62 @@ const SignInput = ({
 
     const handleValue = (e) => {
         const values = { ...inputValue };
+        if (isOnlyNum && (e.target.value === '' ? false : e.target.value[e.target.value.length - 1] < '0' || e.target.value[e.target.value.length - 1] > '9')) return;
         values[num] = e.target.value;
         setInputValue(values);
     }
 
+    useEffect(() => {
+        if (isShake) signInputDiv.current.className += " shake";
+        else signInputDiv.current.className = signInputDiv.current.className.indexOf("shake") !== -1 ? signInputDiv.current.className.substr(0, signInputDiv.current.className.length - 6) : signInputDiv.current.className;
+    }, [isShake])
+
+    const inputProps = { isHold };
+
     return (
-        <SignInputDiv onClick={clickDiv} onBlur={blurDiv} ref={signInputDiv}>
-            <SquareImg radius={radius} src={src} length={length} />
-            <StyledSignInput onFocus={clickDiv} type={type} minLength={4} value={inputValue[num]} onChange={handleValue} placeholder={placeholder} ref={signInput} required />
-        </SignInputDiv>
+        <>
+            <div className="signInputDiv"
+                onClick={clickDiv} onBlur={blurDiv}
+                ref={signInputDiv}>
+                <SquareImg radius={radius} src={src} length={length} />
+                <StyledSignInput onFocus={clickDiv} type={type} minLength={minLength} maxLength={maxLength} value={inputValue[num]} onChange={handleValue} placeholder={placeholder} ref={signInput} required readOnly={isHold} {...inputProps} />
+            </div>
+            <style jsx>{`
+                .signInputDiv{
+                    display: flex;
+                    align-items: center;
+                    width: 300px;
+                    height: 50px;
+                    border: solid;
+                    border-color: #ddd;
+                    border-width: 1px;
+                    padding-left: ${12 + (20 - handledLength) / 2}px;
+                    gap: ${14 + (20 - handledLength) / 2}px;
+                }
+                .shake{
+                    border-color: #da2127 !important;
+                    border-width: 1.5px;
+                    animation: shake 0.5s;
+                }
+                @keyframes shake{
+                    25%{
+                        transform: translate(20px);
+                    }
+                    50%{
+                        transform: translate(-10px);
+                    }
+                    70%{
+                        transform: translate(5px);
+                    }
+                    90%{
+                        transform: translate(-2px);
+                    }
+                    100%{
+                        transform: translate(0);
+                    }
+                }
+            `}</style>
+        </>
     );
 };
 

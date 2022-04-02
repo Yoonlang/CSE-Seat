@@ -34,8 +34,8 @@ const Info = () => {
                 <BasicInfo data={basicData} />
                 <div className="bar"></div>
                 <TodayInfo />
-                <div className="bar"></div>
-                <EnrollFriend />
+                {/* <div className="bar"></div>
+                <EnrollFriend /> */}
             </InfoDiv>
             <style jsx>{`
                 .bar{

@@ -69,6 +69,7 @@ const DetailHistory = ({ isOpenModal = false, detail: { applyTime, want: { frien
             <style jsx>{`
         .detail{
             display: ${(isOpenModal ? 'flex' : 'none')};
+            width: 100%;
             height: 100%;
             flex-wrap: wrap;
             border:solid;

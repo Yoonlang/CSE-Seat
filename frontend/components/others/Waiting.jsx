@@ -7,9 +7,10 @@ const Waiting = () => {
     return <>
         {
             isLoading ?
-                <div className="loading">
-                    <div className="loader"><div></div></div>
-                </div>
+                // <div className="loading">
+                //     <div className="loader"><div></div></div>
+                // </div>
+                ``
                 : ``
         }
         <style jsx>{`
@@ -18,10 +19,10 @@ const Waiting = () => {
             position: fixed;
             justify-content: center;
             align-items: center;
-            top: -1vh;
-            left: -1%;
-            width: 102%;
-            height: 102vh;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
             background: rgba(230, 230, 230, 0.5);
             z-index: 20;
         }

@@ -15,7 +15,6 @@ const Checker = () => {
 
     const handleHistoryData = (data) => {
         const res = data.data.filter((prop) => {
-            if (prop.apply_id === 96) return 0; /* 예외처리라 없애야함 나중에. */
             return prop.state === 2 ? 0 : 1;
         })
         setHistoryToOther(res);
@@ -28,13 +27,15 @@ const Checker = () => {
                 credentials: "include",
             })
             const data = await res.json();
-            data.result === true ? setLoginData({
-                isLogin: true,
-                name: data.name,
-            }) : setLoginData({
-                isLogin: false,
-                name: undefined,
-            });
+            data.result === true ?
+                setLoginData({
+                    isLogin: true,
+                    name: data.name,
+                }) :
+                setLoginData({
+                    isLogin: false,
+                    name: undefined,
+                });
         } catch (e) {
             console.log("Error: ", e);
         }

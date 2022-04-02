@@ -21,12 +21,13 @@ passport.use('local-join', new LocalStrategy({
         userDTO.only_friend = 'true' ? true : false;
         try{
             result = await userService.join(userDTO);
+            if(result instanceof Error) throw result;
             if(result.result == false) 
-                throw result;
+                return done(null, false, {message : result.message});
             return done(null, {sid : userDTO.sid});
         }catch(e){
-            console.log('오류 항목:', e.message);
-            return done(null, false, {message : e.message});
+            console.log(sid, ' 오류 항목:', e.message);
+            return done(e);
         }
     }
 ));
@@ -39,12 +40,13 @@ passport.use('local-login', new LocalStrategy({
         userDTO = req.body;
         try{
             result = await userService.login(userDTO);
+            if(result instanceof Error) throw result;
             if(result.result == false) 
-                throw result;
+                return done(null, false, {message : result.message});
             return done(null, {sid : userDTO.sid});            
         }catch(e){
-            console.log('오류 항목:', e.message);
-            return done(null, false, {message : e.message});
+            console.log(sid,' 오류 항목:', e.message);
+            return done(e);
         }
     }
 ));

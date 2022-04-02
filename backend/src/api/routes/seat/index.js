@@ -19,7 +19,7 @@ router.post('/reservation',isLoggedIn,async (req, res, next) => {
     seatDTO.user_sid = req.user;
     let result = await seatService.reserve(seatDTO);
     if(result instanceof Error) return next(result);
-    res.status(200).json({result: true});
+    res.status(200).json(result);
 });
 
 router.post('/reservation-cancel',isLoggedIn,async (req, res, next) => {
@@ -27,7 +27,7 @@ router.post('/reservation-cancel',isLoggedIn,async (req, res, next) => {
     seatDTO.user_sid = req.user;
     let result = await seatService.cancelReservation(seatDTO);
     if(result instanceof Error) return next(result);
-    res.status(200).json({result: true});
+    res.status(200).json(result);
 });
 
 router.use((err,req,res,next)=>{

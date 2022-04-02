@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { PageDiv } from "../components/atoms/Div";
 import HeadTitle from "../components/others/headTitle"
@@ -38,7 +38,14 @@ const Apply = ({ data }) => {
         const BoolToNum = friends.map((prop) => {
             return prop ? 0 : 1;
         })
-        setWrongData([...BoolToNum, seat === true ? 0 : 1]);
+        const tempWrongData = [...BoolToNum, seat === true ? 0 : 1];
+        setWrongData(tempWrongData);
+        if (!tempWrongData.some((prop) => {
+            return prop === 1 ? true : false;
+        })) {
+            alert("이미 신청처리가 되었습니다.");
+            router.replace('/');
+        }
     }
 
     const refreshWrong = (num) => {
@@ -116,13 +123,16 @@ const Apply = ({ data }) => {
                 })
             })
             const data = await res.json();
+            if (res.status === 400) throw "잠시 후 다시 시도해주세요";
             if (data.result === true) {
-                alert("신청되었습니다.");
+                alert("아직 서비스 준비 중입니다.");
+                //alert("신청되었습니다.");
                 router.replace('/');
             }
             else handleWrong(data.data);
         } catch (e) {
-            console.log("Error: ", e);
+            alert(e);
+            router.replace(router.asPath);
         }
     }
 
@@ -131,7 +141,7 @@ const Apply = ({ data }) => {
             <HeadTitle title="apply" />
             <ApplyForm>
                 <div className="title">
-                    자리 신청
+                    내일 자리 신청
                     <div>
                         <ColorTable color="#5C9EFF" length="14px">신청</ColorTable>
                         <ColorTable length="14px">비신청</ColorTable>
@@ -184,7 +194,7 @@ const Apply = ({ data }) => {
                     <span>
                         친구<br />
                         <span>(최대 3명)</span><br /><br />
-                        <span>자리가 없을 시 따로 앉거나<br />일부 인원만 배정될 수 있음.</span>
+                        <span>자리가 없을 시 따로 앉거나<br />일부 인원만 배정될 수 있음</span>
                     </span>
                     {
                         friendHope.map((prop, index) => {
@@ -220,7 +230,7 @@ const Apply = ({ data }) => {
                     font-size: 12px;
                 }
                 .bar{
-                    width: 85%;
+                    width: 90%;
                     height: 1px;
                     border:solid;
                     border-width: 1px 0 0 0;
@@ -238,10 +248,9 @@ const Apply = ({ data }) => {
                 .time{
                     display: grid;
                     grid-template-rows: 1fr 1fr;
-                    grid-template-columns: 200px 1fr;
                     justify-items: center;
                     align-items: center;
-                    width: 80%;
+                    width: min(90%, 400px);
                     height: 80px;
                     row-gap: 6px;  
                 }
@@ -308,10 +317,9 @@ const Apply = ({ data }) => {
                 .room{
                     display: grid;
                     grid-template-rows: 1fr 1fr 1fr;
-                    grid-template-columns: 200px 1fr;
                     justify-items: center;
                     align-items: center;
-                    width: 80%;
+                    width: min(90%, 400px);
                     height: 120px;
                     row-gap: 6px;   
                 }
@@ -370,10 +378,9 @@ const Apply = ({ data }) => {
                 .seat{
                     display: grid;
                     grid-template-rows: 1fr 1fr;
-                    grid-template-columns: 200px 1fr;
                     justify-items: center;
                     align-items: center;
-                    width: 80%;
+                    width: min(90%, 400px);
                     height: 100px;
                     row-gap: 6px;
                 }
@@ -466,6 +473,29 @@ const Apply = ({ data }) => {
                     }
                     100%{
                         transform: translate(0);
+                    }
+                }
+
+                @media(min-width: 401px){
+                    .time{
+                        grid-template-columns: 200px 1fr;
+                    }
+                    .room{
+                        grid-template-columns: 200px 1fr;
+                    }
+                    .seat{
+                        grid-template-columns: 200px 1fr;
+                    }
+                }
+                @media(max-width: 400px){
+                    .time{
+                        grid-template-columns: 160px 1fr;
+                    }
+                    .room{
+                        grid-template-columns: 160px 1fr;
+                    }
+                    .seat{
+                        grid-template-columns: 160px 1fr;
                     }
                 }
             `}</style>
