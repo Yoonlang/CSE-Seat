@@ -248,7 +248,6 @@ const Apply = ({ data }) => {
                 .time{
                     display: grid;
                     grid-template-rows: 1fr 1fr;
-                    grid-template-columns: 200px 1fr;
                     justify-items: center;
                     align-items: center;
                     width: min(90%, 400px);
@@ -318,7 +317,6 @@ const Apply = ({ data }) => {
                 .room{
                     display: grid;
                     grid-template-rows: 1fr 1fr 1fr;
-                    grid-template-columns: 200px 1fr;
                     justify-items: center;
                     align-items: center;
                     width: min(90%, 400px);
@@ -380,7 +378,6 @@ const Apply = ({ data }) => {
                 .seat{
                     display: grid;
                     grid-template-rows: 1fr 1fr;
-                    grid-template-columns: 200px 1fr;
                     justify-items: center;
                     align-items: center;
                     width: min(90%, 400px);
@@ -476,6 +473,29 @@ const Apply = ({ data }) => {
                     }
                     100%{
                         transform: translate(0);
+                    }
+                }
+
+                @media(min-width: 401px){
+                    .time{
+                        grid-template-columns: 200px 1fr;
+                    }
+                    .room{
+                        grid-template-columns: 200px 1fr;
+                    }
+                    .seat{
+                        grid-template-columns: 200px 1fr;
+                    }
+                }
+                @media(max-width: 400px){
+                    .time{
+                        grid-template-columns: 160px 1fr;
+                    }
+                    .room{
+                        grid-template-columns: 160px 1fr;
+                    }
+                    .seat{
+                        grid-template-columns: 160px 1fr;
                     }
                 }
             `}</style>
