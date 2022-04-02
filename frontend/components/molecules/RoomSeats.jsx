@@ -116,7 +116,7 @@ const RoomSeats = ({ roomNumber = 0, length = "50px", basic = false, m, seats })
                     transition: 0.2s;
                 }
                 .realSeat:hover{
-                    transform: translateX(4px) translateY(-4px);
+                    transform: translateX(2px) translateY(-2px);
                 }
             `}</style>
         </>
