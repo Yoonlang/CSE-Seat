@@ -141,7 +141,7 @@ const Apply = ({ data }) => {
             <HeadTitle title="apply" />
             <ApplyForm>
                 <div className="title">
-                    자리 신청
+                    내일 자리 신청
                     <div>
                         <ColorTable color="#5C9EFF" length="14px">신청</ColorTable>
                         <ColorTable length="14px">비신청</ColorTable>
