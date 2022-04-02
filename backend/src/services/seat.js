@@ -64,10 +64,11 @@ module.exports = {
         if (result) return {result: false, message: "이미 예약하셨습니다."};
         result = await seatModel.exist(seatDTO);
         if (result) return {result: false, message: "이미 예약된 좌석입니다."};
-
-        let ealry2_t = new Date(dateService.getTodayDate() + ' 18:00:00');
-        let curT  = new Date(dateService.getNowTime());
-        if (curT> ealry2_t) return {result: false, message: "예약할 수 있는 시간이 지났습니다."};
+        if(seatDTO.isToday === true){
+          let ealry2_t = new Date(dateService.getTodayDate() + ' 18:00:00');
+          let curT  = new Date(dateService.getNowTime());
+          if (curT> ealry2_t) return {result: false, message: "예약할 수 있는 시간이 지났습니다."};
+        }
       }
       if (seatDTO.part2) {
         seatDTO.part = 2;
