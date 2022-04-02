@@ -218,6 +218,12 @@ const SignForm = () => {
     }, [inputValue[3]])
 
     useEffect(() => {
+        if (inputValue[4].indexOf('@') !== -1 && inputValue[4].indexOf('@') === inputValue[4].length - 1) {
+            const tempInputValue = { ...inputValue };
+            tempInputValue[4] += "knu.ac.kr";
+            setInputValue(tempInputValue);
+        }
+
         if (isShake[4] && inputValue[4].length >= 10 && inputValue[4].indexOf("@knu.ac.kr") !== -1 && inputValue[4].length - inputValue[4].indexOf("@knu.ac.kr") === 10) {
             const tempIsShake = [...isShake];
             tempIsShake[4] = false;
@@ -329,6 +335,7 @@ const SignForm = () => {
                             isHold={isHoldEmail}
                             minLength={10}
                             isShake={isShake[4]}
+
                             num={4} />
                         {
                             isHoldAuth ?
