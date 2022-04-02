@@ -125,7 +125,8 @@ const Apply = ({ data }) => {
             const data = await res.json();
             if (res.status === 400) throw "잠시 후 다시 시도해주세요";
             if (data.result === true) {
-                alert("신청되었습니다.");
+                alert("아직 서비스 준비 중입니다.");
+                //alert("신청되었습니다.");
                 router.replace('/');
             }
             else handleWrong(data.data);
