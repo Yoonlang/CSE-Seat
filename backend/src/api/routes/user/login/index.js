@@ -11,7 +11,7 @@ router.get('/', (req, res)=>{
 router.post('/process', (req,res,next)=>{
     passport.authenticate('local-login', (err,user,info) => {
         if(err) return next(err);
-        if (!user) return res.status(401).json({result:fale ,message: info.message});
+        if (!user) return res.status(401).json({result:false ,message: info.message});
         req.logIn(user, function(err) {
             if (err) { return next(err); }
             return res.status(200).json({result:true, sid: user});
