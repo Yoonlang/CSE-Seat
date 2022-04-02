@@ -57,6 +57,12 @@ module.exports = {
   reserve: async (seatDTO) => {
     try{
       initProperty(seatDTO);
+
+      if(seatDTO.isToday === false){
+        let ealry2_t = new Date(dateService.getTodayDate() + ' 18:00:00');
+        let curT  = new Date(dateService.getNowTime());
+        if (curT<ealry2_t) return {result: false, message: "내일 예약은 저녁 6시부터 가능합니다."};
+      }
     
       if (seatDTO.part1) {
         seatDTO.part = 1;
