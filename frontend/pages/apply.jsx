@@ -123,6 +123,7 @@ const Apply = ({ data }) => {
                 })
             })
             const data = await res.json();
+            console.log(data);
             if (data.result === true) {
                 alert("신청되었습니다.");
                 router.replace('/');
@@ -484,7 +485,6 @@ export async function getStaticProps() {
     try {
         const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
             method: "GET",
-            credentials: "include",
         });
         const data = await res.json();
         return {
