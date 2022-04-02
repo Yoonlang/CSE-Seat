@@ -45,7 +45,7 @@ const SignForm = () => {
                     })
                 })
                 const data = await res.json();
-                if (res.status === 400) throw '';
+                if (res.status === 400) throw "잠시 후 다시 시도해주세요";
                 if (data.result === false) {
                     if (signInBtn.current.className.indexOf("wrong") === -1)
                         signInBtn.current.className += " wrong";
@@ -68,7 +68,7 @@ const SignForm = () => {
                     ])
                 }
             } catch (e) {
-                alert("잠시 후 다시 시도해주세요");
+                alert(e);
                 router.replace(router.asPath);
             }
         }
@@ -101,7 +101,7 @@ const SignForm = () => {
                     })
                 })
                 const data = await res.json();
-                if (res.status === 400) throw '';
+                if (res.status === 400) throw "잠시 후 다시 시도해주세요";
                 if (data.result === false) {
                     alert(data.message);
                 }
@@ -115,7 +115,7 @@ const SignForm = () => {
                     ])
                 }
             } catch (e) {
-                alert("잠시 후 다시 시도해주세요");
+                alert(e);
                 router.replace(router.asPath);
             }
         }
@@ -148,15 +148,18 @@ const SignForm = () => {
         });
 
         try {
-            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/test", {
-                method: "GET",
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/mail", {
+                method: "POST",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json"
                 },
+                body: JSON.stringify({
+                    mail: inputValue[4],
+                })
             })
             const data = await res.json();
-            console.log(res);
-            console.log(data);
+            if (res.status === 400) throw "잠시 후 다시 시도해주세요";
             if (data.result === true) {
                 airplane.current.className += " active";
                 setTimeout(() => {
@@ -168,7 +171,6 @@ const SignForm = () => {
                 }, 1000);
             }
             else {
-                console.log(res.status);
                 emailBtn.current.className += " shake";
                 setHandleEmail({
                     isHoldEmail: false,
@@ -178,7 +180,8 @@ const SignForm = () => {
                 throw (data.message);
             }
         } catch (e) {
-            console.log(e);
+            alert(e);
+            router.replace(router.asPath);
         }
     }
 
