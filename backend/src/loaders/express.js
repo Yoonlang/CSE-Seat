@@ -12,6 +12,6 @@ module.exports = ({app}) => {
         origin: true,
         credentials: true,
     }));
-    app.use('/', routes);
+    app.use('/api', routes);
     return app;
 }
