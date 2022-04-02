@@ -39,22 +39,23 @@ module.exports = {
     
     join: async (userDTO)=>{
         try{
-            if (!userDTO.sid) throw Error('학번을 입력하세요.')
-            if (!userDTO.password) throw Error('비밀번호를 입력하세요.')
-            if (!userDTO.email) throw Error('이메일을 입력하세요.')
-            if(!userDTO.authNum) throw Error('인증번호를 입력하세요');
+            
+            if (!userDTO.sid) return {result: false, message: '학번을 입력하세요.'};
+            if (!userDTO.password) return {result: false, message: '비밀번호를 입력하세요.'};
+            if (!userDTO.email) return {result: false, message: '이메일을 입력하세요.'};
+            if(!userDTO.authNum) return {result: false, message: '인증번호를 입력하세요.'};
             
             console.log(await redis.get(userDTO.email))
             console.log(userDTO.authNum)
             
             if((await redis.get(userDTO.email)) != userDTO.authNum){
-                throw Error('인증번호가 틀렸거나 만료됐습니다.');
+                return {result: false, message: '인증번호가 틀렸거나 만료됐습니다.'};
             } 
             
             let result = await userModel.findById(userDTO.sid).catch((err)=>{throw err;});
-            if(result) throw Error('이미 가입한 학번이 존재합니다.');
+            if(result) return {result: false, message: '이미 가입한 학번이 존재합니다.'};
             result = await userModel.findByEmail(userDTO.email).catch((err)=>{throw err;});
-            if(result) throw Error('이미 가입한 이메일이 존재합니다.');
+            if(result) return {result: false, message: '이미 가입한 이메일이 존재합니다.'};
 
             
             hashed = await createHashedPassword(userDTO.password);
@@ -65,23 +66,23 @@ module.exports = {
             return {result : result};
         }catch(e){
             console.log('userService Join error: ',e)
-            return {result : false, message: e.message};
+            return e;
         }
     },
     login : async (userDTO) => {
         try{
-            if (!userDTO.sid) throw Error('학번을 입력하세요.')
-            if (!userDTO.password) throw Error('비밀번호를 입력하세요.')
+            if (!userDTO.sid) return {result: false, message: '학번을 입력하세요.'};
+            if (!userDTO.password) return {result: false, message: '비밀번호를 입력하세요.'};
             let result= await userModel.findById(userDTO.sid);
-            if(!result) throw Error('가입한 학번이 존재하지 않습니다.');
+            if(!result) return {result: false, message: '가입한 학번이 존재하지 않습니다.'};
             let rightPassword = result.password;
             if (rightPassword == await makePasswordHashed(userDTO.sid, userDTO.password)){
                 return {result: true}
             }
-            else throw Error('비밀번호가 틀렸습니다.');
+            else return {result: false, message: '비밀번호가 틀렸습니다.'};
         }catch(e){
             console.log('userService Login error: ',e)
-            return {result : false, message: e.message};
+            return e;
         }     
     },
     mail : async (mail_address) => {
