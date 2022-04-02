@@ -48,10 +48,6 @@ const Header = () => {
 
     const closeModal2 = () => setIsMenuClick(false);
 
-    useEffect(() => {
-
-    }, [])
-
     return (
         <>
             <div className="block"></div>

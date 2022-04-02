@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
 import { SignInput } from "../atoms/Input";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -22,6 +23,7 @@ const SignForm = () => {
     const signInBtn = useRef();
     const signUpForm = useRef();
     const emailBtn = useRef();
+    const router = useRouter();
 
     const changeFormState = () => {
         setIsLoginForm(!isLoginForm);
@@ -43,6 +45,7 @@ const SignForm = () => {
                     })
                 })
                 const data = await res.json();
+                if (res.status === 400) throw '';
                 if (data.result === false) {
                     if (signInBtn.current.className.indexOf("wrong") === -1)
                         signInBtn.current.className += " wrong";
@@ -53,18 +56,20 @@ const SignForm = () => {
                         }, 1);
                     }
                     setIsFailed(true);
-                    throw ("Can't login");
                 }
-                setLoginData({
-                    isLogin: true,
-                    sid: undefined,
-                });
-                setInputValue([
-                    inputValue[0],
-                    '', '', '', '', '', '', '',
-                ])
+                else {
+                    setLoginData({
+                        isLogin: true,
+                        sid: undefined,
+                    });
+                    setInputValue([
+                        inputValue[0],
+                        '', '', '', '', '', '', '',
+                    ])
+                }
             } catch (e) {
-                console.log("error: ", e);
+                alert("잠시 후 다시 시도해주세요");
+                router.replace(router.asPath);
             }
         }
         else {
@@ -96,7 +101,11 @@ const SignForm = () => {
                     })
                 })
                 const data = await res.json();
-                if (data.result === true) {
+                if (res.status === 400) throw '';
+                if (data.result === false) {
+                    alert(data.message);
+                }
+                else {
                     setLoginData({
                         isLogin: true,
                         sid: undefined,
@@ -105,13 +114,10 @@ const SignForm = () => {
                         '', '', '', '', '', '', '', '',
                     ])
                 }
-
             } catch (e) {
-
+                alert("잠시 후 다시 시도해주세요");
+                router.replace(router.asPath);
             }
-
-
-
         }
         else {
             const tempIsShake = [...isShake];
@@ -142,17 +148,15 @@ const SignForm = () => {
         });
 
         try {
-            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/mail", {
-                method: "POST",
-                credentials: "include",
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/test", {
+                method: "GET",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({
-                    mail: inputValue[4],
-                })
             })
             const data = await res.json();
+            console.log(res);
+            console.log(data);
             if (data.result === true) {
                 airplane.current.className += " active";
                 setTimeout(() => {
@@ -163,17 +167,18 @@ const SignForm = () => {
                     });
                 }, 1000);
             }
-            else { // 아직 이건 테스트 안해봤음.
+            else {
+                console.log(res.status);
                 emailBtn.current.className += " shake";
                 setHandleEmail({
                     isHoldEmail: false,
                     isHoldAuth: true,
                     isEmailButton: true,
                 });
+                throw (data.message);
             }
         } catch (e) {
             console.log(e);
-
         }
     }
 
