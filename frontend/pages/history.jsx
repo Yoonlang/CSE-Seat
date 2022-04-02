@@ -18,32 +18,35 @@ const History = () => {
             <HeadTitle title="history" />
             <HistoryDiv>
                 <div className="title">입퇴실 / 신청 기록 열람</div>
-                <div className="seatHistorys">
-                    {
-                        completeHistoryData?.data.length === 0 ?
-                            <div className="nothing">
-                                <SquareImg
-                                    src="/images/nothing.png"
-                                    length="180px"
-                                    opacity="0.3" />
-                                <span>Nothing !!</span>
-                            </div> :
-                            completeHistoryData?.data.map((prop, index) => {
-                                const { apply: { time: applyTime }, date, part1, part1End, part2, state, want } = prop;
-                                const splitDate = date.split('-');
-                                const handledDate = `${splitDate[0]}년 ${splitDate[1][0] === '0' ? splitDate[1][1] : splitDate[1]}월 ${splitDate[2][0] === '0' ? splitDate[2][1] : splitDate[2]}일`
-                                return <SeatHistory
-                                    key={prop, index}
-                                    date={handledDate}
-                                    part1={part1}
-                                    part1End={part1End}
-                                    part2={part2}
-                                    state={state}
-                                    detail={{ applyTime, want }}
-                                />
-                            })
-                    }
-                </div>
+                {
+                    completeHistoryData?.data.length === 0 ?
+                        <div className="nothing">
+                            <SquareImg
+                                src="/images/nothing.png"
+                                length="180px"
+                                opacity="0.3" />
+                            <span>Nothing !!</span>
+                        </div>
+                        :
+                        <div className="seatHistorys">
+                            {
+                                completeHistoryData?.data.map((prop, index) => {
+                                    const { apply: { time: applyTime }, date, part1, part1End, part2, state, want } = prop;
+                                    const splitDate = date.split('-');
+                                    const handledDate = `${splitDate[0]}년 ${splitDate[1][0] === '0' ? splitDate[1][1] : splitDate[1]}월 ${splitDate[2][0] === '0' ? splitDate[2][1] : splitDate[2]}일`
+                                    return <SeatHistory
+                                        key={prop, index}
+                                        date={handledDate}
+                                        part1={part1}
+                                        part1End={part1End}
+                                        part2={part2}
+                                        state={state}
+                                        detail={{ applyTime, want }}
+                                    />
+                                })
+                            }
+                        </div>
+                }
             </HistoryDiv>
             <style jsx>{`
                 .title{
@@ -58,6 +61,7 @@ const History = () => {
                     align-items: center;
                     width: 100%;
                     height: 100%;
+                    background: #f9f9f9;
                 }
                 .nothing{
                     display: flex;
