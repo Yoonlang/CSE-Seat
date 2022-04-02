@@ -77,12 +77,14 @@ const SeatModal = () => {
                 })
             })
             const data = await res.json();
+            if (res.status === 400) throw "잠시 후 다시 시도해주세요";
             if ((data.result === true) & isFinish)
                 closeModal();
             else if (data.result === false)
-                throw ("Can't cancel!");
+                alert(data.message);
         } catch (e) {
-            console.log("Error: ", e);
+            alert(e);
+            router.replace(router.asPath);
         } finally {
             setRefreshData(!refreshData);
         }
@@ -106,12 +108,13 @@ const SeatModal = () => {
                 })
             })
             const data = await res.json();
+            if (res.status === 400) throw "잠시 후 다시 시도해주세요";
             if (data.result === true)
                 closeModal();
-            else
-                throw ("Can't reserve");
+            else alert(data.message);
         } catch (e) {
-            console.log("Error: ", e);
+            alert(e);
+            router.replace(router.asPath);
         } finally {
             setRefreshData(!refreshData);
         }
@@ -167,14 +170,17 @@ const SeatModal = () => {
                 })
             })
             const data = await res.json();
-            if (data.result === false)
-                throw ("Can't check");
-            setRefreshData(!refreshData);
-            if (!isCheckIn) {
-                closeModal();
+            if (res.status === 400) throw "잠시 후 다시 시도해주세요";
+            if (data.result === true) {
+                setRefreshData(!refreshData);
+                if (!isCheckIn) {
+                    closeModal();
+                }
             }
+            else alert(data.message);
         } catch (e) {
-            console.log("Error: ", e);
+            alert(e);
+            router.replace(router.asPath);
         } finally {
             if (isCheckIn) setIsCheckInLoading(false);
         }

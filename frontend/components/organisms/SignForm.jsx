@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
 import { SignInput } from "../atoms/Input";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -22,6 +23,7 @@ const SignForm = () => {
     const signInBtn = useRef();
     const signUpForm = useRef();
     const emailBtn = useRef();
+    const router = useRouter();
 
     const changeFormState = () => {
         setIsLoginForm(!isLoginForm);
@@ -43,6 +45,7 @@ const SignForm = () => {
                     })
                 })
                 const data = await res.json();
+                if (res.status === 400) throw "잠시 후 다시 시도해주세요";
                 if (data.result === false) {
                     if (signInBtn.current.className.indexOf("wrong") === -1)
                         signInBtn.current.className += " wrong";
@@ -53,18 +56,20 @@ const SignForm = () => {
                         }, 1);
                     }
                     setIsFailed(true);
-                    throw ("Can't login");
                 }
-                setLoginData({
-                    isLogin: true,
-                    sid: undefined,
-                });
-                setInputValue([
-                    inputValue[0],
-                    '', '', '', '', '', '', '',
-                ])
+                else {
+                    setLoginData({
+                        isLogin: true,
+                        sid: undefined,
+                    });
+                    setInputValue([
+                        inputValue[0],
+                        '', '', '', '', '', '', '',
+                    ])
+                }
             } catch (e) {
-                console.log("error: ", e);
+                alert(e);
+                router.replace(router.asPath);
             }
         }
         else {
@@ -96,7 +101,11 @@ const SignForm = () => {
                     })
                 })
                 const data = await res.json();
-                if (data.result === true) {
+                if (res.status === 400) throw "잠시 후 다시 시도해주세요";
+                if (data.result === false) {
+                    alert(data.message);
+                }
+                else {
                     setLoginData({
                         isLogin: true,
                         sid: undefined,
@@ -105,13 +114,10 @@ const SignForm = () => {
                         '', '', '', '', '', '', '', '',
                     ])
                 }
-
             } catch (e) {
-
+                alert(e);
+                router.replace(router.asPath);
             }
-
-
-
         }
         else {
             const tempIsShake = [...isShake];
@@ -153,6 +159,7 @@ const SignForm = () => {
                 })
             })
             const data = await res.json();
+            if (res.status === 400) throw "잠시 후 다시 시도해주세요";
             if (data.result === true) {
                 airplane.current.className += " active";
                 setTimeout(() => {
@@ -163,17 +170,18 @@ const SignForm = () => {
                     });
                 }, 1000);
             }
-            else { // 아직 이건 테스트 안해봤음.
+            else {
                 emailBtn.current.className += " shake";
                 setHandleEmail({
                     isHoldEmail: false,
                     isHoldAuth: true,
                     isEmailButton: true,
                 });
+                throw (data.message);
             }
         } catch (e) {
-            console.log(e);
-
+            alert(e);
+            router.replace(router.asPath);
         }
     }
 
@@ -218,6 +226,12 @@ const SignForm = () => {
     }, [inputValue[3]])
 
     useEffect(() => {
+        if (inputValue[4].indexOf('@') !== -1 && inputValue[4].indexOf('@') === inputValue[4].length - 1) {
+            const tempInputValue = { ...inputValue };
+            tempInputValue[4] += "knu.ac.kr";
+            setInputValue(tempInputValue);
+        }
+
         if (isShake[4] && inputValue[4].length >= 10 && inputValue[4].indexOf("@knu.ac.kr") !== -1 && inputValue[4].length - inputValue[4].indexOf("@knu.ac.kr") === 10) {
             const tempIsShake = [...isShake];
             tempIsShake[4] = false;
@@ -329,6 +343,7 @@ const SignForm = () => {
                             isHold={isHoldEmail}
                             minLength={10}
                             isShake={isShake[4]}
+
                             num={4} />
                         {
                             isHoldAuth ?

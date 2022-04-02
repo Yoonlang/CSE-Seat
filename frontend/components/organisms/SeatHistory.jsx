@@ -47,16 +47,16 @@ const SeatHistory = ({ date, part1, part2, part1End, state, detail }) => {
                 })
             })
             const data = await res.json();
-            if (data.result === false) {
-                throw ("Can't check");
-            }
-            setRefreshData(!refreshData);
+            if (res.status === 400) throw "잠시 후 다시 시도해주세요";
+            if (data.result === true)
+                setRefreshData(!refreshData);
+            else alert(data.message);
         } catch (e) {
-            console.log("Error: ", e);
+            alert(e);
+            router.replace(router.asPath);
         } finally {
             if (isCheckIn) setIsCheckInLoading(false);
         }
-
     }
 
     return (
