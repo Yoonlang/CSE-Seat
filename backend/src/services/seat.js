@@ -61,20 +61,20 @@ module.exports = {
       if (seatDTO.part1) {
         seatDTO.part = 1;
         let result = await seatModel.existInDate(seatDTO);
-        if (result) throw Error("이미 예약하셨습니다.");
+        if (result) return {result: false, message: "이미 예약하셨습니다."};
         result = await seatModel.exist(seatDTO);
-        if (result) throw Error("이미 예약된 좌석입니다.");
+        if (result) return {result: false, message: "이미 예약된 좌석입니다."};
 
         let ealry2_t = new Date(dateService.getTodayDate() + ' 18:00:00');
         let curT  = new Date(dateService.getNowTime());
-        if (curT> ealry2_t) throw Error("예약할 수 있는 시간이 지났습니다.");
+        if (curT> ealry2_t) return {result: false, message: "예약할 수 있는 시간이 지났습니다."};
       }
       if (seatDTO.part2) {
         seatDTO.part = 2;
         let result = await seatModel.existInDate(seatDTO);
-        if (result) throw Error("이미 예약하셨습니다.");
+        if (result) return {result: false, message: "이미 예약하셨습니다."};
         result = await seatModel.exist(seatDTO);
-        if (result) throw Error("이미 예약된 좌석입니다.");
+        if (result) return {result: false, message: "이미 예약된 좌석입니다."};
       }
 
       seatDTO.seat_room = [seatDTO.seat_room];
@@ -101,7 +101,7 @@ module.exports = {
       }
 
       await logModel.reservation(seatDTO);
-      return true
+      return {result: true};
     } catch (e) {
       return e;
     }
@@ -117,29 +117,29 @@ module.exports = {
       if (seatDTO.part1) {
         seatDTO.part = 1;
         let result = await seatModel.exist(seatDTO);
-        if (!result) throw new Error("예약 좌석이 아닙니다");
+        if (!result) return {result: false, message: "예약 좌석이 아닙니다"};
         if (result.user_sid != seatDTO.user_sid)
-          throw new Error("예약자가 본인이 아닙니다");
+          return {result: false, message: "예약자가 본인이 아닙니다"};
         part1ApplyId = result.apply_id;
       }
       if (seatDTO.part2) {
         seatDTO.part = 2;
         let result = await seatModel.exist(seatDTO);
-        if (!result) throw new Error("예약 좌석이 아닙니다");
+        if (!result) return {result: false, message: "예약 좌석이 아닙니다"};
         if (result.user_sid != seatDTO.user_sid)
-          throw new Error("예약자가 본인이 아닙니다");
+          return {result: false, message: "예약자가 본인이 아닙니다"};
         part2ApplyId = result.apply_id;
       }
       if (seatDTO.part1) {
         seatDTO.part = 1;
         seatDTO.apply_id = part1ApplyId;
-        if (await entryModel.getCheckInData(seatDTO)) throw new Error('이미 입실하셔서 취소가 불가능합니다.');
+        if (await entryModel.getCheckInData(seatDTO)) return {result: false, message: "이미 입실하셔서 취소가 불가능합니다."};
         await seatModel.deleteReservation(seatDTO);
       }
       if (seatDTO.part2) {
         seatDTO.part = 2;
         seatDTO.apply_id = part1ApplyId;
-        if (await entryModel.getCheckInData(seatDTO)) throw new Error('이미 입실하셔서 취소가 불가능합니다.');
+        if (await entryModel.getCheckInData(seatDTO)) return {result: false, message: "이미 입실하셔서 취소가 불가능합니다."};
         await seatModel.deleteReservation(seatDTO);
       }
       if(seatDTO.part1 && seatDTO.part2){
@@ -167,7 +167,7 @@ module.exports = {
         else await logModel.updateCancel(seatDTO); 
       }
 
-      return true;
+      return {result: true};
     } catch (e) {
       console.log("seat services error", e);
       return e;
