@@ -138,7 +138,7 @@ module.exports = {
       }
       if (seatDTO.part2) {
         seatDTO.part = 2;
-        seatDTO.apply_id = part1ApplyId;
+        seatDTO.apply_id = part2ApplyId;
         if (await entryModel.getCheckInData(seatDTO)) return {result: false, message: "이미 입실하셔서 취소가 불가능합니다."};
         await seatModel.deleteReservation(seatDTO);
       }
