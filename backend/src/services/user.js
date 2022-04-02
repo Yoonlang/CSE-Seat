@@ -44,8 +44,11 @@ module.exports = {
             if (!userDTO.email) throw Error('이메일을 입력하세요.')
             if(!userDTO.authNum) throw Error('인증번호를 입력하세요');
             
+            console.log(await redis.get(userDTO.email))
+            console.log(userDTO.authNum)
+            
             if((await redis.get(userDTO.email)) != userDTO.authNum){
-                throw Error('인증번호가 틀렸습니다');
+                throw Error('인증번호가 틀렸거나 만료됐습니다.');
             } 
             
             let result = await userModel.findById(userDTO.sid).catch((err)=>{throw err;});
