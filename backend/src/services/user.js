@@ -89,9 +89,9 @@ module.exports = {
         try{
             redisClient.select(1);
             if(await redisClient.get(mail_address) != null)
-                return {result: false, cause: '1 minute'};
+                return {result: false, message: '1분뒤 재요청할 수 있습니다.'};
             if(mail_address.split('@')[1] !='knu.ac.kr')
-                return {result: false, cuase: 'wrong email'};
+                return {result: false, message: '@knu.ac.kr 이메일이 아닙니다.'};
 
             let authNum = crypto.randomInt(100000, 999999);
             let emailTemplete;
