@@ -27,21 +27,21 @@ const getEntryState = (history) => {
 
   //취소에 따른 비활성화
 
-  if(history.part1.isPart && history.part2.isPart){
-    if(history.part1.cancel_marker && history.part2.cancel_marker){
+  if(history.part1.isPart === true && history.part2.isPart === true){
+    if(history.part1.cancel_marker === true && history.part2.cancel_marker === true){
       history.state = 2;
       history.part1End = true;
       return
     }
   }
-  else if(history.part1.isPart){
-    if(history.part1.cancel_marker){
+  else if(history.part1.isPart === true){
+    if(history.part1.cancel_marker === true){
       history.state = 2;
       return
     }
   }
-  else if(history.part2.isPart){
-    if(history.part2.cancel_marker){
+  else if(history.part2.isPart === true){
+    if(history.part2.cancel_marker === true){
       history.state = 2;
       return
     }
@@ -56,12 +56,12 @@ const getEntryState = (history) => {
   let curT  = new Date(dateService.getNowTime());
 
   
-  if(history.part1.isPart){
+  if(history.part1.isPart === true){
     if(curT<ealry1_t){
       history.state = 3;
       return;
     }
-    if(history.part2.isPart){
+    if(history.part2.isPart === true){
       
       if(curT>late2_t){
         history.state = 2;
@@ -79,7 +79,7 @@ const getEntryState = (history) => {
         return;
       }
     }
-  }else if(history.part2.isPart){
+  }else if(history.part2.isPart === true){
     if(curT<ealry2_t){
       history.state = 3;
       return;
@@ -90,10 +90,10 @@ const getEntryState = (history) => {
     }
   }
 
-  if (history.part1.isPart){
+  if (history.part1.isPart === true){
     if (!history.part1.inTime) history.state = 0;
     else if (history.part1.outTime){
-      if (history.part2.isPart){
+      if (history.part2.isPart === true){
         history.part1End = true;
         if(!history.part2.inTime) {
           history.state = 0;
@@ -108,7 +108,7 @@ const getEntryState = (history) => {
     }
     else history.state = 1;
   }
-  else if (history.part2.isPart){
+  else if (history.part2.isPart === true){
     if(!history.part2.inTime) history.state = 0;
     else if(!history.part2.outTime) history.state = 1;
     else history.state = 2;

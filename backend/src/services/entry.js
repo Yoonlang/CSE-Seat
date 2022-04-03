@@ -18,21 +18,21 @@ module.exports ={
             let part1ApplyId;
             let part2ApplyId;
             
-            if (entryDTO.part1) {
+            if (entryDTO.part1 === true) {
                 entryDTO.part = 1;
                 let result = await seatModel.exist(entryDTO);
                 if (!result) return {result: false, message: "예약 좌석이 아닙니다."};
                 if (result.user_sid != entryDTO.user_sid) return {result: false, message: "예약자가 본인이 아닙니다."};
                 part1ApplyId = result.apply_id;
             }
-            if (entryDTO.part2) {
+            if (entryDTO.part2 === true) {
                 entryDTO.part = 2;
                 let result = await seatModel.exist(entryDTO);
                 if (!result) return {result: false, message: "예약 좌석이 아닙니다."};
                 if (result.user_sid != entryDTO.user_sid) return {result: false, message: "예약자가 본인이 아닙니다."};
                 part2ApplyId = result.apply_id;
             }
-            if(entryDTO.part1){
+            if(entryDTO.part1 === true){
                 entryDTO.part = 1;
                 entryDTO.apply_id = part1ApplyId;
                 if (await entryModel.getCheckInData(entryDTO)){
@@ -61,7 +61,7 @@ module.exports ={
             let part1ApplyId;
             let part2ApplyId;
             let inTime;
-            if (entryDTO.part1) {
+            if (entryDTO.part1 === true) {
                 entryDTO.part = 1;
                 let result = await seatModel.exist(entryDTO);
                 if (!result) return {result: false, message: "예약 좌석이 아닙니다."};
@@ -72,7 +72,7 @@ module.exports ={
                     return {result: false, message: "아직 체크인하지 않았습니다."};
                 } 
             }
-            if (entryDTO.part2) {
+            if (entryDTO.part2 === true) {
                 entryDTO.part = 2;
                 let result = await seatModel.exist(entryDTO);
                 if (!result) return {result: false, message: "예약 좌석이 아닙니다."};
@@ -89,8 +89,8 @@ module.exports ={
             let nowTime = new Date(dateService.getNowTime());
             let t = new Date(dateService.getTodayDate() + ' 18:00:00');
 
-            if(entryDTO.part2 && nowTime>t){
-                if(entryDTO.part1){
+            if(entryDTO.part2 === true && nowTime>t){
+                if(entryDTO.part1 === true){
 
                     entryDTO.apply_id = part1ApplyId;
                     entryDTO.part = 1;

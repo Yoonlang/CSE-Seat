@@ -11,9 +11,7 @@ const initProperty = (seatDTO) => {
     ? dateService.getTodayDate()
     : dateService.getTomorrowDate();
   seatDTO.apply_time = dateService.getNowTime();
-  seatDTO.part1 = 'true' ? seatDTO.part1 = true : seatDTO.part1 = false;
-  seatDTO.part2 = 'true' ? seatDTO.part2 = true : seatDTO.part2 = false;
-  
+
 };
 
 
@@ -67,7 +65,7 @@ module.exports = {
         if (curT<ealry2_t) return {result: false, message: "내일 예약은 저녁 6시부터 가능합니다."};
       }
     
-      if (seatDTO.part1) {
+      if (seatDTO.part1 === true) {
         seatDTO.part = 1;
         let result = await seatModel.existInDate(seatDTO);
         if (result) return {result: false, message: "이미 예약하셨습니다."};
@@ -79,7 +77,7 @@ module.exports = {
           if (curT> ealry2_t) return {result: false, message: "예약할 수 있는 시간이 지났습니다."};
         }
       }
-      if (seatDTO.part2) {
+      if (seatDTO.part2 === true) {
         seatDTO.part = 2;
         let result = await seatModel.existInDate(seatDTO);
         if (result) return {result: false, message: "이미 예약하셨습니다."};
@@ -91,7 +89,7 @@ module.exports = {
       let insertId = await seatModel.apply(seatDTO);
       seatDTO.seat_room = seatDTO.seat_room[0];
 
-      if (seatDTO.part1) {
+      if (seatDTO.part1 === true) {
         seatDTO.part = 1;
         seatDTO.apply_id = insertId;
         await seatModel.reserve(seatDTO);
@@ -100,7 +98,7 @@ module.exports = {
         seatDTO.part1_seat_room = seatDTO.seat_room;
         seatDTO.part1_seat_num = seatDTO.seat_num;
       }
-      if (seatDTO.part2) {
+      if (seatDTO.part2 === true) {
         seatDTO.part = 2;
         seatDTO.apply_id = insertId;
         await seatModel.reserve(seatDTO); //여기 오류시 롤백
@@ -124,7 +122,7 @@ module.exports = {
       let part1ApplyId;
       let part2ApplyId;
 
-      if (seatDTO.part1) {
+      if (seatDTO.part1 === true) {
         seatDTO.part = 1;
         let result = await seatModel.exist(seatDTO);
         if (!result) return {result: false, message: "예약 좌석이 아닙니다"};
@@ -132,7 +130,7 @@ module.exports = {
           return {result: false, message: "예약자가 본인이 아닙니다"};
         part1ApplyId = result.apply_id;
       }
-      if (seatDTO.part2) {
+      if (seatDTO.part2 === true) {
         seatDTO.part = 2;
         let result = await seatModel.exist(seatDTO);
         if (!result) return {result: false, message: "예약 좌석이 아닙니다"};
@@ -140,19 +138,19 @@ module.exports = {
           return {result: false, message: "예약자가 본인이 아닙니다"};
         part2ApplyId = result.apply_id;
       }
-      if (seatDTO.part1) {
+      if (seatDTO.part1 === true) {
         seatDTO.part = 1;
         seatDTO.apply_id = part1ApplyId;
         if (await entryModel.getCheckInData(seatDTO)) return {result: false, message: "이미 입실하셔서 취소가 불가능합니다."};
         await seatModel.deleteReservation(seatDTO);
       }
-      if (seatDTO.part2) {
+      if (seatDTO.part2 === true) {
         seatDTO.part = 2;
         seatDTO.apply_id = part2ApplyId;
         if (await entryModel.getCheckInData(seatDTO)) return {result: false, message: "이미 입실하셔서 취소가 불가능합니다."};
         await seatModel.deleteReservation(seatDTO);
       }
-      if(seatDTO.part1 && seatDTO.part2){
+      if(seatDTO.part1 === true && seatDTO.part2 === true){
         if(part1ApplyId === part2ApplyId){
           seatDTO.apply_id = part1ApplyId;
           await logModel.updateCancel(seatDTO);
@@ -167,11 +165,11 @@ module.exports = {
           await logModel.updateCancel(seatDTO);
         }
       }
-      else if(seatDTO.part1 || seatDTO.part2){
+      else if(seatDTO.part1 === true || seatDTO.part2 === true){
         if (part1ApplyId) seatDTO.apply_id = part1ApplyId;
         else if (part2ApplyId) seatDTO.apply_id = part2ApplyId;
         let result = await logModel.findOne(seatDTO);
-        if (result.part1 && result.part2){
+        if (result.part1 === true && result.part2 === true){
           await logModel.updatePart(seatDTO);
         }
         else await logModel.updateCancel(seatDTO); 
