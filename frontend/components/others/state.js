@@ -38,6 +38,15 @@ const todayAtom = atom({
     default : true
 })
 
+const emailAtom = atom({
+    key: 'email',
+    default: {
+        isHoldEmail: false,
+        isHoldAuth: true,
+        isEmailButton: false,
+    }
+})
+
 const notificationAtom = atom({
     key: 'notification',
     default: ""
@@ -80,4 +89,4 @@ const enrollFriendAtom = atom({
     }
 })
 
-export { loginAtom, indexLoadingAtom, refreshIndexAtom, loadingCheckInAtom, completeHistoryAtom, historyToIndexAndInfoAtom, todayAtom, notificationAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };
+export { emailAtom, loginAtom, indexLoadingAtom, refreshIndexAtom, loadingCheckInAtom, completeHistoryAtom, historyToIndexAndInfoAtom, todayAtom, notificationAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };
