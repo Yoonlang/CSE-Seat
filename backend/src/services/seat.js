@@ -11,6 +11,9 @@ const initProperty = (seatDTO) => {
     ? dateService.getTodayDate()
     : dateService.getTomorrowDate();
   seatDTO.apply_time = dateService.getNowTime();
+  seatDTO.part1 = 'true' ? seatDTO.part1 = true : seatDTO.part1 = false;
+  seatDTO.part2 = 'true' ? seatDTO.part2 = true : seatDTO.part2 = false;
+  
 };
 
 
