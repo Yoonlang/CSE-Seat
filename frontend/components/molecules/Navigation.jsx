@@ -11,10 +11,11 @@ const Navigation = () => {
                 <MyLink href="/history" width="100%">
                     <span>내 기록 보기</span>
                 </MyLink>
-                <div></div>
+                {/* <div></div>
                 <MyLink href="/apply" width="100%">
                     <span>자리 신청</span>
-                </MyLink>
+                </MyLink> */}
+                {/*navDiv width 원래 400*/}
             </div>
             <style jsx>{`
             .navDiv{
@@ -36,7 +37,7 @@ const Navigation = () => {
             }
             @media(min-width:768px){
                 .navDiv{
-                    width: 400px;
+                    width: 300px;
                     margin-left: 20px;
                 }
             }
