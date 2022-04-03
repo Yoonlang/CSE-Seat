@@ -16,6 +16,8 @@ const MyApp = ({ Component, pageProps }) => {
                 <meta property="og:title" content="CSE Seat" />
                 <meta property="og:description" content="컴퓨터학부 자리 신청 서비스" />
                 <meta property="og:image" content="https://github.com/CSE-seat/CSE-Seat/blob/main/frontend/public/images/cse.png?raw=true" />
+                <meta property="og:image:width" content="600" />
+                <meta property="og:image:height" content="300" />
                 <link rel="shortcut icon" type="image/x-icon" href="images/cse.png" />
             </Head>
             <Header />
