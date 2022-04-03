@@ -3,7 +3,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import Checkbox from "../atoms/Checkbox";
 import { MyLink } from "../atoms/Div";
 import { isInLocation } from "../others/checkPos";
-import { historyToIndexAndInfoAtom, loadingCheckInAtom, refreshIndexAtom } from "../others/state";
+import { historyToIndexAndInfoAtom, loadingCheckInAtom, notificationAtom, refreshIndexAtom } from "../others/state";
 
 const todayIntro = [`오늘`, `1부`, ``, `2부`, `내일`, `1부`, ``, `2부`,]
 
@@ -14,6 +14,7 @@ const TodayInfo = () => {
     const checkData = useRecoilValue(historyToIndexAndInfoAtom);
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     const setIsCheckInLoading = useSetRecoilState(loadingCheckInAtom);
+    const setNotice = useSetRecoilState(notificationAtom);
 
     const handleCancel = () => {
         if (isSelectCancel) {
@@ -41,7 +42,10 @@ const TodayInfo = () => {
                             })
                             const data = await res.json();
                             if (res.status === 400) throw "잠시 후 다시 시도해주세요";
-                            if (data.result === true) setRefreshData(!refreshData);
+                            if (data.result === true) {
+                                setRefreshData(!refreshData);
+                                setNotice("자리 취소 완료");
+                            }
                             else alert(data.message);
                         } catch (e) {
                             alert(e);
@@ -169,11 +173,15 @@ const TodayInfo = () => {
                 })
             })
             const data = await res.json();
-            if (data.result === false)
-                throw ("Can't check");
-            setRefreshData(!refreshData);
+            if (res.status === 400) throw "잠시 후 다시 시도해주세요";
+            if (data.result === true) {
+                setRefreshData(!refreshData);
+                setNotice(isCheckIn ? "입실 완료" : "퇴실 완료");
+            }
+            else alert(data.message);
         } catch (e) {
-            console.log("Error: ", e);
+            alert(e);
+            router.replace(router.asPath);
         } finally {
             if (isCheckIn) setIsCheckInLoading(false);
         }

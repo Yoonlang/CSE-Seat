@@ -2,13 +2,14 @@ import { useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import DetailHistory from "../molecules/DetailHistory";
 import { isInLocation } from "../others/checkPos";
-import { loadingCheckInAtom, refreshIndexAtom } from "../others/state";
+import { loadingCheckInAtom, notificationAtom, refreshIndexAtom } from "../others/state";
 
 const SeatHistory = ({ date, part1, part2, part1End, state, detail }) => {
     const cancel = [part1.cancel_marker, part2.cancel_marker];
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     const setIsCheckInLoading = useSetRecoilState(loadingCheckInAtom);
+    const setNotice = useSetRecoilState(notificationAtom);
     let isCancel = false;
     if (cancel[0] & cancel[1]) isCancel = true;
     else if (part1.isPart ^ part2.isPart) {
@@ -48,8 +49,10 @@ const SeatHistory = ({ date, part1, part2, part1End, state, detail }) => {
             })
             const data = await res.json();
             if (res.status === 400) throw "잠시 후 다시 시도해주세요";
-            if (data.result === true)
+            if (data.result === true) {
                 setRefreshData(!refreshData);
+                setNotice(isCheckIn ? "입실 완료" : "퇴실 완료");
+            }
             else alert(data.message);
         } catch (e) {
             alert(e);

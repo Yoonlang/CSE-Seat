@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Seat, seatColor } from "../atoms/Seat";
 import { isInLocation } from "../others/checkPos";
-import { historyToIndexAndInfoAtom, loadingCheckInAtom, loginAtom, refreshIndexAtom, seatModalAtom } from "../others/state";
+import { historyToIndexAndInfoAtom, loadingCheckInAtom, loginAtom, notificationAtom, refreshIndexAtom, seatModalAtom } from "../others/state";
 
 const SeatModal = () => {
     const loginData = useRecoilValue(loginAtom);
@@ -18,6 +18,7 @@ const SeatModal = () => {
     const [isReadyToDoOthers, setIsReadyToDoOthers] = useState(false);
     const checkInOutData = useRecoilValue(historyToIndexAndInfoAtom);
     const setIsCheckInLoading = useSetRecoilState(loadingCheckInAtom);
+    const setNotice = useSetRecoilState(notificationAtom);
     const modalOutside = useRef();
     const cancelBtn = useRef();
     const router = useRouter();
@@ -78,8 +79,10 @@ const SeatModal = () => {
             })
             const data = await res.json();
             if (res.status === 400) throw "잠시 후 다시 시도해주세요";
-            if ((data.result === true) & isFinish)
+            if ((data.result === true) & isFinish) {
+                setNotice("자리 취소 완료");
                 closeModal();
+            }
             else if (data.result === false)
                 alert(data.message);
         } catch (e) {
@@ -109,8 +112,10 @@ const SeatModal = () => {
             })
             const data = await res.json();
             if (res.status === 400) throw "잠시 후 다시 시도해주세요";
-            if (data.result === true)
+            if (data.result === true) {
+                setNotice("자리 신청 완료");
                 closeModal();
+            }
             else alert(data.message);
         } catch (e) {
             alert(e);
@@ -173,9 +178,8 @@ const SeatModal = () => {
             if (res.status === 400) throw "잠시 후 다시 시도해주세요";
             if (data.result === true) {
                 setRefreshData(!refreshData);
-                if (!isCheckIn) {
-                    closeModal();
-                }
+                if (!isCheckIn) closeModal();
+                setNotice(isCheckIn ? "입실 완료" : "퇴실 완료");
             }
             else alert(data.message);
         } catch (e) {

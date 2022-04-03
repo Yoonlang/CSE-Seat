@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import Notification from "../organisms/Notification";
 import { completeHistoryAtom, historyToIndexAndInfoAtom, loginAtom, refreshIndexAtom } from "./state";
 
 const Checker = () => {
@@ -71,7 +72,9 @@ const Checker = () => {
             }
         }
     }, [pathname, isFetching, isLogin]);
-    return <></>
+    return <>
+        <Notification />
+    </>
 }
 
 export default Checker;
