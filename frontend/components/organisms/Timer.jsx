@@ -1,33 +1,39 @@
-import { useEffect, useRef, useState } from "react";
-import { useSetRecoilState } from "recoil";
-import { emailAtom } from "../others/state";
-
+import { useEffect, useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { emailAtom, timerAtom } from "../others/state";
 
 const Timer = () => {
-    const [min, setMin] = useState(5);
-    const [sec, setSec] = useState(0);
-    const time = useRef(300);
-    const timerId = useRef(null);
+    const [timer, setTimer] = useRecoilState(timerAtom);
+    const { time } = timer;
+    const [min, setMin] = useState(parseInt(time / 60));
+    const [sec, setSec] = useState(time % 60);
     const setHandleEmail = useSetRecoilState(emailAtom);
 
     useEffect(() => {
-        timerId.current = setInterval(() => {
-            setMin(parseInt(time.current / 60));
-            setSec(time.current % 60);
-            time.current -= 1;
-        }, 1000);
-    }, [])
+        setTimer({
+            isRun: true,
+            time: time,
+            delay: 1000,
+        })
+    }, []);
 
     useEffect(() => {
-        if (time.current < 0) {
-            clearInterval(timerId.current);
+        setMin(parseInt(time / 60));
+        setSec(time % 60);
+
+        if (time < 0) {
+            setTimer({
+                isRun: false,
+                time: '300',
+                delay: null
+            })
             setHandleEmail({
                 isHoldEmail: true,
                 isEmailButton: true,
                 isHoldAuth: true,
             })
         }
-    }, [sec]);
+    }, [time])
 
     return (<>
         <div>{min}분 {sec}초</div>

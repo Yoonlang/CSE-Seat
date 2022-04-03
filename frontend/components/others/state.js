@@ -33,6 +33,15 @@ const historyToIndexAndInfoAtom = atom({
     default: undefined,
 })
 
+const timerAtom = atom({
+    key: 'timer',
+    default: {
+        isRun: false,
+        time: '300',
+        delay: null,
+    }
+})
+
 const todayAtom = atom({
     key : 'today',
     default : true
@@ -89,4 +98,4 @@ const enrollFriendAtom = atom({
     }
 })
 
-export { emailAtom, loginAtom, indexLoadingAtom, refreshIndexAtom, loadingCheckInAtom, completeHistoryAtom, historyToIndexAndInfoAtom, todayAtom, notificationAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };
+export { timerAtom, emailAtom, loginAtom, indexLoadingAtom, refreshIndexAtom, loadingCheckInAtom, completeHistoryAtom, historyToIndexAndInfoAtom, todayAtom, notificationAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };
