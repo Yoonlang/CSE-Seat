@@ -34,7 +34,11 @@ module.exports = {
   apply: async (seatDTO) => {
     try{
       const json = {result :true, data:{seat: true, friends : [true, true, true]}};
-      if (checkRightSeat(seatDTO.seat_room, seatDTO.seat_num) == false){
+      if (await userModel.findById(seatDTO.user_sid) != false){
+        json.result = false;
+        json.message= '이미 신청하셨습니다.';
+      }
+      if (checkRightSeat(seatDTO.seat_room, seatDTO.seat_num) === false){
         json.result = false;
         json.data.seat = false;
       }
@@ -44,7 +48,7 @@ module.exports = {
           json.data.friends[i] = false;
         }
       }
-      if(json.result == false) return json;
+      if(json.result === false) return json;
       
       seatDTO.date = dateService.getTomorrowDate();
       seatDTO.apply_time = dateService.getNowTime();
