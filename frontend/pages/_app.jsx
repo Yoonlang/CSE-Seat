@@ -4,8 +4,6 @@ import Footer from '../components/organisms/Footer';
 import Checker from '../components/others/Checker';
 import Waiting from '../components/others/Waiting';
 
-
-
 const MyApp = ({ Component, pageProps }) => {
     return (
         <RecoilRoot>

@@ -38,6 +38,11 @@ const todayAtom = atom({
     default : true
 })
 
+const notificationAtom = atom({
+    key: 'notification',
+    default: ""
+})
+
 const showRoomAtom = atom({
     key : 'room',
     default : 0
@@ -75,4 +80,4 @@ const enrollFriendAtom = atom({
     }
 })
 
-export { loginAtom, indexLoadingAtom, refreshIndexAtom, loadingCheckInAtom, completeHistoryAtom, historyToIndexAndInfoAtom, todayAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };
+export { loginAtom, indexLoadingAtom, refreshIndexAtom, loadingCheckInAtom, completeHistoryAtom, historyToIndexAndInfoAtom, todayAtom, notificationAtom, showRoomAtom, seatModalAtom, seatingChartModalAtom, enrollFriendAtom, inputValueAtom };

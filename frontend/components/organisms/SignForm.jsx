@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
 import { SignInput } from "../atoms/Input";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { inputValueAtom, loginAtom } from "../others/state";
+import { inputValueAtom, loginAtom, notificationAtom } from "../others/state";
 import Checkbox from "../atoms/Checkbox";
 import SquareImg from "../atoms/Img";
 
@@ -19,6 +19,7 @@ const SignForm = () => {
     const [isSamePassword, setIsSamePassword] = useState(false);
     const [inputValue, setInputValue] = useRecoilState(inputValueAtom);
     const setLoginData = useSetRecoilState(loginAtom);
+    const setNotice = useSetRecoilState(notificationAtom);
     const airplane = useRef();
     const signInBtn = useRef();
     const signUpForm = useRef();
@@ -168,6 +169,7 @@ const SignForm = () => {
                         isHoldAuth: false,
                         isEmailButton: false,
                     });
+                    setNotice("이메일의 인증번호를 확인해주세요");
                 }, 1000);
             }
             else {
