@@ -25,7 +25,7 @@ const History = () => {
                                 src="/images/nothing.png"
                                 length="180px"
                                 opacity="0.3" />
-                            <span>Nothing !!</span>
+                            <span>신청 기록이 없습니다.</span>
                         </div>
                         :
                         <div className="seatHistorys">
@@ -73,7 +73,7 @@ const History = () => {
                 }
                 .nothing > span{
                     margin-top: 30px;
-                    font-size: 50px;
+                    font-size: 35px;
                     font-weight: 600;
                     color: #b3b3b3;
                 }

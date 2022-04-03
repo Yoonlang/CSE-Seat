@@ -19,7 +19,7 @@ export const isInLocation = async () => {
             const position = await getPosition(options);
             const {latitude, longitude} = position.coords;
             const dist = Math.pow(Math.pow(latitude - it4Pos.latitude, 2) + Math.pow(longitude - it4Pos.longitude, 2), 0.5);
-            isCheck = dist < 0.101 ? true : false; // 일단 0.101 원래는 0.001
+            isCheck = dist < 0.003 ? true : false; // 일단 0.101 원래는 0.001
         } catch (e) {
             if(e.code === 1) alert("입실을 위해 위치 엑세스를 허용하세요.");
         }
