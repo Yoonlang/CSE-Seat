@@ -23,6 +23,7 @@
     "express-session": "^1.17.2",
     "fs": "^0.0.1-security",
     "moment": "^2.29.1",
+    "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "node-fetch": "^3.2.0",
@@ -33,7 +34,9 @@
     "passport-local": "^1.0.0",
     "redis": "^4.0.4",
     "redis-server": "^1.2.2",
-    "router": "^1.3.6"
+    "router": "^1.3.6",
+    "winston": "^3.6.0",
+    "winston-daily-rotate-file": "^4.6.1"
   },
   "_moduleAliases": {
     "$": "./src"
