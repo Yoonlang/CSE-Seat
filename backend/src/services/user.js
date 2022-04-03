@@ -45,9 +45,7 @@ module.exports = {
             if (!userDTO.email) return {result: false, message: '이메일을 입력하세요.'};
             if(!userDTO.authNum) return {result: false, message: '인증번호를 입력하세요.'};
             
-            console.log(await redis.get(userDTO.email))
-            console.log(userDTO.authNum)
-            
+            await redisClient.select(0);
             if((await redis.get(userDTO.email)) != userDTO.authNum){
                 return {result: false, message: '인증번호가 틀렸거나 만료됐습니다.'};
             } 
