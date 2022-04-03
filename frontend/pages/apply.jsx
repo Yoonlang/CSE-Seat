@@ -127,6 +127,7 @@ const Apply = ({ data }) => {
             if (data.result === true) {
                 alert("아직 서비스 준비 중입니다.");
                 //alert("신청되었습니다.");
+                // 신청이 되면 setNotice로.
                 router.replace('/');
             }
             else handleWrong(data.data);
