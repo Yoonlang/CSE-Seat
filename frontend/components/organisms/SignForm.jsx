@@ -2,18 +2,15 @@ import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
 import { SignInput } from "../atoms/Input";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { inputValueAtom, loginAtom, notificationAtom } from "../others/state";
+import { emailAtom, inputValueAtom, loginAtom, notificationAtom } from "../others/state";
 import Checkbox from "../atoms/Checkbox";
 import SquareImg from "../atoms/Img";
+import Timer from "./Timer";
 
 const SignForm = () => {
     const [isLoginForm, setIsLoginForm] = useState(true);
     const [isFailed, setIsFailed] = useState(false);
-    const [handleEmail, setHandleEmail] = useState({
-        isHoldEmail: false,
-        isHoldAuth: true,
-        isEmailButton: false,
-    });
+    const [handleEmail, setHandleEmail] = useRecoilState(emailAtom);
     const { isHoldEmail, isHoldAuth, isEmailButton } = handleEmail;
     const [isShake, setIsShake] = useState([false, false, false, false, false, false, false, false,]);
     const [isSamePassword, setIsSamePassword] = useState(false);
@@ -266,37 +263,18 @@ const SignForm = () => {
     }, [inputValue[7]])
 
     useEffect(() => {
-        // console.log(handleEmail);
-        // if (!isHoldAuth) alert("이메일을 확인해주세요.");
-        // 이것도 fetch 보내서 result가 true면 alert 떠야함.
-    }, [handleEmail])
-
-    useEffect(() => {
-        // 1. @knu.ac.kr이면 옆에 메일 보내기 뜨게. 다시 지우면 사라짐
-        // 2. 메일 보내기를 눌러서 result 성공이 뜨면 이메일은 잠구고 (메일 보내기를 눌렀으면 일단 email 수정 금지)
-        // 3. 메일 보내기 없애주고, 인증번호 확인은 적을 수 있게 되어야함.
         if (isHoldAuth) {
             const tempHandleData = { ...handleEmail }
             const isQualify = inputValue[4]?.indexOf("@knu.ac.kr") === -1 ? false : inputValue[4].indexOf("@knu.ac.kr") + 10 === inputValue[4].length ? true : false;
             tempHandleData.isEmailButton = isQualify ? true : false;
             setHandleEmail(tempHandleData);
         }
-
-        // 현재 메일 보내기 버튼은 뜬 상태
-
-
     }, [inputValue[4], inputValue[5]])
 
     useEffect(() => {
         if (inputValue[6] === inputValue[7] && inputValue[6].length >= 4) setIsSamePassword(true);
         else setIsSamePassword(false);
     }, [inputValue[6], inputValue[7]])
-
-    useEffect(() => {
-        if (isFailed) {
-            // signInBtn.current.className += " wrong";
-        }
-    }, [isFailed])
 
     return (
         <>
@@ -345,7 +323,6 @@ const SignForm = () => {
                             isHold={isHoldEmail}
                             minLength={10}
                             isShake={isShake[4]}
-
                             num={4} />
                         {
                             isHoldAuth ?
@@ -354,16 +331,19 @@ const SignForm = () => {
                                     :
                                     <div className="sendEmailBtn">이메일 인증 받기 <SquareImg src="/images/send.png" length="20px" /></div>
                                 :
-                                <SignInput src="/images/check.png"
-                                    radius="5px"
-                                    length="23px"
-                                    placeholder="인증번호 확인"
-                                    isHold={isHoldAuth}
-                                    minLength={6}
-                                    maxLength={6}
-                                    isOnlyNum
-                                    isShake={isShake[5]}
-                                    num={5} />
+                                <>
+                                    <SignInput src="/images/check.png"
+                                        radius="5px"
+                                        length="23px"
+                                        placeholder="인증번호 확인"
+                                        isHold={isHoldAuth}
+                                        minLength={6}
+                                        maxLength={6}
+                                        isOnlyNum
+                                        isShake={isShake[5]}
+                                        num={5} />
+                                    <Timer />
+                                </>
                         }
                         <SignInput src="/images/lock.png"
                             type="password"
