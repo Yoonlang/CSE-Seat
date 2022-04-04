@@ -2,23 +2,26 @@ import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
 import { SignInput } from "../atoms/Input";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { inputValueAtom, loginAtom } from "../others/state";
+import { emailAtom, inputValueAtom, loginAtom, notificationAtom } from "../others/state";
 import Checkbox from "../atoms/Checkbox";
 import SquareImg from "../atoms/Img";
+import Timer from "./Timer";
 
 const SignForm = () => {
     const [isLoginForm, setIsLoginForm] = useState(true);
     const [isFailed, setIsFailed] = useState(false);
-    const [handleEmail, setHandleEmail] = useState({
-        isHoldEmail: false,
-        isHoldAuth: true,
-        isEmailButton: false,
-    });
+    const [handleEmail, setHandleEmail] = useRecoilState(emailAtom);
     const { isHoldEmail, isHoldAuth, isEmailButton } = handleEmail;
     const [isShake, setIsShake] = useState([false, false, false, false, false, false, false, false,]);
     const [isSamePassword, setIsSamePassword] = useState(false);
+    const [preventPushBtnTwice, setPreventPushBtnTwice] = useState({
+        sendEmailBtn: false,
+        signUpBtn: false,
+    });
+    const { sendEmailBtn: preventSendEmailBtn, signUpBtn: preventSignUpBtn } = preventPushBtnTwice;
     const [inputValue, setInputValue] = useRecoilState(inputValueAtom);
     const setLoginData = useSetRecoilState(loginAtom);
+    const setNotice = useSetRecoilState(notificationAtom);
     const airplane = useRef();
     const signInBtn = useRef();
     const signUpForm = useRef();
@@ -84,7 +87,11 @@ const SignForm = () => {
 
     const handleSignUp = async (e) => {
         e.preventDefault();
-        if (inputValue[2].length >= 4 && inputValue[3].length >= 2 && inputValue[4].length >= 10 && inputValue[5].length === 6 && inputValue[6].length >= 4 && inputValue[7].length >= 4) {
+        setPreventPushBtnTwice({
+            sendEmailBtn: preventSendEmailBtn,
+            signUpBtn: true,
+        })
+        if (inputValue[2].length >= 4 && inputValue[3].length >= 2 && inputValue[4].length >= 10 && inputValue[5].length === 6 && !isHoldAuth && inputValue[6].length >= 4 && inputValue[7].length >= 4) {
             try {
                 const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/join/process", {
                     method: "POST",
@@ -117,6 +124,11 @@ const SignForm = () => {
             } catch (e) {
                 alert(e);
                 router.replace(router.asPath);
+            } finally {
+                setPreventPushBtnTwice({
+                    sendEmailBtn: preventSendEmailBtn,
+                    signUpBtn: false,
+                })
             }
         }
         else {
@@ -133,6 +145,10 @@ const SignForm = () => {
             if (!isSamePassword) tempIsShake[7] = true;
             setIsShake(tempIsShake);
             if (isEmailButton && emailBtn.current.className.indexOf("shake") === -1) emailBtn.current.className += " shake";
+            setPreventPushBtnTwice({
+                sendEmailBtn: preventSendEmailBtn,
+                signUpBtn: false,
+            })
         }
     }
 
@@ -141,6 +157,10 @@ const SignForm = () => {
         if (emailBtn.current.className.indexOf("shake") !== -1)
             emailBtn.current.className = emailBtn.current.className.substr(0, emailBtn.current.className.length - 6);
 
+        setPreventPushBtnTwice({
+            sendEmailBtn: true,
+            signUpBtn: preventSignUpBtn
+        })
         setHandleEmail({
             isHoldEmail: true,
             isHoldAuth: true,
@@ -168,6 +188,11 @@ const SignForm = () => {
                         isHoldAuth: false,
                         isEmailButton: false,
                     });
+                    setNotice("이메일의 인증번호를 확인해주세요");
+                    setPreventPushBtnTwice({
+                        sendEmailBtn: false,
+                        signUpBtn: preventSignUpBtn
+                    })
                 }, 1000);
             }
             else {
@@ -177,11 +202,19 @@ const SignForm = () => {
                     isHoldAuth: true,
                     isEmailButton: true,
                 });
-                throw (data.message);
+                setPreventPushBtnTwice({
+                    sendEmailBtn: false,
+                    signUpBtn: preventSignUpBtn
+                })
+                alert(data.message);
             }
         } catch (e) {
             alert(e);
             router.replace(router.asPath);
+            setPreventPushBtnTwice({
+                sendEmailBtn: false,
+                signUpBtn: preventSignUpBtn
+            })
         }
     }
 
@@ -264,37 +297,18 @@ const SignForm = () => {
     }, [inputValue[7]])
 
     useEffect(() => {
-        // console.log(handleEmail);
-        // if (!isHoldAuth) alert("이메일을 확인해주세요.");
-        // 이것도 fetch 보내서 result가 true면 alert 떠야함.
-    }, [handleEmail])
-
-    useEffect(() => {
-        // 1. @knu.ac.kr이면 옆에 메일 보내기 뜨게. 다시 지우면 사라짐
-        // 2. 메일 보내기를 눌러서 result 성공이 뜨면 이메일은 잠구고 (메일 보내기를 눌렀으면 일단 email 수정 금지)
-        // 3. 메일 보내기 없애주고, 인증번호 확인은 적을 수 있게 되어야함.
         if (isHoldAuth) {
             const tempHandleData = { ...handleEmail }
             const isQualify = inputValue[4]?.indexOf("@knu.ac.kr") === -1 ? false : inputValue[4].indexOf("@knu.ac.kr") + 10 === inputValue[4].length ? true : false;
             tempHandleData.isEmailButton = isQualify ? true : false;
             setHandleEmail(tempHandleData);
         }
-
-        // 현재 메일 보내기 버튼은 뜬 상태
-
-
     }, [inputValue[4], inputValue[5]])
 
     useEffect(() => {
         if (inputValue[6] === inputValue[7] && inputValue[6].length >= 4) setIsSamePassword(true);
         else setIsSamePassword(false);
     }, [inputValue[6], inputValue[7]])
-
-    useEffect(() => {
-        if (isFailed) {
-            // signInBtn.current.className += " wrong";
-        }
-    }, [isFailed])
 
     return (
         <>
@@ -343,25 +357,27 @@ const SignForm = () => {
                             isHold={isHoldEmail}
                             minLength={10}
                             isShake={isShake[4]}
-
                             num={4} />
                         {
                             isHoldAuth ?
                                 isEmailButton ?
-                                    <button className="sendEmailBtn" onFocus={focusOnSendEmailBtn} onBlur={blurOnSendEmailBtn} onClick={sendEmail} ref={emailBtn}>이메일 인증 받기 <div className="stay" ref={airplane}><SquareImg src="/images/send.png" length="20px" /></div></button>
+                                    <button className="sendEmailBtn" onFocus={focusOnSendEmailBtn} onBlur={blurOnSendEmailBtn} onClick={sendEmail} ref={emailBtn} disabled={preventSendEmailBtn}>이메일 인증 받기 <div className="stay" ref={airplane}><SquareImg src="/images/send.png" length="20px" /></div></button>
                                     :
                                     <div className="sendEmailBtn">이메일 인증 받기 <SquareImg src="/images/send.png" length="20px" /></div>
                                 :
-                                <SignInput src="/images/check.png"
-                                    radius="5px"
-                                    length="23px"
-                                    placeholder="인증번호 확인"
-                                    isHold={isHoldAuth}
-                                    minLength={6}
-                                    maxLength={6}
-                                    isOnlyNum
-                                    isShake={isShake[5]}
-                                    num={5} />
+                                <>
+                                    <SignInput src="/images/check.png"
+                                        radius="5px"
+                                        length="23px"
+                                        placeholder="인증번호 확인"
+                                        isHold={isHoldAuth}
+                                        minLength={6}
+                                        maxLength={6}
+                                        isOnlyNum
+                                        isShake={isShake[5]}
+                                        num={5} />
+                                    <Timer />
+                                </>
                         }
                         <SignInput src="/images/lock.png"
                             type="password"
@@ -378,7 +394,7 @@ const SignForm = () => {
                             isShake={isShake[7]}
                             num={7} />
                         <span className="samePassword"><Checkbox state={1} length={"20px"} border={false} /></span>
-                        <button className="formBtn" onClick={handleSignUp}>회원가입</button>
+                        <button className="formBtn" onClick={handleSignUp} disabled={preventSignUpBtn}>회원가입</button>
                         <div className="changeBtn" onClick={changeFormState}>로그인</div>
                     </form>
             }

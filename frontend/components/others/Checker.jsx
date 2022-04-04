@@ -1,7 +1,9 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { completeHistoryAtom, historyToIndexAndInfoAtom, loginAtom, refreshIndexAtom } from "./state";
+import useInterval from "use-interval";
+import Notification from "../organisms/Notification";
+import { completeHistoryAtom, historyToIndexAndInfoAtom, loginAtom, refreshIndexAtom, timerAtom } from "./state";
 
 const Checker = () => {
     const router = useRouter();
@@ -10,6 +12,8 @@ const Checker = () => {
     const [loginData, setLoginData] = useRecoilState(loginAtom);
     const setCompleteHistoryData = useSetRecoilState(completeHistoryAtom);
     const setHistoryToOther = useSetRecoilState(historyToIndexAndInfoAtom);
+    const [timer, setTimer] = useRecoilState(timerAtom);
+    const { time, delay } = timer;
     const refreshData = useRecoilValue(refreshIndexAtom);
     const { isLogin } = loginData;
 
@@ -71,7 +75,18 @@ const Checker = () => {
             }
         }
     }, [pathname, isFetching, isLogin]);
-    return <></>
+
+    useInterval(() => {
+        setTimer({
+            isRun: true,
+            time: time - 1,
+            delay: delay,
+        })
+    }, delay)
+
+    return <>
+        <Notification />
+    </>
 }
 
 export default Checker;
