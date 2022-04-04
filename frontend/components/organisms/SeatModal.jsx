@@ -220,7 +220,7 @@ const SeatModal = () => {
                             setMyState(state);
                         }
                     }
-                if (part2.isPart & isMySeat[1] & isToday & flag)
+                if (part2.isPart & isMySeat[1] & isToday)
                     if (Number(part2.seat_num) === seatNumber && Number(part2.seat_room) === roomNumber) {
                         if (state === 0 || state === 1) {
                             isStateNow = true;
