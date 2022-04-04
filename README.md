@@ -41,10 +41,14 @@
  - Recoil
 
 ### Backend
- - 
+ - Node.js
+ - Docker
+ - MySql
+ - Nginx
+ - AWS
 
 ## Project Control
-- Version Control: Git, Github, Docker( 이거 여기 들어가는거 맞나? )
+- Version Control: Git, Github
 - Task Control: Notion, Figma
 
 ## Challenges
