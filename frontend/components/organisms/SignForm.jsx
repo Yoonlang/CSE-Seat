@@ -82,7 +82,7 @@ const SignForm = () => {
 
     const handleSignUp = async (e) => {
         e.preventDefault();
-        if (inputValue[2].length >= 4 && inputValue[3].length >= 2 && inputValue[4].length >= 10 && inputValue[5].length === 6 && inputValue[6].length >= 4 && inputValue[7].length >= 4) {
+        if (inputValue[2].length >= 4 && inputValue[3].length >= 2 && inputValue[4].length >= 10 && inputValue[5].length === 6 && !isHoldAuth && inputValue[6].length >= 4 && inputValue[7].length >= 4) {
             try {
                 const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/join/process", {
                     method: "POST",
