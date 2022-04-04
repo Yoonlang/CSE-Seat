@@ -24,7 +24,17 @@ const Notification = () => {
             <div className="notification" ref={notification}>
                 <span>{notice}</span>
             </div>
+            <div className="block"></div>
             <style jsx>{`
+                .block{
+                    position: fixed;
+                    bottom: -60px;
+                    left: 0;
+                    width: 100%;
+                    height: 60px;
+                    background: #fff;
+                    z-index: 30;
+                }
                 .notification{
                     display: flex;
                     position: fixed;
