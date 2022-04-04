@@ -13,7 +13,7 @@ const Checker = () => {
     const setCompleteHistoryData = useSetRecoilState(completeHistoryAtom);
     const setHistoryToOther = useSetRecoilState(historyToIndexAndInfoAtom);
     const [timer, setTimer] = useRecoilState(timerAtom);
-    const { isRun, time, delay } = timer;
+    const { time, delay } = timer;
     const refreshData = useRecoilValue(refreshIndexAtom);
     const { isLogin } = loginData;
 
@@ -75,7 +75,6 @@ const Checker = () => {
             }
         }
     }, [pathname, isFetching, isLogin]);
-
 
     useInterval(() => {
         setTimer({
