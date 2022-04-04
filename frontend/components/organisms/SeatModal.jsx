@@ -208,6 +208,7 @@ const SeatModal = () => {
     }, [isModalOpen]);
 
     useEffect(() => {
+        console.log(checkInOutData);
         if ((isMySeat[0] | isMySeat[1]) & isToday) {
             let flag = true;
             checkInOutData?.forEach((prop) => {
