@@ -14,6 +14,11 @@ const SignForm = () => {
     const { isHoldEmail, isHoldAuth, isEmailButton } = handleEmail;
     const [isShake, setIsShake] = useState([false, false, false, false, false, false, false, false,]);
     const [isSamePassword, setIsSamePassword] = useState(false);
+    const [preventPushBtnTwice, setPreventPushBtnTwice] = useState({
+        sendEmailBtn: false,
+        signUpBtn: false,
+    });
+    const { sendEmailBtn: preventSendEmailBtn, signUpBtn: preventSignUpBtn } = preventPushBtnTwice;
     const [inputValue, setInputValue] = useRecoilState(inputValueAtom);
     const setLoginData = useSetRecoilState(loginAtom);
     const setNotice = useSetRecoilState(notificationAtom);
@@ -82,7 +87,11 @@ const SignForm = () => {
 
     const handleSignUp = async (e) => {
         e.preventDefault();
-        if (inputValue[2].length >= 4 && inputValue[3].length >= 2 && inputValue[4].length >= 10 && inputValue[5].length === 6 && inputValue[6].length >= 4 && inputValue[7].length >= 4) {
+        setPreventPushBtnTwice({
+            sendEmailBtn: preventSendEmailBtn,
+            signUpBtn: true,
+        })
+        if (inputValue[2].length >= 4 && inputValue[3].length >= 2 && inputValue[4].length >= 10 && inputValue[5].length === 6 && !isHoldAuth && inputValue[6].length >= 4 && inputValue[7].length >= 4) {
             try {
                 const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/join/process", {
                     method: "POST",
@@ -115,6 +124,11 @@ const SignForm = () => {
             } catch (e) {
                 alert(e);
                 router.replace(router.asPath);
+            } finally {
+                setPreventPushBtnTwice({
+                    sendEmailBtn: preventSendEmailBtn,
+                    signUpBtn: false,
+                })
             }
         }
         else {
@@ -131,6 +145,10 @@ const SignForm = () => {
             if (!isSamePassword) tempIsShake[7] = true;
             setIsShake(tempIsShake);
             if (isEmailButton && emailBtn.current.className.indexOf("shake") === -1) emailBtn.current.className += " shake";
+            setPreventPushBtnTwice({
+                sendEmailBtn: preventSendEmailBtn,
+                signUpBtn: false,
+            })
         }
     }
 
@@ -139,6 +157,10 @@ const SignForm = () => {
         if (emailBtn.current.className.indexOf("shake") !== -1)
             emailBtn.current.className = emailBtn.current.className.substr(0, emailBtn.current.className.length - 6);
 
+        setPreventPushBtnTwice({
+            sendEmailBtn: true,
+            signUpBtn: preventSignUpBtn
+        })
         setHandleEmail({
             isHoldEmail: true,
             isHoldAuth: true,
@@ -167,6 +189,10 @@ const SignForm = () => {
                         isEmailButton: false,
                     });
                     setNotice("이메일의 인증번호를 확인해주세요");
+                    setPreventPushBtnTwice({
+                        sendEmailBtn: false,
+                        signUpBtn: preventSignUpBtn
+                    })
                 }, 1000);
             }
             else {
@@ -176,11 +202,19 @@ const SignForm = () => {
                     isHoldAuth: true,
                     isEmailButton: true,
                 });
-                throw (data.message);
+                setPreventPushBtnTwice({
+                    sendEmailBtn: false,
+                    signUpBtn: preventSignUpBtn
+                })
+                alert(data.message);
             }
         } catch (e) {
             alert(e);
             router.replace(router.asPath);
+            setPreventPushBtnTwice({
+                sendEmailBtn: false,
+                signUpBtn: preventSignUpBtn
+            })
         }
     }
 
@@ -327,7 +361,7 @@ const SignForm = () => {
                         {
                             isHoldAuth ?
                                 isEmailButton ?
-                                    <button className="sendEmailBtn" onFocus={focusOnSendEmailBtn} onBlur={blurOnSendEmailBtn} onClick={sendEmail} ref={emailBtn}>이메일 인증 받기 <div className="stay" ref={airplane}><SquareImg src="/images/send.png" length="20px" /></div></button>
+                                    <button className="sendEmailBtn" onFocus={focusOnSendEmailBtn} onBlur={blurOnSendEmailBtn} onClick={sendEmail} ref={emailBtn} disabled={preventSendEmailBtn}>이메일 인증 받기 <div className="stay" ref={airplane}><SquareImg src="/images/send.png" length="20px" /></div></button>
                                     :
                                     <div className="sendEmailBtn">이메일 인증 받기 <SquareImg src="/images/send.png" length="20px" /></div>
                                 :
@@ -360,7 +394,7 @@ const SignForm = () => {
                             isShake={isShake[7]}
                             num={7} />
                         <span className="samePassword"><Checkbox state={1} length={"20px"} border={false} /></span>
-                        <button className="formBtn" onClick={handleSignUp}>회원가입</button>
+                        <button className="formBtn" onClick={handleSignUp} disabled={preventSignUpBtn}>회원가입</button>
                         <div className="changeBtn" onClick={changeFormState}>로그인</div>
                     </form>
             }
