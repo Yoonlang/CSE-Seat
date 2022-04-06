@@ -46,5 +46,23 @@ module.exports = {
         else if (result.length == 0) return resolve(false);
         else return reject(new Error('database PK error'));
     }),
+    deleteCheckInData : async (entryDTO) => new Promise( async (resolve, reject) => {
+        let sql = "DELETE FROM entry_log WHERE apply_id = ? and reservation_sid = ? and part = ?"
+        let result = await db.query(sql,[
+            apply_id = entryDTO.apply_id,
+            reservation_sid = entryDTO.user_sid,
+            part = entryDTO.part,
+        ]);
+        if (result && result.affectedRows > 0)
+            return resolve(true);
+        else if (result.affectedRows == 0){
+            console.log(entryDTO);
+            return reject(new Error('Nothing changed'));
+        }
+        else{
+            console.log(entryDTO);
+            return reject(new Error('database PK error'))
+        }
+    }),
 
 }
