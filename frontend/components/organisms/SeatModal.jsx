@@ -209,19 +209,23 @@ const SeatModal = () => {
 
     useEffect(() => {
         if ((isMySeat[0] | isMySeat[1]) & isToday) {
-            let flag = true;
+            let isStateNow = false;
             checkInOutData?.forEach((prop) => {
-                if (!flag) return;
+                if (isStateNow) return;
                 const { part1, part2, state, isToday } = prop;
                 if (part1.isPart & isMySeat[0] & isToday)
                     if (Number(part1.seat_num) === seatNumber && Number(part1.seat_room) === roomNumber) {
-                        setMyState(state);
-                        flag = false;
+                        if (state === 0 || state === 1) {
+                            isStateNow = true;
+                            setMyState(state);
+                        }
                     }
-                if (part2.isPart & isMySeat[1] & isToday & flag)
+                if (part2.isPart & isMySeat[1] & isToday)
                     if (Number(part2.seat_num) === seatNumber && Number(part2.seat_room) === roomNumber) {
-                        setMyState(state);
-                        flag = false;
+                        if (state === 0 || state === 1) {
+                            isStateNow = true;
+                            setMyState(state);
+                        }
                     }
             })
         }

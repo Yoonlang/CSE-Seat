@@ -12,7 +12,7 @@ router.post('/check-in',isLoggedIn, async (req, res, next) => {
     entryDTO.user_sid = req.user;
     let result = await entryService.checkIn(entryDTO);
     if(result instanceof Error) return next(result);
-    res.status(200).json({result: true, inTime: result.inTime});
+    res.status(200).json(result);
 });
 
 router.post('/check-out',isLoggedIn, async (req, res, next) => {
@@ -20,7 +20,7 @@ router.post('/check-out',isLoggedIn, async (req, res, next) => {
     entryDTO.user_sid = req.user;
     let result = await entryService.checkOut(entryDTO);
     if(result instanceof Error) return next(result);
-    res.status(200).json({result: true, inTime: result.inTime, outTime: result.outTime});
+    res.status(200).json(result);
 });
 
 router.use((err,req,res,next)=>{

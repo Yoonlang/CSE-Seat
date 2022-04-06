@@ -101,8 +101,11 @@ module.exports = {
         let result = await db.query(sql,set);
         if (result && result.affectedRows > 0)
             return resolve(true);
-        else
+        else{
+            console.log(seatDTO);
             return reject(new Error('database PK error'))
+        }
+            
     }),
     deleteReservation: async (seatDTO) => new Promise( async (resolve, reject) => {
         let sql = "DELETE FROM reservation WHERE building_id = ? and seat_room = ? and seat_num = ? and part = ? and date = ?";
@@ -116,7 +119,10 @@ module.exports = {
         ]);
         if (result && result.affectedRows > 0)
             return resolve(true);
-        else
-            return reject(new Error('database PK error'))
+        else{
+            console.log(seatDTO);
+            return reject(new Error('database PK error'));
+        }
+            
     }),
 }

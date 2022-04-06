@@ -40,7 +40,8 @@ module.exports ={
                 }
                 await entryModel.checkIn(entryDTO);
                 
-            }else{
+            }
+            if(entryDTO.part2 === true){
                 entryDTO.part = 2;
                 entryDTO.apply_id = part2ApplyId;
                 if (await entryModel.getCheckInData(entryDTO)){
@@ -90,18 +91,18 @@ module.exports ={
             let t = new Date(dateService.getTodayDate() + ' 18:00:00');
 
             if(entryDTO.part2 === true && nowTime>t){
-                if(entryDTO.part1 === true){
-
+                entryDTO.part = 1;
+                part1ApplyId = await seatModel.checkMySeat(entryDTO).then((data)=>data.apply_id);
+                if(part1ApplyId != undefined){
+                    //1부 체크아웃 - 2부 체크아웃
                     entryDTO.apply_id = part1ApplyId;
                     entryDTO.part = 1;
                     entryDTO.time = dateService.getTodayDate() + ' 18:00:00';
                     inTime = await entryModel.getCheckInData(entryDTO).then((data)=>data.in_time);
                     await entryModel.checkOut(entryDTO);
                     await seatModel.deleteReservation(entryDTO);
-                    if (part1ApplyId != part2ApplyId) entryDTO.apply_id = part2ApplyId;
-                    entryDTO.part = 2;
-                    await entryModel.checkIn(entryDTO);
                 }
+                
                 entryDTO.part = 2;
                 entryDTO.apply_id = part2ApplyId;
                 entryDTO.time = dateService.getNowTime();
@@ -109,6 +110,15 @@ module.exports ={
                 await entryModel.checkOut(entryDTO);
                 await seatModel.deleteReservation(entryDTO);
             }else{
+                //1부 체크아웃 if 2부가 있다..? 2부 체크인 데이터 삭제
+                entryDTO.part = 2;
+                part2ApplyId = await seatModel.checkMySeat(entryDTO).then((data)=>data.apply_id);
+                if(part2ApplyId != undefined){
+                    entryDTO.apply_id = part2ApplyId;
+                    if(await entryModel.getCheckInData(entryDTO)){
+                        await entryModel.deleteCheckInData(entryDTO);
+                    }
+                }               
                 entryDTO.apply_id = part1ApplyId;
                 entryDTO.part = 1;
                 inTime = await entryModel.getCheckInData(entryDTO).then((data)=>data.in_time);
