@@ -91,7 +91,9 @@ module.exports ={
             let t = new Date(dateService.getTodayDate() + ' 18:00:00');
 
             if(entryDTO.part2 === true && nowTime>t){
-                if(entryDTO.part1 === true){
+                entryDTO.part = 1;
+                part1ApplyId = await seatModel.checkMySeat(entryDTO).then((data)=>data.apply_id);
+                if(part1ApplyId != undefined){
                     //1부 체크아웃 - 2부 체크아웃
                     entryDTO.apply_id = part1ApplyId;
                     entryDTO.part = 1;
@@ -109,10 +111,13 @@ module.exports ={
                 await seatModel.deleteReservation(entryDTO);
             }else{
                 //1부 체크아웃 if 2부가 있다..? 2부 체크인 데이터 삭제
-                if(entryDTO.part2 === true){
+                entryDTO.part = 2;
+                part2ApplyId = await seatModel.checkMySeat(entryDTO).then((data)=>data.apply_id);
+                if(part2ApplyId != undefined){
                     entryDTO.apply_id = part2ApplyId;
-                    entryDTO.par = 2;
-                    await entryModel.deleteCheckInData(entryDTO);
+                    if(await entryModel.getCheckInData(entryDTO)){
+                        await entryModel.deleteCheckInData(entryDTO);
+                    }
                 }               
                 entryDTO.apply_id = part1ApplyId;
                 entryDTO.part = 1;
