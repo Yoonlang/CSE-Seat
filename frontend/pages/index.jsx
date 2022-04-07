@@ -22,6 +22,10 @@ const Index = ({ data }) => {
         setIsNav(!isNav);
     }
 
+    const alertNotice = () => {
+        alert("이용불가 시간 안내\n101호 -> 4/12 11:00 ~ 12:00\n101호 -> 4/12 13:00 ~ 16:00\n104호 -> 4/13 18:00 ~ 19:30\n104호 -> 4/14 18:00 ~ 19:30");
+    }
+
     useEffect(async () => {
         try {
             const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
@@ -74,6 +78,9 @@ const Index = ({ data }) => {
 
 
             <SeatModal />
+            <div className="notice" onClick={alertNotice}>
+                <SquareImg src="/images/bell_color.png" length="25px" />
+            </div>
             <div className="refreshBtn">
                 <Refresh />
             </div>
@@ -126,6 +133,9 @@ const Index = ({ data }) => {
                     background: #fff;
                 }
                 @media(min-width: 768px){
+                    .notice{
+                        display: none;
+                    }
                     .refreshBtn{
                         display: none;
                     }
@@ -156,6 +166,22 @@ const Index = ({ data }) => {
                     .rooms .room${(targetRoom)}{
                         display: flex !important;
                         overflow-x: hidden;
+                    }
+                    .notice{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        position: fixed;
+                        bottom: 125px;
+                        right: 25px;
+                        width: 40px;
+                        height: 40px;
+                        background: #fff;
+                        border: solid;
+                        border-radius: 50% 50%;
+                        border-width: 1px;
+                        border-color: #ccc;
+                        cursor: pointer;
                     }
                     .refreshBtn{
                         display: flex;
