@@ -1,3 +1,4 @@
+import SquareImg from "../atoms/Img";
 import Refresh from "../atoms/Refresh";
 import { ColorTables } from "../molecules/ColorTables";
 import Explain from "../molecules/Explain";
@@ -15,6 +16,9 @@ const IndexHeader = ({ isNav = true }) => {
                 <div className="explain">
                     <Explain />
                 </div>
+                <div className="notice">
+                    <SquareImg src="/images/bell_color.png" length="25px" />
+                    이용불가 시간 안내<br/>101호 4/12 11:00 ~ 12:00<br/>101호 4/12 13:00 ~ 16:00<br/>104호 4/13 18:00 ~ 19:30<br/>104호 4/14 18:00 ~ 19:30</div>
                 <div className="right">
                     <div className="onlyPC">
                         <Refresh />
@@ -36,10 +40,16 @@ const IndexHeader = ({ isNav = true }) => {
             }
             .right .onlyPC{
                 display: flex;
-                gap: 25px;
+                gap: 20px;
                 height: 70%;
             }
             @media(min-width: 768px){
+                .notice{
+                    display: flex;
+                    white-space: nowrap;
+                    font-size: 16px;
+                    gap: 10px;
+                }
                 .indexHeader{
                     justify-content: space-between;
                     height: 130px;
@@ -56,6 +66,9 @@ const IndexHeader = ({ isNav = true }) => {
                 }
             }
             @media(max-width: 767px){
+                .notice{
+                    display: none;
+                }
                 .indexHeader{
                     height: 70px;
                     flex-wrap: wrap;
