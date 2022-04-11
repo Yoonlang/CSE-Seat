@@ -27,24 +27,10 @@ const getEntryState = (history) => {
 
   //취소에 따른 비활성화
 
-  if(history.part1.isPart === true && history.part2.isPart === true){
-    if(history.part1.cancel_marker === true && history.part2.cancel_marker === true){
-      history.state = 2;
-      history.part1End = true;
-      return
-    }
-  }
-  else if(history.part1.isPart === true){
-    if(history.part1.cancel_marker === true){
-      history.state = 2;
-      return
-    }
-  }
-  else if(history.part2.isPart === true){
-    if(history.part2.cancel_marker === true){
-      history.state = 2;
-      return
-    }
+  if(history.part1.isPart == false && history.part2.isPart == false){
+    history.state = 2;
+    history.part1End = true;
+    return
   }
 
     //시간 지남/안됨에 따른 state 처리 
@@ -69,9 +55,11 @@ const getEntryState = (history) => {
         return;
       }
       else if(history.part1.outTime != null){
-        history.state = 3;
         history.part1End = true;
-        return;
+        if(curT<ealry2_t){
+          history.state = 3;
+          return;
+        }
       }
     }else{
       if(curT>late1_t){
