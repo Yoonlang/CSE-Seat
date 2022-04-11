@@ -18,7 +18,7 @@ const IndexHeader = ({ isNav = true }) => {
                 </div>
                 <div className="notice">
                     <SquareImg src="/images/bell_color.png" length="25px" />
-                    이용불가 시간 안내<br/>101호 4/12 11:00 ~ 12:00<br/>101호 4/12 13:00 ~ 16:00<br/>104호 4/13 18:00 ~ 19:30<br/>104호 4/14 18:00 ~ 19:30</div>
+                    이용불가 시간 안내<br />101호 4/12 11:00 ~ 12:00<br />101호 4/12 13:00 ~ 16:00<br />104호 4/13 18:00 ~ 19:30<br />104호 4/16 09:30 ~ 10:45</div>
                 <div className="right">
                     <div className="onlyPC">
                         <Refresh />
