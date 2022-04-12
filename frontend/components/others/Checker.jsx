@@ -14,7 +14,7 @@ const Checker = () => {
     const setHistoryToOther = useSetRecoilState(historyToIndexAndInfoAtom);
     const [timer, setTimer] = useRecoilState(timerAtom);
     const { time, delay } = timer;
-    const refreshData = useRecoilValue(refreshIndexAtom);
+    const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     const { isLogin } = loginData;
 
     const handleHistoryData = (data) => {
@@ -44,6 +44,10 @@ const Checker = () => {
             console.log("Error: ", e);
         }
     }, [pathname]);
+
+    useEffect(() => {
+        setRefreshData(!refreshData);
+    }, [router.components])
 
     useEffect(async () => {
         if (pathname === '/' || pathname === '/info' || pathname === '/history') {
