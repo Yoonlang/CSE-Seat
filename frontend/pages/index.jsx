@@ -146,7 +146,7 @@ const Index = ({ data }) => {
                     }
                     .rooms{
                         height: 100%;
-                        justify-content: space-between;
+                        justify-content: space-around;
                         overflow-x: hidden;
                     }
                     .color{
