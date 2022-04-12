@@ -70,7 +70,9 @@ const Index = ({ data }) => {
                                     <div className="color"><ColorTables /></div>
                                     <RoomSeats roomNumber={num} m={m} seats={seats} />
                                 </div>
-                                <div className="bar"></div>
+                                {
+                                    index === 2 ? `` : <div className="bar"></div>
+                                }
                             </Fragment>
                         })
                 }
