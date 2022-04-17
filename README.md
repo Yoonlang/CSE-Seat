@@ -35,7 +35,6 @@
 
 ## Skills
 ### Frontend
- - HTML, CSS, Javscript
  - React
  - Next.js
  - Recoil
