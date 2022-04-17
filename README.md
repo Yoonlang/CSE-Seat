@@ -54,10 +54,6 @@
 ## Challenges
 
 ### Frontend
-- [Next.js 도전기]()
-- [Recoil 도전기]()
-- [자리 배정 알고리즘 도전기]()
-- 이외의 이슈 및 에러 해결에 대해 [블로그](https://yoonlang.github.io/)에 작성했습니다.
-
+- 이슈 및 에러 해결에 대해 [블로그](https://yoonlang.github.io/)에 작성했습니다.
 
 ### Backend
