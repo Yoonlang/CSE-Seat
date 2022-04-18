@@ -9,6 +9,7 @@ import SquareImg from '../components/atoms/Img';
 import { StyledResDiv } from '../components/atoms/Div';
 import Refresh from '../components/atoms/Refresh';
 import { ColorTables } from '../components/molecules/ColorTables';
+import { alertMessageInMobile } from '../components/others/manageNotification';
 
 const Index = ({ data }) => {
     const [updateData, setUpdateData] = useState();
@@ -23,7 +24,7 @@ const Index = ({ data }) => {
     }
 
     const alertNotice = () => {
-        alert("이용불가 시간 안내\n104호 4/16 09:30 ~ 10:45\n104호 4/18 13:30 ~ 14:40\n104호 4/22 09:00 ~ 13:00");
+        alert(alertMessageInMobile);
     }
 
     useEffect(async () => {

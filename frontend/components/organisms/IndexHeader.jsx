@@ -4,6 +4,7 @@ import { ColorTables } from "../molecules/ColorTables";
 import Explain from "../molecules/Explain";
 import IndexNav from "../molecules/IndexNav";
 import TodayButton from "../molecules/TodayButton";
+import { AlertMessageInPC } from "../others/manageNotification";
 
 const IndexHeader = ({ isNav = true }) => {
     return (
@@ -18,7 +19,8 @@ const IndexHeader = ({ isNav = true }) => {
                 </div>
                 <div className="notice">
                     <SquareImg src="/images/bell_color.png" length="25px" />
-                    이용불가 시간 안내<br />104호 4/16 09:30 ~ 10:45<br />104호 4/18 13:30 ~ 14:40<br />104호 4/22 09:00 ~ 13:00</div>
+                    <AlertMessageInPC />
+                </div>
                 <div className="right">
                     <div className="onlyPC">
                         <Refresh />
