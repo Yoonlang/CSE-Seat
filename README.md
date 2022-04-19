@@ -53,6 +53,6 @@
 ## Challenges
 
 ### Frontend
-- 이슈 및 에러 해결에 대해 [블로그](https://yoonlang.github.io/)에 작성했습니다.
+- 이슈 및 에러 해결에 대해 [노션](https://vanilla-newsprint-d3e.notion.site/d49c3bca4f354cc2a1934870b9738763)에 작성했습니다.
 
 ### Backend
