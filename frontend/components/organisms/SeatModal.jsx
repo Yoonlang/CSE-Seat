@@ -6,6 +6,7 @@ import { isInLocation } from "../others/checkPos";
 import { historyToIndexAndInfoAtom, loadingCheckInAtom, loginAtom, notificationAtom, refreshIndexAtom, seatModalAtom } from "../others/state";
 
 const SeatModal = () => {
+
     const loginData = useRecoilValue(loginAtom);
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     const [modalState, setModalState] = useRecoilState(seatModalAtom);

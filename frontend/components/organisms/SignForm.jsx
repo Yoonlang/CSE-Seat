@@ -154,6 +154,10 @@ const SignForm = () => {
 
     const sendEmail = async (e) => {
         e.preventDefault();
+        if (inputValue[4] === "@knu.ac.kr") {
+            alert("잘못된 이메일입니다.");
+            return;
+        }
         if (emailBtn.current.className.indexOf("shake") !== -1)
             emailBtn.current.className = emailBtn.current.className.substr(0, emailBtn.current.className.length - 6);
 
