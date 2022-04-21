@@ -154,7 +154,7 @@ const SignForm = () => {
 
     const sendEmail = async (e) => {
         e.preventDefault();
-        if (inputValue[4] === "@knu.ac.kr") {
+        if (inputValue[4] === "@knu.ac.kr" || inputValue[4].indexOf(' ') !== -1) {
             alert("잘못된 이메일입니다.");
             return;
         }
