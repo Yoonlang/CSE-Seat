@@ -85,53 +85,65 @@ module.exports = {
     },
     mail : async (mail_address) => {
         try{
-            // redisClient.select(1);
-            // if(await redisClient.get(mail_address) != null)
-            //     return {result: false, message: '1분뒤 재요청할 수 있습니다.'};
-            // if(mail_address.split('@')[1] !='knu.ac.kr')
-            //     return {result: false, message: '@knu.ac.kr 이메일이 아닙니다.'};
+            redisClient.select(1);
+            if(await redisClient.get(mail_address) != null)
+                return {result: false, message: '1분뒤 재요청할 수 있습니다.'};
+            if(mail_address.split('@')[1] !='knu.ac.kr')
+                return {result: false, message: '@knu.ac.kr 이메일이 아닙니다.'};
 
-            // let authNum = crypto.randomInt(100000, 999999);
-            // let emailTemplete;
-            // ejs.renderFile(appDir+'/template/mail.ejs', {authCode : authNum}, function (err, data) {
-            //   if(err){console.log(err)}
-            //   emailTemplete = data;
-            // });
+            let authNum = crypto.randomInt(100000, 999999);
+            let emailTemplete;
+            ejs.renderFile(appDir+'/template/mail.ejs', {authCode : authNum}, function (err, data) {
+              if(err){console.log(err)}
+              emailTemplete = data;
+            });
+
+            if (
+                !process.env.CLIENT_ID || 
+                !process.env.CLIENT_SECRET || 
+                !process.env.REFRESH_TOKEN
+              ) {
+                throw Error('OAuth 인증에 필요한 환경변수가 없습니다.');
+              }
         
-            // let transporter = nodemailer.createTransport({
-            //     service: 'gmail',
-            //     host: 'smtp.gmail.com',
-            //     port: 587,
-            //     secure: false,
-            //     auth: {
-            //         user: process.env.NODEMAILER_USER,
-            //         pass: process.env.NODEMAILER_PASS,
-            //     },
-            // });
         
-            // let mailOptions = {
-            //     from: process.env.NODEMAILER_USER,
-            //     to: mail_address,
-            //     subject: '회원가입을 위한 인증번호를 입력해주세요.',
-            //     html: emailTemplete,
-            // };
-            // transporter.sendMail(mailOptions, (error, info) => {
-            //     if (error) {
-            //         console.log('메일 error',error);
-            //         transporter.close();
-            //         throw new Error('메일 전송 실패: ', mail_address);
-            //     }
-            //     transporter.close();
-            // });
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                port: 587,
+                secure: true,
+                auth: {
+                    type: 'OAuth2',
+                    user: process.env.NODEMAILER_USER,
+                    pass: process.env.NODEMAILER_PASS,
+                    clientId: process.env.CLIENT_ID,
+                    clientSecret: process.env.CLIENT_SECRET,
+                    refreshToken: process.env.REFRESH_TOKEN
+                  }
+            });
+        
+            let mailOptions = {
+                from: process.env.NODEMAILER_USER,
+                to: mail_address,
+                subject: '회원가입을 위한 인증번호를 입력해주세요.',
+                html: emailTemplete,
+            };
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log('메일 error',error);
+                    transporter.close();
+                    throw new Error('메일 전송 실패: ', mail_address);
+                }
+                transporter.close();
+            });
             
             
-            // await redisClient.select(0);
-            // await redisClient.set(mail_address, String(authNum));
-            // await redisClient.expire(mail_address, 600);
-            // await redisClient.select(1);
-            // await redisClient.set(mail_address, String(authNum));
-            // await redisClient.expire(mail_address, 60);
-            return {result: false, message: '관리자에게 문의해주세요 '};
+            await redisClient.select(0);
+            await redisClient.set(mail_address, String(authNum));
+            await redisClient.expire(mail_address, 600);
+            await redisClient.select(1);
+            await redisClient.set(mail_address, String(authNum));
+            await redisClient.expire(mail_address, 60);
+            return {result: true};
         }catch(e){
             console.log('emailService Login error: ',e)
             return e;
