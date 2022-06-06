@@ -85,6 +85,7 @@ module.exports = {
     },
     mail : async (mail_address) => {
         try{
+            return {result: false, message: "메일 점검중입니다."};
             redisClient.select(1);
             if(await redisClient.get(mail_address) != null)
                 return {result: false, message: '1분뒤 재요청할 수 있습니다.'};
