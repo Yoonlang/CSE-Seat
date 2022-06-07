@@ -131,7 +131,7 @@ module.exports = {
                 if (error) {
                     console.log('메일 error',error);
                     transporter.close();
-                    throw new Error('메일 전송 실패: ', mail_address);
+                    return {result: false, message: "메일 전송 실패. 관리자에게 문의하세요"};
                 }
                 transporter.close();
             });
