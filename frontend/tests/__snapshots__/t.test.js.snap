@@ -1,0 +1,207 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test 1`] = `
+<div>
+  <div
+    class="footerDiv"
+  >
+    <div
+      class="sc-hKwDye bjorQH"
+      color=""
+      display="flex"
+      height="40px"
+      width="100%"
+    >
+      <div
+        class="footerTitle"
+      >
+        <span
+          class="title"
+        >
+          CSE Seat
+        </span>
+      </div>
+    </div>
+    <div
+      class="footerSubDiv"
+    >
+      <div
+        class="sc-hKwDye hlYtCT"
+        color=""
+        display="flex"
+        height="25px"
+        width="200px"
+      >
+        <span>
+          CSE : 
+        </span>
+        <a
+          href="https://www.instagram.com/knu_cse/"
+        >
+          <img
+            class="sc-jRQBWg fhJfHe"
+            opacity="1"
+            radius="0"
+            src="/images/instagram.png"
+          />
+        </a>
+      </div>
+      <div
+        class="sc-hKwDye cThdpi"
+        color=""
+        display="flex"
+        height="25px"
+        width="200px"
+      >
+        <span>
+          Contact : pove2019@gmail.com
+        </span>
+      </div>
+    </div>
+    <div
+      class="footerSubDiv"
+    >
+      <div
+        class="sc-hKwDye hlYtCT"
+        color=""
+        display="flex"
+        height="25px"
+        width="200px"
+      >
+        <span>
+          Developers : 
+        </span>
+        <div
+          class="sc-hKwDye iFpcNF"
+          color=""
+          display="flex"
+          height="25px"
+          hidden=""
+          width="25px"
+        >
+          <a
+            href="https://www.instagram.com/yoonlang__/"
+          >
+            <img
+              class="sc-jRQBWg fhJfHe"
+              opacity="1"
+              radius="0"
+              src="/images/instagram.png"
+            />
+          </a>
+        </div>
+        <div
+          class="sc-hKwDye iFpcNF"
+          color=""
+          display="flex"
+          height="25px"
+          hidden=""
+          width="25px"
+        >
+          <a
+            href="https://www.instagram.com/cold__rainnn/"
+          >
+            <img
+              class="sc-jRQBWg fhJfHe"
+              opacity="1"
+              radius="0"
+              src="/images/instagram_color.png"
+            />
+          </a>
+        </div>
+      </div>
+      <div
+        class="sc-hKwDye hlYtCT"
+        color=""
+        display="flex"
+        height="25px"
+        width="200px"
+      >
+        <span
+          class="github"
+        >
+          Github : 
+        </span>
+        <a
+          href="https://github.com/Yoonlang"
+        >
+          <img
+            class="sc-jRQBWg eWCpMb"
+            opacity="1"
+            radius="0"
+            src="/images/github.png"
+          />
+        </a>
+        <a
+          href="https://github.com/chanwooDev"
+        >
+          <img
+            class="sc-jRQBWg imMqBm"
+            opacity="1"
+            radius="0"
+            src="/images/github_color.png"
+          />
+        </a>
+      </div>
+    </div>
+  </div>
+  <style
+    jsx="true"
+  >
+    
+            span{
+                color: #fff;
+                font-size: 12px;
+            }
+            .github{
+                margin-left: 24px;
+            }
+            .title{
+                margin-top: 10px;
+                font-size: 14px;
+            }
+            .footerDiv{
+                display:flex;
+                width: 100%;
+                justify-content: center;
+                align-items: center;
+                background: #373737;
+            }
+            .footerTitle{
+                display:flex;
+                width: 200px;
+            }
+            .footerSubDiv{
+                display:flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 80ox;
+                gap: 12px;
+            }
+            @media(min-width: 480px){
+                .footerDiv{
+                    height: 150px;
+                    flex-wrap: wrap;
+                }
+                .footerTitle{
+                    justify-content: center;
+                }
+                .footerSubDiv{
+                    width: 50%;
+                }
+            }
+            @media(max-width: 479px){
+                .footerDiv{
+                    height: 220px;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+                .footerSubDiv{
+                    width: 100%;
+                }
+            }
+        
+  </style>
+</div>
+`;
