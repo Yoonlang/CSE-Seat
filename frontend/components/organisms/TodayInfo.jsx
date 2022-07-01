@@ -1,11 +1,11 @@
 import { Fragment, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import Checkbox from "../atoms/Checkbox";
 import { MyLink } from "../atoms/Div";
+import TodayInfoCheckboxes from "../molecules/TodayInfoCheckboxes";
+import TodayInfoInOutBtns from "../molecules/TodayInfoInOutBtns";
 import { isInLocation } from "../others/checkPos";
 import { historyToIndexAndInfoAtom, loadingCheckInAtom, notificationAtom, refreshIndexAtom } from "../others/state";
-
-const todayIntro = [`오늘`, `1부`, ``, `2부`, `내일`, `1부`, ``, `2부`,]
+import TodayInfoSeatData from "./TodayInfoSeatData";
 
 const TodayInfo = () => {
     const [isSelectCancel, setIsSelectCancel] = useState(false);
@@ -204,147 +204,50 @@ const TodayInfo = () => {
     return (
         <>
             <div className="today">
-                <div className="todayInfo">
-                    {
-                        handledInfoData?.map((prop, index) => {
-                            const { isPart, showingData: { seatNum, seatRoom } } = prop;
-                            return (<Fragment key={prop, index}>
-                                <span>{todayIntro[index * 2]}</span>
-                                <span>{todayIntro[index * 2 + 1]}</span>
-                                {isPart ? <span>{seatRoom}호 {seatNum}번 좌석</span> : <span></span>}
-                            </Fragment>)
-                        })
-                    }
-                </div>
+                <TodayInfoSeatData seatData={handledInfoData} />
                 <div className="infoOption">
                     {isSelectCancel ?
-                        <>
-                            {
-                                checkboxState.map((prop, index) => {
-                                    return (
-                                        <div key={prop, index} onClick={() => clickCheckbox(index)}>
-                                            <Checkbox state={checkboxState[index]} />
-                                        </div>
-                                    );
-                                })
-                            }
-                        </>
+                        <TodayInfoCheckboxes checkboxState={checkboxState} clickCheckbox={clickCheckbox} />
                         :
-                        <>
-                            {
-                                handledInfoData?.map((prop, index) => {
-                                    const { isPart, showingData: { checkState }, fetchingData } = prop;
-                                    return (<div key={prop, index}>
-                                        {isPart ?
-                                            (checkState === 0 ?
-                                                <><button className="on" onClick={() => submitCheck(true, fetchingData)}>입실</button>
-                                                    <button className="off">퇴실</button></> :
-                                                checkState === 1 ?
-                                                    <><button className="off">입실</button>
-                                                        <button className="on" onClick={() => submitCheck(false, fetchingData)}>퇴실</button></> :
-                                                    <><button className="off">입실</button><button className="off">퇴실</button></>) :
-                                            <><button className="hide">입실</button><button className="hide">퇴실</button></>}
-                                    </div>)
-                                })
-                            }
-                        </>
+                        <TodayInfoInOutBtns seatData={handledInfoData} submit={submitCheck} />
                     }
                 </div>
                 <MyLink href="/history" border width="140px" height="30px" fontSize="13px">신청 기록 확인</MyLink>
                 <button className="cancelBtn" onClick={handleCancel}>{isSelectCancel ? "취소하기" : "자리 취소"}</button>
             </div>
-            <style jsx>{`
-        .today{
-            display: grid;
-            grid-template-columns: 230px 1fr;
-            grid-template-rows: 140px 50px;
-            justify-items: flex-end;
-            align-items: flex-end;
-            width: 100%;
-            max-width: 400px;
-            height: 100%;
-            padding: 0 5px;
-            margin-bottom: 40px;
-        }
-        .todayInfo{
-            display: grid;
-            grid-template-rows: 1fr 1fr 1fr 1fr;
-            width: 100%;
-            height: 100%;
-            align-items: center;
-        }
-        .todayInfo > span{
-            text-align: center;
-        }
-        .infoOption{
-            display:flex;
-            flex-direction: column;
-            justify-content: space-around;
-            justify-self: center;
-            height: 100%;
-        }
-        span{
-            white-space: nowrap;
-        }
-        ${(isSelectCancel ? `
-        .infoOption div{
-            display: flex;
-            width: 25px;
-            height: 25px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-        ` : `
-        .infoOption div{
-            display: flex;
-            gap: 7px;
-        }
-        .infoOption button{
-            width: 50px;
-            height: 25px;
-            border: 1px solid #ddd;
-            outline: none;
-            background: #fff;
-            cursor: pointer;
-        }
-        `)}
-        .cancelBtn{
-            width: 100px;
-            height: 30px;
-            background: #fff;
-            outline: none;
-            border: 1px solid #ddd;
-            font-size: 13px;
-            justify-self: center;
-        }
-        .hide{
-            visibility: hidden;
-        }
-        .off{
-            background: #fff;
-            outline: none;
-            border: 1px solid #ddd;
-            color: #ddd;
-            cursor: default;
-        }
-        .on{
-            background: #fff;
-            outline: none;
-            border: 1px solid #999;
-            color: #000;
-            cursor: pointer;
-        }
-        @media(min-width: 480px){
-            .todayInfo{
-                grid-template-columns: 60px 60px 1fr;
+            <style jsx="true">{`
+            .today{
+                display: grid;
+                grid-template-columns: 230px 1fr;
+                grid-template-rows: 140px 50px;
+                justify-items: flex-end;
+                align-items: flex-end;
+                width: 100%;
+                max-width: 400px;
+                height: 100%;
+                padding: 0 5px;
+                margin-bottom: 40px;
             }
-        }
-        @media(max-width: 479px){
-            .todayInfo{
-                grid-template-columns: 50px 50px 1fr;
+            .infoOption{
+                display:flex;
+                flex-direction: column;
+                justify-content: space-around;
+                justify-self: center;
+                height: 100%;
             }
-        }
-    `}</style>
+            span{
+                white-space: nowrap;
+            }
+            .cancelBtn{
+                width: 100px;
+                height: 30px;
+                background: #fff;
+                outline: none;
+                border: 1px solid #ddd;
+                font-size: 13px;
+                justify-self: center;
+            }
+        `}</style>
         </>);
 }
 
