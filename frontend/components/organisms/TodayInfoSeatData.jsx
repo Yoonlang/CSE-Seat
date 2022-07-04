@@ -2,7 +2,6 @@ import { Fragment } from "react";
 
 const TodayInfoSeatData = ({ seatData }) => {
     const todayIntro = [`오늘`, `1부`, ``, `2부`, `내일`, `1부`, ``, `2부`,]
-
     return <>
         <div className="todayInfo">
             {

@@ -1,11 +1,62 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { MyLink } from "../atoms/Div";
 import TodayInfoCheckboxes from "../molecules/TodayInfoCheckboxes";
 import TodayInfoInOutBtns from "../molecules/TodayInfoInOutBtns";
 import { isInLocation } from "../others/checkPos";
+import { myFetch } from "../others/fetch";
 import { historyToIndexAndInfoAtom, loadingCheckInAtom, notificationAtom, refreshIndexAtom } from "../others/state";
 import TodayInfoSeatData from "./TodayInfoSeatData";
+
+const handleCheckData = (req) => {
+    const tempInfoData = [];
+    for (let i = 0; i < 4; i++) {
+        tempInfoData.push(JSON.parse(JSON.stringify({
+            isPart: false,
+            showingData: {
+                checkState: undefined,
+                seatRoom: undefined,
+                seatNum: undefined,
+            },
+            fetchingData: {
+                buildingId: undefined,
+                seatRoom: undefined,
+                seatNum: undefined,
+                isToday: undefined,
+            },
+        })));
+    }
+
+    req?.forEach(({ isToday, part1, part2, part1End, state }) => {
+        const dayIndex = isToday ? 0 : 2;
+        if (part1.isPart && !part1.cancel_marker && ((part2.isPart & !part1End) | (!part2.isPart))) {
+            const tempData = tempInfoData[dayIndex]
+            tempData.isPart = true;
+            tempData.showingData.checkState = state;
+            tempData.showingData.seatNum = part1.seat_num;
+            tempData.showingData.seatRoom = part1.seat_room;
+            tempData.fetchingData.buildingId = part1.building_id;
+            tempData.fetchingData.isToday = isToday;
+            tempData.fetchingData.seatNum = part1.seat_num;
+            tempData.fetchingData.seatRoom = part1.seat_room;
+        }
+        if (part2.isPart && !part2.cancel_marker) {
+            const tempData = tempInfoData[dayIndex + 1]
+            tempData.isPart = true;
+            if (isToday && part1.isPart && !part1.cancel_marker && !part1End)
+                tempData.showingData.checkState = 3;
+            else
+                tempData.showingData.checkState = state;
+            tempData.showingData.seatNum = part2.seat_num;
+            tempData.showingData.seatRoom = part2.seat_room;
+            tempData.fetchingData.buildingId = part2.building_id;
+            tempData.fetchingData.isToday = isToday;
+            tempData.fetchingData.seatNum = part2.seat_num;
+            tempData.fetchingData.seatRoom = part2.seat_room;
+        }
+    });
+    return tempInfoData
+}
 
 const TodayInfo = () => {
     const [isSelectCancel, setIsSelectCancel] = useState(false);
@@ -25,20 +76,13 @@ const TodayInfo = () => {
                     if (prop === 1) {
                         try {
                             const { seatNum, seatRoom, isToday, buildingId } = handledInfoData[index].fetchingData;
-                            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation-cancel", {
-                                method: "POST",
-                                credentials: "include",
-                                headers: {
-                                    "Content-Type": "application/json"
-                                },
-                                body: JSON.stringify({
-                                    building_id: buildingId,
-                                    seat_room: seatRoom,
-                                    seat_num: seatNum,
-                                    isToday: isToday,
-                                    part1: index % 2 === 0 ? true : false,
-                                    part2: index % 2 === 1 ? true : false,
-                                })
+                            const res = await myFetch("POST", "/seat/reservation-cancel", {
+                                building_id: buildingId,
+                                seat_room: seatRoom,
+                                seat_num: seatNum,
+                                isToday: isToday,
+                                part1: index % 2 === 0 ? true : false,
+                                part2: index % 2 === 1 ? true : false,
                             })
                             const data = await res.json();
                             if (res.status === 400) throw "잠시 후 다시 시도해주세요";
@@ -67,89 +111,6 @@ const TodayInfo = () => {
         }
     }
 
-    const handleCheckData = (req) => {
-        const tempInfoData = [{
-            isPart: false,
-            showingData: {
-                checkState: undefined,
-                seatRoom: undefined,
-                seatNum: undefined,
-            },
-            fetchingData: {
-                buildingId: undefined,
-                seatRoom: undefined,
-                seatNum: undefined,
-                isToday: undefined,
-            },
-        }, {
-            isPart: false,
-            showingData: {
-                checkState: undefined,
-                seatRoom: undefined,
-                seatNum: undefined,
-            },
-            fetchingData: {
-                buildingId: undefined,
-                seatRoom: undefined,
-                seatNum: undefined,
-                isToday: undefined,
-            },
-        }, {
-            isPart: false,
-            showingData: {
-                checkState: undefined,
-                seatRoom: undefined,
-                seatNum: undefined,
-            },
-            fetchingData: {
-                buildingId: undefined,
-                seatRoom: undefined,
-                seatNum: undefined,
-                isToday: undefined,
-            },
-        }, {
-            isPart: false,
-            showingData: {
-                checkState: undefined,
-                seatRoom: undefined,
-                seatNum: undefined,
-            },
-            fetchingData: {
-                buildingId: undefined,
-                seatRoom: undefined,
-                seatNum: undefined,
-                isToday: undefined,
-            },
-        }];
-        req?.forEach(({ isToday, part1, part2, part1End, state }) => {
-            const dayIndex = isToday ? 0 : 2;
-            if (part1.isPart && !part1.cancel_marker && ((part2.isPart & !part1End) | (!part2.isPart))) {
-                tempInfoData[dayIndex].isPart = true;
-                tempInfoData[dayIndex].showingData.checkState = state;
-                tempInfoData[dayIndex].showingData.seatNum = part1.seat_num;
-                tempInfoData[dayIndex].showingData.seatRoom = part1.seat_room;
-                tempInfoData[dayIndex].fetchingData.buildingId = part1.building_id;
-                tempInfoData[dayIndex].fetchingData.isToday = isToday;
-                tempInfoData[dayIndex].fetchingData.seatNum = part1.seat_num;
-                tempInfoData[dayIndex].fetchingData.seatRoom = part1.seat_room;
-            }
-            if (part2.isPart && !part2.cancel_marker) {
-                tempInfoData[dayIndex + 1].isPart = true;
-                if (isToday && part1.isPart && !part1.cancel_marker && !part1End)
-                    tempInfoData[dayIndex + 1].showingData.checkState = 3;
-                else
-                    tempInfoData[dayIndex + 1].showingData.checkState = state;
-                tempInfoData[dayIndex + 1].showingData.seatNum = part2.seat_num;
-                tempInfoData[dayIndex + 1].showingData.seatRoom = part2.seat_room;
-                tempInfoData[dayIndex + 1].fetchingData.buildingId = part2.building_id;
-                tempInfoData[dayIndex + 1].fetchingData.isToday = isToday;
-                tempInfoData[dayIndex + 1].fetchingData.seatNum = part2.seat_num;
-                tempInfoData[dayIndex + 1].fetchingData.seatRoom = part2.seat_room;
-            }
-        });
-        setHandledInfoData(tempInfoData);
-    }
-
     const submitCheck = async (isCheckIn, { buildingId, seatNum, seatRoom }) => {
         if (isCheckIn) setIsCheckInLoading(true);
         if (isCheckIn && !await isInLocation()) {
@@ -158,19 +119,12 @@ const TodayInfo = () => {
         }
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
         try {
-            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    building_id: buildingId,
-                    seat_room: seatRoom,
-                    seat_num: seatNum,
-                    part1: handledInfoData[0].isPart,
-                    part2: handledInfoData[1].isPart,
-                })
+            const res = await myFetch("POST", leftURL, {
+                building_id: buildingId,
+                seat_room: seatRoom,
+                seat_num: seatNum,
+                part1: handledInfoData[0].isPart,
+                part2: handledInfoData[1].isPart,
             })
             const data = await res.json();
             if (res.status === 400) throw "잠시 후 다시 시도해주세요";
@@ -188,7 +142,10 @@ const TodayInfo = () => {
     }
 
     useEffect(() => {
-        if (checkData) handleCheckData(checkData);
+        if (checkData) {
+            const tempInfoData = handleCheckData(checkData)
+            setHandledInfoData(tempInfoData)
+        }
     }, [checkData])
 
     useEffect(() => {
