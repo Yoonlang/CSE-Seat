@@ -3,10 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Seat, seatColor } from "../atoms/Seat";
 import { isInLocation } from "../others/checkPos";
+import { myFetch } from "../others/fetch";
 import { historyToIndexAndInfoAtom, loadingCheckInAtom, loginAtom, notificationAtom, refreshIndexAtom, seatModalAtom } from "../others/state";
 
 const SeatModal = () => {
-
     const loginData = useRecoilValue(loginAtom);
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
     const [modalState, setModalState] = useRecoilState(seatModalAtom);
@@ -63,20 +63,13 @@ const SeatModal = () => {
 
     const fetchingCancel = async (one = isReadyToRequest[0], two = isReadyToRequest[1], isFinish = true) => {
         try {
-            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation-cancel", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    building_id: "414",
-                    seat_room: roomNumber.toString(),
-                    seat_num: seatNumber.toString(),
-                    isToday: isToday,
-                    part1: one,
-                    part2: two,
-                })
+            const res = await myFetch("POST", "/seat/reservation-cancel", {
+                building_id: "414",
+                seat_room: roomNumber.toString(),
+                seat_num: seatNumber.toString(),
+                isToday: isToday,
+                part1: one,
+                part2: two,
             })
             const data = await res.json();
             if (res.status === 400) throw "잠시 후 다시 시도해주세요";
@@ -96,20 +89,13 @@ const SeatModal = () => {
 
     const fetchingReservation = async (one = isReadyToRequest[0], two = isReadyToRequest[1]) => {
         try {
-            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/seat/reservation", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    building_id: "414",
-                    seat_room: [roomNumber.toString()],
-                    seat_num: seatNumber.toString(),
-                    isToday: isToday,
-                    part1: one,
-                    part2: two,
-                })
+            const res = await myFetch("POST", "/seat/reservation", {
+                building_id: "414",
+                seat_room: [roomNumber.toString()],
+                seat_num: seatNumber.toString(),
+                isToday: isToday,
+                part1: one,
+                part2: two,
             })
             const data = await res.json();
             if (res.status === 400) throw "잠시 후 다시 시도해주세요";
@@ -161,19 +147,12 @@ const SeatModal = () => {
         }
         const leftURL = isCheckIn ? "/entry/check-in" : "/entry/check-out";
         try {
-            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + leftURL, {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    building_id: "414",
-                    seat_room: roomNumber.toString(),
-                    seat_num: seatNumber.toString(),
-                    part1: isMySeat[0],
-                    part2: isMySeat[1],
-                })
+            const res = await myFetch("POST", leftURL, {
+                building_id: "414",
+                seat_room: roomNumber.toString(),
+                seat_num: seatNumber.toString(),
+                part1: isMySeat[0],
+                part2: isMySeat[1],
             })
             const data = await res.json();
             if (res.status === 400) throw "잠시 후 다시 시도해주세요";
