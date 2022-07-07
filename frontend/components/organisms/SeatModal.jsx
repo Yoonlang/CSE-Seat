@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Seat, seatColor } from "../atoms/Seat";
+import SeatModalInOutBtns from "../molecules/SeatModalInOutBtns";
 import { isInLocation } from "../others/checkPos";
 import { myFetch } from "../others/fetch";
 import { historyToIndexAndInfoAtom, loadingCheckInAtom, loginAtom, notificationAtom, refreshIndexAtom, seatModalAtom } from "../others/state";
@@ -237,23 +238,7 @@ const SeatModal = () => {
 
                     {isMySeat[0] | isMySeat[1] ?
                         <>
-                            <div className="check">
-                                {
-                                    myState === 3 ? <>
-                                        <button className="off">입실</button>
-                                        <button className="off">퇴실</button>
-                                    </> :
-                                        myState === 0 ?
-                                            <>
-                                                <button className="on" onClick={() => handleCheck(true)}>입실</button>
-                                                <button className="off">퇴실</button>
-                                            </> :
-                                            <>
-                                                <button className="off">입실</button>
-                                                <button className="on" onClick={() => handleCheck(false)}>퇴실</button>
-                                            </>
-                                }
-                            </div>
+                            <SeatModalInOutBtns myState={myState} handleCheck={handleCheck} />
                             <button className="submit" onClick={clickBtn}>자리 수정</button>
                         </>
                         :
@@ -357,60 +342,31 @@ const SeatModal = () => {
                     twoColor === 2 ? "pointer" : "default")};
                 color: ${(twoColor === seatColor[0] ? "#000" : "#fff")};
             }
-            .check{
-                display: flex;
-                justify-content: center;
-                width: 100%;
-                gap: 20px;
-                margin: 10px 0;
-            }
-            .check button{
-                width: 80px;
-                height: 35px;
-            }
-            .check span{
-                width: 200px !important;
-                height: 100%;
-            }
-            .off{
-                background: #fff;
-                outline: none;
-                border: 1px solid #ddd;
-                color: #ddd;
-                cursor: default;
-            }
-            .on{
-                background: #fff;
-                outline: none;
-                border: 1px solid #999;
-                color: #000;
-                cursor: pointer;
-            }
             .submit{
-                position: absolute;
-                bottom: 25px;
-                width: 160px;
-                height: 40px;
-                outline: none;
-                border: solid;
-                border-width: 1px;
-                background: #fff;
-                ${(isReadyToRequest[0] | isReadyToRequest[1] ?
+            position: absolute;
+            bottom: 25px;
+            width: 160px;
+            height: 40px;
+            outline: none;
+            border: solid;
+            border-width: 1px;
+            background: #fff;
+            ${(isReadyToRequest[0] | isReadyToRequest[1] ?
                     `
-                    box-shadow: 0 0 1px;
-                    border-color: #999;
-                    cursor: pointer;
-                    color: #000;
-                    `
+                box-shadow: 0 0 1px;
+                border-color: #999;
+                cursor: pointer;
+                color: #000;
+                `
                     :
                     `
-                    border-color: #ddd;
-                    color: #ddd;
-                    cursor: default;
-                    `
+                border-color: #ddd;
+                color: #ddd;
+                cursor: default;
+                `
                 )}
-                transition: 0.2s;
-            }
+            transition: 0.2s;
+        }
         `}</style>
         </>
     );
