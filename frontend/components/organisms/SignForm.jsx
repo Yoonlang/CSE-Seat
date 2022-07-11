@@ -6,13 +6,16 @@ import { emailAtom, inputValueAtom, loginAtom, notificationAtom } from "../other
 import Checkbox from "../atoms/Checkbox";
 import SquareImg from "../atoms/Img";
 import Timer from "./Timer";
+import myFetch from "../others/fetch"
+import SignInForm from "./SignInForm";
+import SignUpForm from "./SignUpForm";
 
 const SignForm = () => {
     const [isLoginForm, setIsLoginForm] = useState(true);
     const [isFailed, setIsFailed] = useState(false);
     const [handleEmail, setHandleEmail] = useRecoilState(emailAtom);
     const { isHoldEmail, isHoldAuth, isEmailButton } = handleEmail;
-    const [isShake, setIsShake] = useState([false, false, false, false, false, false, false, false,]);
+    const [isShake, setIsShake] = useState(new Array(8).fill(false));
     const [isSamePassword, setIsSamePassword] = useState(false);
     const [preventPushBtnTwice, setPreventPushBtnTwice] = useState({
         sendEmailBtn: false,
@@ -36,16 +39,9 @@ const SignForm = () => {
         if (inputValue[0].length >= 4 && inputValue[1].length >= 4) {
             e.preventDefault();
             try {
-                const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/login/process", {
-                    method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        sid: inputValue[0],
-                        password: inputValue[1]
-                    })
+                const res = await myFetch("POST", "/user/login/process", {
+                    sid: inputValue[0],
+                    password: inputValue[1]
                 })
                 const data = await res.json();
                 if (res.status === 400) throw "잠시 후 다시 시도해주세요";
@@ -93,19 +89,12 @@ const SignForm = () => {
         })
         if (inputValue[2].length >= 4 && inputValue[3].length >= 2 && inputValue[4].length >= 10 && inputValue[5].length === 6 && !isHoldAuth && inputValue[6].length >= 4 && inputValue[7].length >= 4) {
             try {
-                const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/join/process", {
-                    method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        sid: inputValue[2],
-                        password: inputValue[7],
-                        name: inputValue[3],
-                        email: inputValue[4],
-                        authNum: inputValue[5],
-                    })
+                const res = await myFetch("POST", "/user/join/process", {
+                    sid: inputValue[2],
+                    password: inputValue[7],
+                    name: inputValue[3],
+                    email: inputValue[4],
+                    authNum: inputValue[5],
                 })
                 const data = await res.json();
                 if (res.status === 400) throw "잠시 후 다시 시도해주세요";
@@ -117,9 +106,7 @@ const SignForm = () => {
                         isLogin: true,
                         sid: undefined,
                     });
-                    setInputValue([
-                        '', '', '', '', '', '', '', '',
-                    ])
+                    setInputValue(new Array(8).fill(''))
                 }
             } catch (e) {
                 alert(e);
@@ -172,15 +159,8 @@ const SignForm = () => {
         });
 
         try {
-            const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/mail", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    mail: inputValue[4],
-                })
+            const res = await myFetch("POST", "/user/mail", {
+                mail: inputValue[4],
             })
             const data = await res.json();
             if (res.status === 400) throw "잠시 후 다시 시도해주세요";
@@ -318,89 +298,9 @@ const SignForm = () => {
         <>
             {
                 isLoginForm ?
-                    <form className="signForm">
-                        <SignInput src="/images/user.png"
-                            radius="5px"
-                            isShake={isShake[0]}
-                            num={0} />
-                        <SignInput src="/images/lock.png"
-                            maxLength={10}
-                            type="password"
-                            placeholder="비밀번호"
-                            isShake={isShake[1]}
-                            num={1} />
-                        <span className="signInError">
-                            {
-                                isShake[0] & isShake[1] ?
-                                    `학번과 비밀번호를 4자리 이상 입력해주세요.` :
-                                    isShake[0] ? `학번을 4자리 이상 입력해주세요.` :
-                                        isShake[1] ? `비밀번호를 4자리 이상 입력해주세요.` :
-                                            isFailed ?
-                                                `학번 또는 비밀번호를 잘못 입력했습니다.` :
-                                                ``
-                            }
-                        </span>
-                        <button className="formBtn" ref={signInBtn} onClick={handleSignIn}>로그인</button>
-                        <div className="changeBtn" onClick={changeFormState}>회원가입</div>
-                    </form>
+                    <SignInForm />
                     :
-                    <form className="signForm" ref={signUpForm}>
-                        <SignInput src="/images/user.png"
-                            radius="5px"
-                            isShake={isShake[2]}
-                            num={2} />
-                        <SignInput src="/images/user.png"
-                            radius="5px"
-                            placeholder="이름"
-                            minLength={2}
-                            isShake={isShake[3]}
-                            num={3} />
-                        <SignInput src="/images/mail.png"
-                            length="28px"
-                            placeholder="학교 이메일"
-                            isHold={isHoldEmail}
-                            minLength={10}
-                            isShake={isShake[4]}
-                            num={4} />
-                        {
-                            isHoldAuth ?
-                                isEmailButton ?
-                                    <button className="sendEmailBtn" onFocus={focusOnSendEmailBtn} onBlur={blurOnSendEmailBtn} onClick={sendEmail} ref={emailBtn} disabled={preventSendEmailBtn}>이메일 인증 받기 <div className="stay" ref={airplane}><SquareImg src="/images/send.png" length="20px" /></div></button>
-                                    :
-                                    <div className="sendEmailBtn">이메일 인증 받기 <SquareImg src="/images/send.png" length="20px" /></div>
-                                :
-                                <>
-                                    <SignInput src="/images/check.png"
-                                        radius="5px"
-                                        length="23px"
-                                        placeholder="인증번호 확인"
-                                        isHold={isHoldAuth}
-                                        minLength={6}
-                                        maxLength={6}
-                                        isOnlyNum
-                                        isShake={isShake[5]}
-                                        num={5} />
-                                    <Timer />
-                                </>
-                        }
-                        <SignInput src="/images/lock.png"
-                            type="password"
-                            placeholder="비밀번호"
-                            minLength={4}
-                            maxLength={10}
-                            isShake={isShake[6]}
-                            num={6} />
-                        <SignInput src="/images/lock.png"
-                            type="password"
-                            placeholder="비밀번호 확인"
-                            minLength={4}
-                            maxLength={10}
-                            isShake={isShake[7]}
-                            num={7} />
-                        <span className="samePassword"><Checkbox state={1} length={"20px"} border={false} /></span>
-                        <button className="formBtn" onClick={handleSignUp} disabled={preventSignUpBtn}>회원가입</button>
-                        <div className="changeBtn" onClick={changeFormState}>로그인</div>
-                    </form>
+                    <SignUpForm />
             }
             <style jsx>{`
                 .signForm{

@@ -209,20 +209,7 @@ const SeatModal = () => {
                     }
             })
         }
-    }, [isReadyToDoOthers, checkInOutData])
-
-    // useEffect(() => {
-    //     let myDiv = document.getElementById("test");
-    //     myDiv.addEventListener('click', () => {
-    //         selectTime(0)
-    //     })
-        
-    //     return () => {
-    //         myDiv.removeEventListener('click', () => {
-    //             selectTime(0)
-    //         })
-    //     }
-    // }, [])
+    }, [isReadyToDoOthers, checkInOutData])    
 
     return (
         <>
