@@ -7,6 +7,13 @@ import { isInLocation } from "../others/checkPos";
 import { myFetch } from "../others/fetch";
 import { historyToIndexAndInfoAtom, loadingCheckInAtom, loginAtom, notificationAtom, refreshIndexAtom, seatModalAtom } from "../others/state";
 
+const changeColor = (color) => {
+    if (color === seatColor[0]) return seatColor[4];
+    if (color === seatColor[4]) return seatColor[0];
+    if (color === seatColor[2]) return seatColor[5];
+    if (color === seatColor[5]) return seatColor[2];
+}
+
 const SeatModal = () => {
     const loginData = useRecoilValue(loginAtom);
     const [refreshData, setRefreshData] = useRecoilState(refreshIndexAtom);
@@ -24,13 +31,6 @@ const SeatModal = () => {
     const modalOutside = useRef();
     const cancelBtn = useRef();
     const router = useRouter();
-
-    const changeColor = (color) => {
-        if (color === seatColor[0]) return seatColor[4];
-        if (color === seatColor[4]) return seatColor[0];
-        if (color === seatColor[2]) return seatColor[5];
-        if (color === seatColor[5]) return seatColor[2];
-    }
 
     const clickModal = (event) => {
         if (event.target === modalOutside.current || event.target === cancelBtn.current) {
@@ -183,7 +183,6 @@ const SeatModal = () => {
             two === 2 ? tempSeat[1] = true : false;
             setIsMySeat(tempSeat);
         }
-
         if (isModalOpen) setIsReadyToDoOthers(true);
         else setIsReadyToDoOthers(false);
     }, [isModalOpen]);
@@ -211,6 +210,19 @@ const SeatModal = () => {
             })
         }
     }, [isReadyToDoOthers, checkInOutData])
+
+    // useEffect(() => {
+    //     let myDiv = document.getElementById("test");
+    //     myDiv.addEventListener('click', () => {
+    //         selectTime(0)
+    //     })
+        
+    //     return () => {
+    //         myDiv.removeEventListener('click', () => {
+    //             selectTime(0)
+    //         })
+    //     }
+    // }, [])
 
     return (
         <>
