@@ -298,7 +298,11 @@ const SignForm = () => {
         <>
             {
                 isLoginForm ?
-                    <SignInForm />
+                    <SignInForm
+                        isShake={isShake}
+                        isFailed={isFailed}
+                        handleSignIn={handleSignIn}
+                        changeFormState={changeFormState} />
                     :
                     <SignUpForm />
             }
