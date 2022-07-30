@@ -97,16 +97,28 @@ module.exports = {
               if(err){console.log(err)}
               emailTemplete = data;
             });
+
+            if (
+                !process.env.CLIENT_ID || 
+                !process.env.CLIENT_SECRET || 
+                !process.env.REFRESH_TOKEN
+              ) {
+                throw Error('OAuth 인증에 필요한 환경변수가 없습니다.');
+              }
+        
         
             let transporter = nodemailer.createTransport({
                 service: 'gmail',
-                host: 'smtp.gmail.com',
                 port: 587,
-                secure: false,
+                secure: true,
                 auth: {
+                    type: 'OAuth2',
                     user: process.env.NODEMAILER_USER,
                     pass: process.env.NODEMAILER_PASS,
-                },
+                    clientId: process.env.CLIENT_ID,
+                    clientSecret: process.env.CLIENT_SECRET,
+                    refreshToken: process.env.REFRESH_TOKEN
+                  }
             });
         
             let mailOptions = {
@@ -119,7 +131,7 @@ module.exports = {
                 if (error) {
                     console.log('메일 error',error);
                     transporter.close();
-                    throw new Error('메일 전송 실패: ', mail_address);
+                    return {result: false, message: "메일 전송 실패. 관리자에게 문의하세요"};
                 }
                 transporter.close();
             });

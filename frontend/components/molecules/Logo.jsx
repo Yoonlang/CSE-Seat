@@ -2,7 +2,7 @@ import { MyLink } from "../atoms/Div";
 
 const Logo = () => {
     return (
-        <MyLink href="/" passHref={true} width="180px" height="50%">
+        <MyLink href="/" width="180px" height="50%">
             <img className="logoImg" src="/images/cse.png" />
             <span>CSE Seat</span>
             <style jsx>{`

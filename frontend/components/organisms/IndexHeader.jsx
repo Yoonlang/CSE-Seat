@@ -1,8 +1,10 @@
+import SquareImg from "../atoms/Img";
 import Refresh from "../atoms/Refresh";
 import { ColorTables } from "../molecules/ColorTables";
 import Explain from "../molecules/Explain";
 import IndexNav from "../molecules/IndexNav";
 import TodayButton from "../molecules/TodayButton";
+import { AlertMessageInPC } from "../others/manageNotification";
 
 const IndexHeader = ({ isNav = true }) => {
     return (
@@ -14,6 +16,10 @@ const IndexHeader = ({ isNav = true }) => {
                 </div>
                 <div className="explain">
                     <Explain />
+                </div>
+                <div className="notice">
+                    <SquareImg src="/images/bell_color.png" length="25px" />
+                    <AlertMessageInPC />
                 </div>
                 <div className="right">
                     <div className="onlyPC">
@@ -36,10 +42,16 @@ const IndexHeader = ({ isNav = true }) => {
             }
             .right .onlyPC{
                 display: flex;
-                gap: 25px;
+                gap: 20px;
                 height: 70%;
             }
             @media(min-width: 768px){
+                .notice{
+                    display: flex;
+                    white-space: nowrap;
+                    font-size: 16px;
+                    gap: 10px;
+                }
                 .indexHeader{
                     justify-content: space-between;
                     height: 130px;
@@ -56,6 +68,9 @@ const IndexHeader = ({ isNav = true }) => {
                 }
             }
             @media(max-width: 767px){
+                .notice{
+                    display: none;
+                }
                 .indexHeader{
                     height: 70px;
                     flex-wrap: wrap;

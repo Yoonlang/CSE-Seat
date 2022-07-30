@@ -10,6 +10,7 @@ router.get('/', (req, res)=>{
 router.post('/', async(req, res, next) => {
     result = await userService.mail(req.body.mail);
     if(result instanceof Error) return next(result);
+    if(result.result === false) return next(result);
     res.status(200).json(result);
 });
 

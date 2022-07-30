@@ -34,7 +34,7 @@ const Footer = () => {
                     </Div>
                 </div>
             </div>
-            <style jsx>{`
+            <style jsx="true">{`
             span{
                 color: #fff;
                 font-size: 12px;

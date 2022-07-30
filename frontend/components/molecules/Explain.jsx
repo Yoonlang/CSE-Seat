@@ -17,6 +17,9 @@ const Explain = () => {
             .sp{
                 margin-bottom: 3px;
             }
+            span{
+                white-space: nowrap;
+            }
         `}</style>
         </>
     );

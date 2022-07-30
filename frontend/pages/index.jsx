@@ -9,6 +9,7 @@ import SquareImg from '../components/atoms/Img';
 import { StyledResDiv } from '../components/atoms/Div';
 import Refresh from '../components/atoms/Refresh';
 import { ColorTables } from '../components/molecules/ColorTables';
+import { alertMessageInMobile } from '../components/others/manageNotification';
 
 const Index = ({ data }) => {
     const [updateData, setUpdateData] = useState();
@@ -20,6 +21,10 @@ const Index = ({ data }) => {
 
     const changeUpDownState = () => {
         setIsNav(!isNav);
+    }
+
+    const alertNotice = () => {
+        alert(alertMessageInMobile);
     }
 
     useEffect(async () => {
@@ -66,7 +71,9 @@ const Index = ({ data }) => {
                                     <div className="color"><ColorTables /></div>
                                     <RoomSeats roomNumber={num} m={m} seats={seats} />
                                 </div>
-                                <div className="bar"></div>
+                                {
+                                    index === 2 ? `` : <div className="bar"></div>
+                                }
                             </Fragment>
                         })
                 }
@@ -74,6 +81,9 @@ const Index = ({ data }) => {
 
 
             <SeatModal />
+            <div className="notice" onClick={alertNotice}>
+                <SquareImg src="/images/bell_color.png" length="25px" />
+            </div>
             <div className="refreshBtn">
                 <Refresh />
             </div>
@@ -126,6 +136,9 @@ const Index = ({ data }) => {
                     background: #fff;
                 }
                 @media(min-width: 768px){
+                    .notice{
+                        display: none;
+                    }
                     .refreshBtn{
                         display: none;
                     }
@@ -134,7 +147,7 @@ const Index = ({ data }) => {
                     }
                     .rooms{
                         height: 100%;
-                        justify-content: space-between;
+                        justify-content: space-around;
                         overflow-x: hidden;
                     }
                     .color{
@@ -156,6 +169,22 @@ const Index = ({ data }) => {
                     .rooms .room${(targetRoom)}{
                         display: flex !important;
                         overflow-x: hidden;
+                    }
+                    .notice{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        position: fixed;
+                        bottom: 125px;
+                        right: 25px;
+                        width: 40px;
+                        height: 40px;
+                        background: #fff;
+                        border: solid;
+                        border-radius: 50% 50%;
+                        border-width: 1px;
+                        border-color: #ccc;
+                        cursor: pointer;
                     }
                     .refreshBtn{
                         display: flex;

@@ -3,7 +3,7 @@ services:
   nodejs:
     ports:
       - "8080:8080"
-     volumes:
+    volumes:
       - ./logs:/usr/src/app/logs
     environment:
       - TZ=Asia/Seoul
