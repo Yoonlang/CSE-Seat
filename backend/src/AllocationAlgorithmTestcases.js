@@ -101,6 +101,10 @@ const Testcases = [
       },
     ],
   },
+  {
+    input: [],
+    output: [],
+  },
 ];
 
 module.exports = Testcases;
