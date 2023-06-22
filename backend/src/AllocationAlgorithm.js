@@ -102,45 +102,6 @@ const arr = [
   },
 ];
 
-const requests = [
-  {
-    building_id: "414",
-    apply_time: "20220226170505",
-    seat_room: ["101", "104", "108"],
-    seat_num: "20",
-    isToday: false,
-    part1: true,
-    part2: true,
-    apply_id: 142,
-    apply_user_sid: "oon",
-    friends: [1, 2, 3],
-  },
-  {
-    building_id: "414",
-    apply_time: "20220226170506",
-    seat_room: ["101", "104"],
-    seat_num: "18",
-    isToday: false,
-    part1: true,
-    part2: false,
-    apply_id: 143,
-    apply_user_sid: 456,
-    friends: [],
-  },
-  {
-    building_id: "414",
-    apply_time: "20220226170506",
-    seat_room: ["101", "104"],
-    seat_num: "19",
-    isToday: false,
-    part1: true,
-    part2: false,
-    apply_id: 144,
-    apply_user_sid: "789",
-    friends: [],
-  },
-];
-
 const hopeNumber = [
   [0, 0, 0],
   [0, 0, 0],
@@ -928,7 +889,7 @@ const solveReq = (seat_room, seat_num, part1, part2, num) => {
   return res;
 };
 
-const Allocation = () => {
+const Allocation = (requests) => {
   const sortedRequests = requests.slice().sort((a, b) => {
     return Number(a.apply_time) - Number(b.apply_time);
   });
@@ -1048,7 +1009,8 @@ const Allocation = () => {
       });
     }
   );
-  console.log(res);
+
+  return res;
 };
 
-Allocation();
+module.exports = Allocation;
